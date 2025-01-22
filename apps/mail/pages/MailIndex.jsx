@@ -1,11 +1,18 @@
 
 export function MailIndex() {
-    return (<div>
+    return (<div className = "mail-page">
                 <header className = "mail-header">
                 
-                    <section className = "compose">
-                        <button><i class="fa-solid fa-pen"></i> <span>Compose</span></button>
+                    <section className = "logo">
+                        <i class="fa-solid fa-bars"></i>
+                        <img src = "assets/img/gmail-logo.png"></img>
+                        <h3>Gmail</h3>
+                        
                     </section>
+
+                    {/* <section className = "compose">
+                        <button><i class="fa-solid fa-pen"></i> <span>Compose</span></button>                        
+                    </section> */}
                     
                     <section className = "search">
 
@@ -15,7 +22,12 @@ export function MailIndex() {
 
                     </section>
 
-                    <section className = "user-details"> </section>                
+                    {/* <section className = "user-details"> </section>                 */}
+                    <section className = "user-details">
+                        <div className = "fa-solid fa-grip toolbar-button"> </div>    
+                        <img src = "assets/img/user-avatar.png"></img>
+                    </section>                
+                
                 
                 </header>
 
@@ -23,6 +35,10 @@ export function MailIndex() {
                 
                     <div class ="side-bar">
 
+                        <section className = "compose">
+                            <button><i class="fa-solid fa-pen"></i> <span>Compose</span></button>                        
+                        </section>
+                    
                         <div className = "inbox side-bar-category">
                             <i class="fa-solid fa-inbox"></i>
                             <span>Inbox</span>
