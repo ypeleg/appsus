@@ -1,11 +1,58 @@
+
+
 export const utilService = {
+    loadFromStorage,
+    saveToStorage,
     makeId,
     makeLorem,
     getRandomIntInclusive,
-    getRandomColor,
-    padNum,
     getDayName,
     getMonthName,
+    animateCSS,
+    debounce,
+    getRandomColor,
+    padNum,
+    getRamdomDateInBetween
+}
+
+function getRamdomDateInBetween(start, end) {
+    start = Date.parse(start);
+    end = Date.parse(end);
+    return new Date(Math.floor(Math.random() * (end - start + 1) + start));
+}
+
+function saveToStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value))
+}
+
+function loadFromStorage(key) {
+    const data = localStorage.getItem(key)
+    return (data) ? JSON.parse(data) : undefined
+}
+
+function animateCSS(el, animation = 'bounce') {
+    const prefix = 'animate__'
+    return new Promise((resolve, reject) => {
+        const animationName = `${prefix}${animation}`
+        el.classList.add(`${prefix}animated`, animationName)
+        function handleAnimationEnd(event) {
+            event.stopPropagation()
+            el.classList.remove(`${prefix}animated`, animationName)
+            resolve('Animation ended')
+        }
+
+        el.addEventListener('animationend', handleAnimationEnd, { once: true })
+    })
+}
+
+function debounce(callback, wait) {
+    let timeoutId = null;
+    return (...args) => {
+        window.clearTimeout(timeoutId);
+        timeoutId = window.setTimeout(() => {
+            callback(...args);
+        }, wait);
+    };
 }
 
 function makeId(length = 6) {
@@ -53,10 +100,10 @@ function getDayName(date, locale) {
     return date.toLocaleDateString(locale, { weekday: 'long' })
 }
 
-
 function getMonthName(date) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ]
     return monthNames[date.getMonth()]
 }
+
