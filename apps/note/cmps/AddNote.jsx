@@ -51,7 +51,7 @@ export function AddNote({ onSaveNote }) {
 
     setNoteToEdit(prevNote => ({ ...prevNote }))
     console.log(noteToEdit);
-    onSaveNote('noteToEdit')
+    onSaveNote(noteToEdit)
   }
 
 

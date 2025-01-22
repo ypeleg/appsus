@@ -1,3 +1,5 @@
+import {mailsService} from "../../mail/services/mails.service"
+
 const { useEffect, useState } = React
 const { Link, useSearchParams } = ReactRouterDOM
 
@@ -15,34 +17,24 @@ export function NoteIndex() {
 
     useEffect(() => {
         loadNotes()
-    }, [])
-
-
-
+    }, [notes])
 
     function loadNotes() {
-        noteService.query()
-            .then(notes => {
-                console.log(notes);
-                setNotes(notes)
-
-            })
-            .catch(err => {
-                console.log('Problems getting notes:', err)
-            })
+        noteService.query().then(notes => setNotes(notes))
     }
 
     function onSaveNote(note) {
-        console.log('sss');
-
-        // noteService.save(note)
-        //     .then(note => {
-        //     })
-        //     .catch(err => {
-        //         console.log('err:', err)
-        //     })
+        console.log('note', note);
+        // const noteToSave = getEmptyNote()
+        noteService.save(note)
+            .then(() => {
+                loadNotes()
+                console.log('Note saved!!')
+            })
+            .catch(err => {
+                console.log('Problems saving note:', err)
+            })
     }
-
 
     if (!notes) return <h1>Loading...</h1>
     return (
@@ -51,7 +43,7 @@ export function NoteIndex() {
             <main className="main-layout">
                 <SideBar />
                 <div className="notes-workspace">
-                    <AddNote onSaveNote={() => onSaveNote(note)} />
+                    <AddNote onSaveNote={onSaveNote} />
                     <NoteList
                         notes={notes}
                     />
