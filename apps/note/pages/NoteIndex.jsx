@@ -1,108 +1,62 @@
+const { useEffect, useState } = React
+const { Link, useSearchParams } = ReactRouterDOM
+
+
+import { noteService } from "../services/note.service.js"
+import { NoteList } from "../cmps/NoteList.jsx"
+import { NoteHeader } from "../cmps/NoteHeader.jsx"
+import { SideBar } from "../cmps/SideBar.jsx"
+import { AddNote } from "../cmps/AddNote.jsx"
 
 
 export function NoteIndex() {
-    return (<div className = "note-page">
-                <header className = "note-header">
-                
 
+    const [notes, setNotes] = useState(null)
 
-                    <section className = "logo">
-                        <i class="fa-solid fa-bars"></i>
-                        <img src = "assets/img/note-logo.png"></img>
-                        <h3>Keep</h3>
-                        
-                    </section>
-                    
-                    <section className = "search">
-
-                        <div className="search-bar">                            
-                            <input className="searchbox" type = "text" placeholder = "Search" />                
-                        </div>    
-
-                    </section>
-
-                    <section className = "toolbar">
-                        <div className = "fa-solid fa-refresh toolbar-button"> </div>    
-                        <div className = "fa-solid fa-bars-progress toolbar-button"> </div>    
-                        <div className = "fa-solid fa-gear toolbar-button"> </div>    
-                    </section>                
-
-
-                    <section className = "user-details">
-                        <div className = "fa-solid fa-grip toolbar-button"> </div>    
-                        <img src = "assets/img/user-avatar.png"></img>
-                    </section>                
-                
-                </header>
+    useEffect(() => {
+        loadNotes()
+    }, [])
 
 
 
 
+    function loadNotes() {
+        noteService.query()
+            .then(notes => {
+                console.log(notes);
+                setNotes(notes)
 
-                <main className = "main-layout">
-                
-                    <div class ="side-bar">
+            })
+            .catch(err => {
+                console.log('Problems getting notes:', err)
+            })
+    }
 
-                        <div className = "inbox side-bar-category side-active">
-                            <i class="fa-regular fa-lightbulb"></i>
-                            <span>Notes</span>
-                        </div>    
-                        
-                        <div className = "starred side-bar-category">                            
-                            <i class="fa-regular fa-bell"></i>
-                            <span>Reminders</span>
-                        </div>    
-                        
-                        <div className = "sent side-bar-category">
-                            <i class="fa-solid fa-pen"></i>
-                            <span>Edit Labels</span>
-                        </div>    
-                        
-                        <div className = "draft side-bar-category">
-                            <i class="fa-solid fa-box-archive"></i>                            
-                            <span>Archive</span>
-                        </div>    
-                        
-                        <div className = "trash side-bar-category">
-                            <i class="fa-solid fa-trash"></i>
-                            <span>Trash</span>
-                        </div>    
+    function onSaveNote(note) {
+        console.log('sss');
 
-                    </div>
-
-                    <div class="notes-workspace">
-                        
-                        <div className="new-note">                            
-
-                            <div class ="notes-buttons">
-                                <div className = ""> <i class="fa-regular fa-lightbulb"></i> </div>    
-                                <div className = ""> <i class="fa-regular fa-bell"></i> </div>    
-                            </div>  
-                            <input className="newnote" type = "text" placeholder = "Take a note.." />
-                          
-
-                        </div>    
-
-                        <div className = "notes">
+        // noteService.save(note)
+        //     .then(note => {
+        //     })
+        //     .catch(err => {
+        //         console.log('err:', err)
+        //     })
+    }
 
 
-                            <div className = "note">
-                                <h4>Note</h4>
-                                <p>some text that is long</p>
-                                <div className = "note-bottom-bar">
-                                    <i class="fa-regular fa-bell"></i>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                    </div>
-                    
-
-
-                </main>
-
-           </div>)
+    if (!notes) return <h1>Loading...</h1>
+    return (
+        <div className="note-page">
+            <NoteHeader />
+            <main className="main-layout">
+                <SideBar />
+                <div className="notes-workspace">
+                    <AddNote onSaveNote={() => onSaveNote(note)} />
+                    <NoteList
+                        notes={notes}
+                    />
+                </div>
+            </main>
+        </div>)
 }
 
