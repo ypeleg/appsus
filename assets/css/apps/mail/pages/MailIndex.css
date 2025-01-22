@@ -1,1 +1,229 @@
- /* mail index  */
+
+.search-bar::before {
+    /* z-index: 0; */
+    left: 15px;
+    
+    content: '\f002';
+    font-size: 0.8em;
+    position: absolute;
+    /* color: transparent; */
+    pointer-events: none;
+    font-family: "fa-solid";
+    /* text-shadow: 0 0 0 lightgray; */
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: text;
+    border: none;
+
+    
+    display: flex;
+    gap: 8px;
+}
+
+.search-bar button {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+input.searchbox {    
+    /* z-index: 1; */
+    
+    height: 44px;
+    outline: none;
+    font-size: 0.8em;
+    border-radius: 6px;
+    /* margin-block: 40px; */
+    padding-inline: 20px;
+    /* border: 1px solid gray; */
+    margin-block: 12px;
+    background-color: #e2eaf3;
+
+    padding-inline-start: 40px;
+    
+}
+
+
+.mail-header {
+    background-color: #f0f5f8;
+    display: flex;
+    
+}
+
+.compose {
+
+    width: 256px;
+  }
+  
+.compose button {
+    display: flex;
+    gap: 0.7em;
+    /* justify-items: space-between; */
+    padding: 16px 24px;
+    background-color: #c1e6fe;
+    border-radius: 16px;
+    margin: 8px;
+    border: 0;
+    /* box-shadow: 0 1px 3px rgba(0,0,0,0.15); */
+    cursor: pointer;
+    font-size: 14px;
+}
+
+  .search {
+    /* background-color: #f1f3f4; */
+    /* border-radius: 8px; */
+    /* padding: 8px 16px; */
+    /* margin: 8px; */
+    /* width: 100%; */
+    /* max-width: 720px; */
+  }
+  
+  .main-layout {
+    display: flex;
+    height: 100vh;
+    background-color: #fff;
+  }
+  
+  .side-bar {
+    width: 256px;
+    padding: 8px 0;
+    background-color: #f0f5f8;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .inbox,
+  .starred,
+  .sent,
+  .draft,
+  .trash {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 24px;
+    border-radius: 0 16px 16px 0;
+    margin: 2px 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #202124;
+  }
+  
+  .inbox span:last-child,
+  .starred span:last-child,
+  .sent span:last-child,
+  .draft span:last-child,
+  .trash span:last-child {
+    margin-left: auto;
+    color: #5f6368;
+    font-size: 13px;
+  }
+  
+  .inbox:hover,
+  .starred:hover,
+  .sent:hover,
+  .draft:hover,
+  .trash:hover {
+    background-color: #e8eaed;
+  }
+  
+  .main-table {
+    flex: 1;
+  }
+  
+  .filter-bar {
+    display: flex;
+    gap: 24px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    color: #5f6368;
+    font-size: 14px;
+  }
+  
+  .select-box {
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .select-box:hover {
+    background-color: #e8eaed;
+  }
+  
+  .messages {
+    width: 100%;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    /* justify-items: center; */
+  }
+  
+.msg-details {
+    display: flex;
+}
+
+.msg-details .title {
+
+
+}
+
+.msg {
+    display: grid;
+    grid-template-columns: 30px 30px minmax(auto, 150px) auto 40px;        
+    padding: 4px 16px;
+    height: 40px;
+    border-bottom: 1px solid #e0e0e0;
+    align-items: center;
+    /* align-items: space-between; */
+    /* justify-content: center;     */
+    /* justify-content: space-between; */
+    cursor: pointer;
+    font-size: 14px;
+    color: #202124;
+}
+  
+.msg:hover {
+    box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60,64,67,.3);
+    z-index: 2;
+}
+  
+  
+.star {
+    color: #e8eaed;
+    font-size: 20px;
+}
+
+.star:hover {
+    color: #5f6368;
+}
+
+.user {
+    font-size: 14px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 16px;
+}
+
+.title {
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.subtitle {
+    color: #5f6368;
+    padding-left: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.date {
+    /* color: #5f6368;     */
+    font-size: 12px;
+    font-weight: bold;
+}
