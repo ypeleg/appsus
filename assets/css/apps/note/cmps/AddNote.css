@@ -1,0 +1,103 @@
+.note-bottom-bar {
+  padding-top: 20px;
+  background-color: #0b57cf;
+}
+
+.new-note {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+
+}
+
+.notes-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.notes-buttons>* {
+  cursor: pointer;
+}
+
+.note-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+
+
+.add-note-container {
+
+  flex: 1;
+  margin-inline-start: 200px;
+  border: none;
+  outline: none;
+  width: 600px;
+  padding: 2px 10px;
+  font-size: 14px;
+  border-radius: 15px;
+  box-shadow: -1px -1px 13px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+
+
+}
+
+blockquote {
+  background: #fff;
+  border: none;
+  border-radius: 5px;
+  margin: 16px 0;
+  outline: none;
+}
+
+blockquote p {
+  padding: 2px;
+}
+
+.note-editor-button {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.note-editor-button .close {
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  height: max-content;
+  padding: 10px;
+}
+
+.tools-btns>* {
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Circular shape */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tools-btns>*:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-editor-button .close:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.tools-btns {
+  display: flex;
+  gap: 15px;
+}

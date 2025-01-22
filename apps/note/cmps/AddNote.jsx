@@ -13,25 +13,25 @@ export function AddNote({ onSaveNote }) {
   const texRef = useRef(null);
   const titleRef = useRef(null);
 
-  useEffect(() => {
-    loadNotes()
-  }, [])
+  // useEffect(() => {
+  //   loadNotes()
+  // }, [])
 
-  useEffect(() => {
-    loadNotes()
-  }, [noteToEdit])
+  // // useEffect(() => {
+  // //   loadNotes()
+  // // }, [noteToEdit])
 
-  function loadNotes() {
-    noteService.query()
-      .then(notes => {
-        console.log(notes);
-        setNotes(notes)
+  // function loadNotes() {
+  //   noteService.query()
+  //     .then(notes => {
+  //       console.log(notes);
+  //       setNotes(notes)
 
-      })
-      .catch(err => {
-        console.log('Problems getting notes:', err)
-      })
-  }
+  //     })
+  //     .catch(err => {
+  //       console.log('Problems getting notes:', err)
+  //     })
+  // }
 
   function openEditor() {
     setIsOpen(true);
@@ -51,6 +51,7 @@ export function AddNote({ onSaveNote }) {
 
     setNoteToEdit(noteToEdit)
     console.log(noteToEdit);
+    setIsOpen(false)
     onSaveNote(noteToEdit)
   }
 
@@ -78,9 +79,11 @@ export function AddNote({ onSaveNote }) {
 
             <section className="note-editor-button">
               <button className="close">Close</button>
-              <button className="fa-solid fa-download"></button>
-              <button className="fa-solid fa-image"></button>
-              <button className="fa-solid fa-palette"></button>
+              <section className="tools-btns">
+                <button className="fa-solid fa-download"></button>
+                <button className="fa-solid fa-image"></button>
+                <button className="fa-solid fa-palette"></button>
+              </section>
 
             </section>
           </form>
@@ -92,9 +95,11 @@ export function AddNote({ onSaveNote }) {
             Write somthing...
           </div>
 
-          <div class="notes-buttons">
-            <div className="" class="fa-regular fa-lightbulb" ></div>
-            <div className="" class="fa-regular fa-bell"> </div>
+          <div className="notes-buttons">
+            <div className="fa-regular fa-a" ></div>
+            <div className="fa-regular fa-image"> </div>
+            <div className="fa-brands fa-youtube"> </div>
+            <div className="fa-regular fa-circle-check"> </div>
           </div>
         </div >
       }

@@ -17,36 +17,43 @@ export function NoteIndex() {
 
     useEffect(() => {
         loadNotes()
-    }, [notes])
+    }, [])
 
     function loadNotes() {
-        noteService.query().then(notes => setNotes(notes))
+        noteService.query()
+            .then((notes) => {
+                console.log(notes)
+                setNotes(notes)
+            })
+            .catch((err) => {
+                console.log("Problems getting notes:", err)
+                setError("Failed to load notes.")
+            })
     }
 
-    function onSaveNote(note) {
-        console.log('note', note);
-        // const noteToSave = getEmptyNote()
-        noteService.save(note)
-            .then(() => {
-                loadNotes()
-                console.log('Note saved!!')
-            })
-            .catch(err => {
-                console.log('Problems saving note:', err)
-            })
-    }
 
     function onSaveNote(note) {
         console.log(note);
-
         noteService
             .save(note)
             .then((savedNote) => {
                 setNotes((prevNotes) => [...prevNotes, savedNote]);
-                console.log("Note saved:", savedNote);
+                console.log("Note saved:", savedNote)
             })
             .catch(err => {
                 console.log('err:', err)
+            })
+    }
+
+    function onRemoveNote(noteId) {
+        noteService.remove(noteId)
+            .then(() => {
+                setNotes(notes => notes.filter(note => note.id !== noteId))
+                showSuccessMsg(`note removed successfully!`)
+            })
+            .catch(err => {
+                console.log('Problems removing note:', err)
+                showErrorMsg(`Problems removing note (${noteId})`)
             })
     }
 
