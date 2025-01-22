@@ -49,9 +49,9 @@ export function AddNote({ onSaveNote }) {
     noteToEdit.info.title = title
     noteToEdit.type = 'NoteTxt'
 
-    setNoteToEdit(prevNote => ({ ...prevNote }))
+    setNoteToEdit(noteToEdit)
     console.log(noteToEdit);
-    onSaveNote('noteToEdit')
+    onSaveNote(noteToEdit)
   }
 
 

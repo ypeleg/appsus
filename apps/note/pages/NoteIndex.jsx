@@ -25,7 +25,6 @@ export function NoteIndex() {
             .then(notes => {
                 console.log(notes);
                 setNotes(notes)
-
             })
             .catch(err => {
                 console.log('Problems getting notes:', err)
@@ -33,15 +32,20 @@ export function NoteIndex() {
     }
 
     function onSaveNote(note) {
-        console.log('sss');
+        console.log(note);
 
-        // noteService.save(note)
-        //     .then(note => {
-        //     })
-        //     .catch(err => {
-        //         console.log('err:', err)
-        //     })
+        noteService
+            .save(note)
+            .then((savedNote) => {
+                setNotes((prevNotes) => [...prevNotes, savedNote]);
+                console.log("Note saved:", savedNote);
+            })
+            .catch(err => {
+                console.log('err:', err)
+            })
     }
+
+
 
 
     if (!notes) return <h1>Loading...</h1>
@@ -51,7 +55,7 @@ export function NoteIndex() {
             <main className="main-layout">
                 <SideBar />
                 <div className="notes-workspace">
-                    <AddNote onSaveNote={() => onSaveNote(note)} />
+                    <AddNote onSaveNote={(note) => onSaveNote(note)} />
                     <NoteList
                         notes={notes}
                     />
