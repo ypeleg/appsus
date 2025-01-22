@@ -1,4 +1,6 @@
-import { utilService } from '../../../services/util.service.js'
+
+
+import { mailUtilService } from '/mail-util.service.js'
 import { storageService } from '../../../services/async-storage.service.js'
 
 const MAIL_KEY = 'mailDB'
@@ -8,24 +10,65 @@ _createMails()
 
 
 export const mailsService = {
-    query,
     get,
-    remove,
     save,
-    getEmptyMail,
+    query,
+    remove,
+    getLoggedinUser,
     getDefaultFilter,
 }
 
 window.bs = mailsService
 
+
+const loggedinUser = {
+    email: 'user@appsus.com',
+    fullname: 'Mahatma Appsus'
+}
+
+function getLoggedinUser() {
+    return loggedinUser
+}
+
 function query(filterBy = {}) {
     return storageService.query(MAIL_KEY)
         .then(mails => {
 
-            if (filterBy.subject) {
+            if (filterBy.txt) {
+                mails = mails.filter(mail =>
+                    (   RegExp(filterBy.txt, 'i').test(mail.subject)
+                    || RegExp(filterBy.txt, 'i').test(mail.body)
+                    || RegExp(filterBy.txt, 'i').test(mail.from)
+                    || RegExp(filterBy.txt, 'i').test(mail.to) )
+                )
+            }
 
-                mails = mails.filter(mail => RegExp(filterBy.subject, 'i').test(mail.subject))
+            if ((filterBy.isRead !== null) && (filterBy.isRead !== undefined)) {
+                mails = mails.filter(mail => mail.isRead === filterBy.isRead)
+            }
 
+            if ((filterBy.isStared !== null) && (filterBy.isStared !== undefined)) {
+                console.log('all filterby ', filterBy)
+                console.log('filterBy.isStared:', filterBy.isStared)
+                mails = mails.filter(mail => (mail.isStared))
+                console.log('filterBy.isStared:', mails.length)
+            }
+
+            if (filterBy.lables && filterBy.lables.length) {
+                mails = mails.filter(mail => mail.labels.some(label => filterBy.lables.includes(label)))
+            }
+
+            if (filterBy.status) {
+                mails = mails.filter(mail => (mail.status === filterBy.status))
+            }
+
+            if (filterBy.from) {
+                console.log('filterBy.from:', filterBy.from)
+                mails = mails.filter(mail => (mail.from === filterBy.from))
+            }
+
+            if (filterBy.to) {
+                mails = mails.filter(mail => (mail.to === filterBy.to))
             }
 
             return mails
@@ -49,30 +92,27 @@ function save(mail) {
     }
 }
 
-function getEmptyMail(title = '', amount = '', description = '', pageCount = '', language = 'en', authors = '') {
+function getDefaultFilter(filterBy = {
+    status: '', // 'inbox/sent/trash/draft'
+    txt: '',
+    isRead: null,
+    isStared: null,
+    lables: []
+}) {
     return {
-        title,
-        authors,
-        description,
-        pageCount,
-        thumbnail: `/assets/mailsImages/15.jpg`,
-        language,
-        listPrice: {
-            amount,
-            currencyCode: "EUR",
-            isOnSale: Math.random() > 0.7
-        },
-        reviews: []
+        status: '',
+        txt: '',
+        isRead: null,
+        isStared: null,
+        lables: []
     }
-}
 
-function getDefaultFilter(filterBy = { title: '', minPrice: 0, maxPrice: 0 }) {
-    return { title: filterBy.title, minPrice: filterBy.minPrice, maxPrice: 0 }
+    /* return { txt: filterBy.txt, minDate: filterBy.minDate, maxDate: filterBy.minDate } */
 }
 
 function _createMails() {
-    const mails = utilService.loadFromStorage(MAIL_KEY) || []
-    // const mails = []
+    // const mails = utilService.loadFromStorage(MAIL_KEY) || []
+    const mails = []
 
 
     if (mails && mails.length) return
@@ -80,33 +120,28 @@ function _createMails() {
     for (let i = 0; i < 20; i++) {
         const mail = {
 
-            id: utilService.makeId(),
-            sentAt: utilService.getRamdomDateInBetween('2021-01-01', '2025-01-22'),
-            createdAt: utilService.getRamdomDateInBetween('2021-01-01', '2025-01-22'),
+            id: mailUtilService.random.id(),
+            sentAt: mailUtilService.random.date('2021-01-01', '2025-01-22'),
+            createdAt: mailUtilService.random.date('2021-01-01', '2025-01-22'),
 
-            subject: utilService.makeLorem(2),
-            body: utilService.makeLorem(20),
+            subject: mailUtilService.random.lorem(2),
+            body: mailUtilService.random.lorem(20),
 
-            isRead: false,
-            removedAt : null,
+            isRead: mailUtilService.random.choice([true, false]),
+            isStared: mailUtilService.random.choice([true, false]),
 
-            from: 'momo@momo.com',
-            to: 'user@appsus.com',
+            removedAt : mailUtilService.random.choice([null, mailUtilService.random.date('2021-01-01', '2025-01-22')]),
+
+            labels: mailUtilService.random.sample(['Primary', 'Promotions', 'Social'], mailUtilService.random.randint(0, 3)),
+
+            ...( (mailUtilService.random.randint(0, 1)) ? {from: 'momo@momo.com',   to: 'user@appsus.com'}:
+                                                          {from: 'user@appsus.com', to: 'momo@momo.com'}
+            )
 
         }
+
+        // console.log(mail)
         mails.push(mail)
     }
-    utilService.saveToStorage(MAIL_KEY, mails)
-}
-
-function _setNextPrevMailId(mail) {
-    return storageService.query(MAIL_KEY)
-        .then((mails) => {
-            const mailIdx = mails.findIndex((currMail) => currMail.id === mail.id)
-            const nextMail = mails[mailIdx + 1] ? mails[mailIdx + 1] : mails[0]
-            const prevMail = mails[mailIdx - 1] ? mails[mailIdx - 1] : mails[mails.length - 1]
-            mail.nextMailId = nextMail.id
-            mail.prevMailId = prevMail.id
-            return mail
-        })
+    mailUtilService.saveToStorage(MAIL_KEY, mails)
 }

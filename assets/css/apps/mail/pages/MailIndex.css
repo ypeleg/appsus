@@ -198,6 +198,9 @@
     position: relative;
     border-radius: 50px;
     z-index: 0;
+
+    width: calc(100% - 256px);
+
 }
 
 /* .main-table::before {
@@ -254,7 +257,8 @@
 }
 
 .mail-page .messages {
-    width: 100%;
+
+    /*max-width: 100%;*/
     /* display: flex; */
     /* flex-direction: column; */
     /* align-items: center; */
@@ -263,6 +267,7 @@
   
 .mail-page .msg-details {
     display: flex;
+
 }
 
 .mail-page .msg-details .title {
@@ -271,8 +276,10 @@
 }
 
 .mail-page .msg {
+
     display: grid;
-    grid-template-columns: 30px 30px minmax(auto, 150px) auto 40px;        
+    grid-template-columns: 30px 30px minmax(150px, auto) minmax(auto, calc(100% - 256px)) 40px;
+    /*grid-template-columns: 30px 30px minmax(150px, auto) auto 40px;*/
     padding: 4px 16px;
     height: 40px;
     border-bottom: 1px solid #e0e0e0;
@@ -303,7 +310,7 @@ input.checkbox {
     color: #5f6368;
 }
 
-.mail-page .user {
+.mail-page .from {
     font-size: 14px;
     font-weight: 500;
     overflow: hidden;
@@ -313,7 +320,7 @@ input.checkbox {
 }
 
 .mail-page .title {
-    font-weight: bold;
+    /*font-weight: bold;*/
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -324,10 +331,25 @@ input.checkbox {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    /*max-width: 200px;*/
+    /*white-space: nowrap;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 .mail-page .date {
     /* color: #5f6368;     */
     font-size: 12px;
+    font-weight: bold;
+}
+
+.read .msg-details .title,
+.read .from{
+    font-weight: normal;
+}
+
+.unread .msg-details .title,
+.unread .from {
     font-weight: bold;
 }

@@ -1,5 +1,6 @@
 
 
+
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 
@@ -12,15 +13,39 @@ export function MailIndex() {
 
     const [mails, setMails] = useState([])
 
-    const [filterBy, setFilterBy] = useState(mailsService.getDefaultFilter()) // maxPrice: 100
+
+    const [filterBy, setFilterBy] = useState(mailsService.getDefaultFilter())
+
+    const [starredMails, setStarredMails] = useState([])
+    const [unreadInboxMails, setUnreadInboxMails] = useState([])
+    const [sentMails, setSentMails] = useState([])
+
 
     useEffect(() => {
-        console.log('filterBy:', filterBy)
-        mailsService.query(filterBy).then(setMails)
+
+        mailsService.query({isRead: true}).then(mails => {setUnreadInboxMails(mails.length)})
+        mailsService.query({isStared: true}).then(mails => {setStarredMails(mails.length)})
+        mailsService.query({from: mailsService.getLoggedinUser().email }).then(mails => {setSentMails(mails.length)})
+
+        onSetFilterBy({to: mailsService.getLoggedinUser().email})
+
+    }, [])
+
+
+    useEffect(() => {
+        console.log('out filterBy:', filterBy)
+        mailsService.query(filterBy).then(mails => setMails(mails))
     }, [filterBy])
 
-    function onSetFilterBy(newFilter) {
-        setFilterBy(prevFilter => ({...prevFilter, ...newFilter}))
+
+    function onSetFilterBy(newFilter, reset = false) {
+        if (reset) {
+            setFilterBy(prevFilter => ({...mailsService.getDefaultFilter(), ...newFilter}))
+        } else {
+            setFilterBy(prevFilter => ({...prevFilter, ...newFilter}))
+        }
+
+
     }
 
     function removeMail(mailId) {
@@ -34,6 +59,8 @@ export function MailIndex() {
                 navigate('/mail')
             })
     }
+
+
 
     return (<div className="mail-page">
         <header className="mail-header">
@@ -74,34 +101,34 @@ export function MailIndex() {
                             <button><i className = "fa-solid fa-pen"></i> <span>Compose</span></button>                        
                         </section>
                     
-                        <div className = "inbox side-bar-category">
+                        <div className = "inbox side-bar-category" onClick={() => {onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)} }>
                             <i className = "fa-solid fa-inbox"></i>
                             <span>Inbox</span>
-                            <span>1,000</span>
+                            <span>{unreadInboxMails}</span>
                         </div>    
                         
                         <div className = "starred side-bar-category">                            
                             <i className = "fa-regular fa-star"></i>
                             <span>Starred</span>
-                            <span>1,000</span>
+                            <span>{starredMails}</span>
                         </div>    
                         
-                        <div className = "sent side-bar-category">
+                        <div className = "sent side-bar-category" onClick={() => {onSetFilterBy({from: mailsService.getLoggedinUser().email}, true)} }>
                             <i className = "fa-regular fa-paper-plane"></i>
                             <span>Sent</span>
-                            <span>1,000</span>
+                            <span>{sentMails}</span>
                         </div>    
                         
                         <div className = "draft side-bar-category">
                             <i className = "fa-regular fa-file"></i>                            
                             <span>Drafts</span>
-                            <span>1,000</span>
+                            <span>0</span>
                         </div>    
                         
                         <div className = "trash side-bar-category">
                             <i className = "fa-solid fa-trash"></i>
                             <span>Trash</span>
-                            <span>1,000</span>
+                            <span></span>
                         </div>    
 
                     </div>
