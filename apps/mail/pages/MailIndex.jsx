@@ -23,31 +23,31 @@ export function MailIndex() {
                 
                     <div class ="side-bar">
 
-                        <div className = "inbox">
+                        <div className = "inbox side-bar-category">
                             <i class="fa-solid fa-inbox"></i>
                             <span>Inbox</span>
                             <span>1,000</span>
                         </div>    
                         
-                        <div className = "starred">
-                            <i class="fa-solid fa-star"></i> 
+                        <div className = "starred side-bar-category">                            
+                            <i class="fa-regular fa-star"></i>
                             <span>Starred</span>
                             <span>1,000</span>
                         </div>    
                         
-                        <div className = "sent">
+                        <div className = "sent side-bar-category">
                             <i class="fa-regular fa-paper-plane"></i>
                             <span>Sent</span>
                             <span>1,000</span>
                         </div>    
                         
-                        <div className = "draft">
+                        <div className = "draft side-bar-category">
                             <i class="fa-regular fa-file"></i>                            
                             <span>Drafts</span>
                             <span>1,000</span>
                         </div>    
                         
-                        <div className = "trash">
+                        <div className = "trash side-bar-category">
                             <i class="fa-solid fa-trash"></i>
                             <span>Trash</span>
                             <span>1,000</span>
@@ -56,6 +56,12 @@ export function MailIndex() {
                     </div>
                     
                     <div class ="main-table">
+
+                        <div className = "tab-bar">
+                            <div className = "primary-tab tab-item tab-active"><i class="fa-solid fa-inbox"></i><span>Primary</span></div>
+                            <div className = "promotions-tab tab-item"><i class="fa-solid fa-tag"></i><span>Promotions</span></div>
+                            <div className = "social-tab tab-item"><i class="fa-regular fa-user"></i><span>Social</span></div>
+                        </div>
 
                         <div className = "filter-bar">
                             
@@ -67,8 +73,8 @@ export function MailIndex() {
                         
                         <div className = "messages">
                             <article className = "msg">
-                                <div className = "unread"> <input type="checkbox"></input> </div>
-                                <div className = "star"><i class="fa-solid fa-star"></i> </div>
+                                <div className = "unread"> <input className="checkbox" type="checkbox"></input> </div>
+                                <div className = "star"><i class="fa-regular fa-star"></i> </div>
                                 <div className = "user">user@gmail.com</div>
                                 <div className = "msg-details">
                                     <div className = "title">Hello how are you?</div>
@@ -78,8 +84,8 @@ export function MailIndex() {
                             </article>
 
                             <article className = "msg">
-                                <div className = "unread"> <input type="checkbox"></input> </div>
-                                <div className = "star"><i class="fa-solid fa-star"></i> </div>
+                                <div className = "unread"> <input className="checkbox" type="checkbox"></input> </div>
+                                <div className = "star"><i class="fa-regular fa-star"></i> </div>
                                 <div className = "user">user@gmail.com</div>
                                 <div className = "msg-details">
                                     <div className = "title">Hello how are you?</div>
