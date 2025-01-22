@@ -7,7 +7,8 @@ const { useState, useEffect, useRef } = React
 
 import { MailList } from '../cmps/MailList.jsx'
 import { mailsService } from '../services/mails.service.js'
-
+// import {mailUtilService} from "../services/mail-util.service.js"
+import { mailUtilService } from '../services/mail-util.service.js'
 
 export function MailIndex() {
 
@@ -19,6 +20,22 @@ export function MailIndex() {
     const [starredMails, setStarredMails] = useState([])
     const [unreadInboxMails, setUnreadInboxMails] = useState([])
     const [sentMails, setSentMails] = useState([])
+
+    const [activePage, setActivePage] = useState('inbox')
+
+    const [activeTab, setActiveTab] = useState('primary')
+
+
+    // search
+    const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
+    const initialFilterBy = useRef({ ...filterBy })
+    // const onSetFilterDebounce = useRef(mailUtilService.debounce(onFilterBy, 500)).current
+    const onSetFilterDebounce = useRef(onSetFilterBy).current
+
+
+    useEffect(() => {
+        onSetFilterDebounce(filterByToEdit)
+    }, [filterByToEdit])
 
 
     useEffect(() => {
@@ -48,6 +65,9 @@ export function MailIndex() {
 
     }
 
+
+
+
     function removeMail(mailId) {
         mailsService.remove(mailId)
             .then(() => {
@@ -62,11 +82,28 @@ export function MailIndex() {
 
 
 
+
+
+
+    function handleSearchChange({ target }) {
+        const { name: field, type } = target
+        const value = type === 'number' ? +target.value : target.value
+        setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
+    }
+
+    function reset() {
+        setFilterByToEdit(initialFilterBy.current)
+    }
+
+
+
+
+
     return (<div className="mail-page">
         <header className="mail-header">
 
             <section className="logo">
-                <i className = "fa-solid fa-bars"></i>
+                <i className = "hover-hint fa-solid fa-bars hover-hint-strong"></i>
                 <img src="assets/img/gmail-logo.png"></img>
                 <h3>Gmail</h3>
 
@@ -79,14 +116,14 @@ export function MailIndex() {
             <section className="search">
 
                 <div className="search-bar">
-                <input className="searchbox" type = "text" placeholder = "Search" />
+                <input name='txt' className="searchbox" type = "text" placeholder = "Search" onChange={handleSearchChange} value={filterByToEdit.txt} />
                         </div>    
 
                     </section>
 
                     {/* <section className = "user-details"> </section>                 */}
                     <section className = "user-details">
-                        <div className = "fa-solid fa-grip toolbar-button"> </div>    
+                        <div className = "fa-solid fa-grip toolbar-button hover-hint hover-hint-strong"> </div>
                         <img src = "assets/img/user-avatar.png"></img>
                     </section>                
                 
@@ -100,32 +137,55 @@ export function MailIndex() {
                         <section className = "compose">
                             <button><i className = "fa-solid fa-pen"></i> <span>Compose</span></button>                        
                         </section>
-                    
-                        <div className = "inbox side-bar-category" onClick={() => {onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)} }>
+
+                        <div className = {`inbox side-bar-category ${(activePage === 'inbox')? 'mail-side-bar-active': ''}`}
+                             onClick   = {() => {
+                                               onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)
+                                               setActivePage('inbox')
+                                          }}>
+
                             <i className = "fa-solid fa-inbox"></i>
                             <span>Inbox</span>
                             <span>{unreadInboxMails}</span>
                         </div>    
                         
-                        <div className = "starred side-bar-category">                            
+                        <div className = {`starred side-bar-category ${(activePage === 'starred')? 'mail-side-bar-active': ''}`}
+                             onClick = {() => {
+                                               onSetFilterBy({isStared: true}, true)
+                                               setActivePage('starred')
+                                       }}>
                             <i className = "fa-regular fa-star"></i>
                             <span>Starred</span>
                             <span>{starredMails}</span>
                         </div>    
                         
-                        <div className = "sent side-bar-category" onClick={() => {onSetFilterBy({from: mailsService.getLoggedinUser().email}, true)} }>
+                        <div className = {`sent side-bar-category ${(activePage === 'sent')? 'mail-side-bar-active': ''}`}
+                             onClick = {() => {
+                                            onSetFilterBy({from: mailsService.getLoggedinUser().email}, true)
+                                            setActivePage('sent')
+                                       }}>
+
                             <i className = "fa-regular fa-paper-plane"></i>
                             <span>Sent</span>
                             <span>{sentMails}</span>
                         </div>    
                         
-                        <div className = "draft side-bar-category">
+                        <div className = {`draft side-bar-category ${(activePage === 'draft')? 'mail-side-bar-active' : ''}`}
+                             onClick = {() => {
+                                            onSetFilterBy({sentAt: null, createdAt: true}, true)
+                                            setActivePage('draft')
+                                       }}>
                             <i className = "fa-regular fa-file"></i>                            
                             <span>Drafts</span>
                             <span>0</span>
                         </div>    
                         
-                        <div className = "trash side-bar-category">
+                        <div className = {`trash side-bar-category ${(activePage === 'trash')? 'mail-side-bar-active' : ''}`}
+                             onClick = {() => {
+                                 onSetFilterBy({sentAt: null, createdAt: true}, true)
+                                 setActivePage('trash')
+                             }}>
+
                             <i className = "fa-solid fa-trash"></i>
                             <span>Trash</span>
                             <span></span>
@@ -136,9 +196,23 @@ export function MailIndex() {
                     <div className = "main-table">
 
                         <div className = "tab-bar">
-                            <div className = "primary-tab tab-item tab-active"><i className = "fa-solid fa-inbox"></i><span>Primary</span></div>
-                            <div className = "promotions-tab tab-item"><i className = "fa-solid fa-tag"></i><span>Promotions</span></div>
-                            <div className = "social-tab tab-item"><i className = "fa-regular fa-user"></i><span>Social</span></div>
+                            <div className = {`primary-tab tab-item ${(activeTab === 'primary')? 'tab-active': ''}`}
+                                 onClick = {() => {
+                                     onSetFilterBy({labels: ['primary']}, true)
+                                     setActiveTab('primary')
+                                 }}>
+                                <i className = "fa-solid fa-inbox"></i><span>Primary</span></div>
+                            <div className = {`promotions-tab tab-item ${(activeTab === 'promotions')? 'tab-active': ''}`}
+                                 onClick = {() => {
+                                     onSetFilterBy({labels: ['promotions']}, true)
+                                     setActiveTab('promotions')
+                                 }}>
+                                <i className = "fa-solid fa-tag"></i><span>Promotions</span></div>
+                            <div className = {`social-tab tab-item ${(activeTab === 'social')? 'tab-active': ''}`}
+                                 onClick = {() => {
+                                     onSetFilterBy({labels: ['social']}, true)
+                                     setActiveTab('social')
+                                 }}><i className = "fa-regular fa-user"></i><span>Social</span></div>
                         </div>
 
                         <div className = "filter-bar">

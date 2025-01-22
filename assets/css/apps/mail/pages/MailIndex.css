@@ -1,5 +1,6 @@
 
 
+
 .mail-page .logo {
     width: 256px;
 }
@@ -157,7 +158,7 @@
     align-items: center;
     gap: 16px;
     padding: 8px 24px;
-    border-radius: 0 16px 16px 0;
+    border-radius: 16px;
     margin-right: 10px;
     cursor: pointer;
     font-size: 14px;
@@ -221,9 +222,16 @@
     align-items: center;
     padding-inline: 20px;
     gap: 1em;
+    /*line-height: normal;*/
+    /*letter-spacing: normal;*/
+    font-size: 14px;
+    font-weight: 500;
+    font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
 
 .mail-page .tab-active {
+    /*font-family: Roboto;*/
+
     color: #0b57cf;
     border-bottom: #0b57cf 3px solid;
 
@@ -344,6 +352,11 @@ input.checkbox {
     font-weight: bold;
 }
 
+.mail-page article .msg .read  {
+    /*background-color: #f2f6fc;*/
+    /*background-color: red;*/
+}
+
 .read .msg-details .title,
 .read .from{
     font-weight: normal;
@@ -352,4 +365,96 @@ input.checkbox {
 .unread .msg-details .title,
 .unread .from {
     font-weight: bold;
+}
+
+.mail-side-bar-active {
+    background-color: #d3e3fd;
+    font-weight: bold;
+    color: #202124;    
+}
+
+.mail-page .inbox span:last-child {
+    color: #202124;    
+}
+
+.msg:hover {
+    background-color: #c2dbff;
+    box-shadow: inset 1px 0 0 rgb(218,220,224),inset -1px 0 0 rgb(218,220,224),0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+    z-index: 1;
+}
+
+article.msg:hover  {
+    background-color: #c2dbff;
+    box-shadow: inset 1px 0 0 rgb(218,220,224),inset -1px 0 0 rgb(218,220,224),0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);
+    /*z-index: 2;*/
+}
+
+
+/*.msg:hover::after {*/
+/*    font-family: 'fa-solid';*/
+/*    position: absolute;*/
+/*    content: '\f031';*/
+/*    right: 0.7em;*/
+/*    font-size: 0.8em;*/
+/*    color: transparent;*/
+/*    text-shadow: 0 0 0 gray;*/
+/*    pointer-events: none;*/
+/*    z-index: 0;*/
+/*}*/
+
+.msg:hover i {
+    color: #444746;
+}
+
+.hover-hint {
+    cursor: pointer;
+    position: relative;
+
+}
+
+.hover-hint:hover>* {
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.hover-hint:hover::before {
+    position: relative;
+    z-index: 1;
+}
+
+.hover-hint:hover::after {
+    content: '';
+    position: absolute;
+    background-color: rgb(242, 242, 242, 0.5);
+    /*background-color: red;*/
+    border-radius: 2em;
+    height: 200%;
+    aspect-ratio: 1;
+    left: -30%;
+    top: -50%;
+    z-index: 0;
+
+
+    transition: all 0.3s ease;
+
+
+}
+
+.hover-hint-strong:hover::after {
+    left: -60%;
+    background-color: #e0e0e0;
+}
+
+
+.tab-item {
+    cursor: pointer;
+    /*padding: 20px;*/
+    /*margin-inline: 20px;*/
+
+}
+
+.tab-item:hover {
+    background-color: #f4f4f4;
 }

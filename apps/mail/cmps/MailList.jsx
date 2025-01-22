@@ -12,8 +12,8 @@ export function MailList({ mails, onRemove }) {
         {mails.map(mail =>
 
             <article className={`msg ${mail.isRead ? 'read' : 'unread'}`} key = {mail.id}>
-                <div className="unread-checkbox"><input className="checkbox" type="checkbox"></input></div>
-                <div className={`star ${mail.isStared ? 'stared' : 'unstared'}`}><i className="fa-regular fa-star"></i></div>
+                <div className="unread-checkbox hover-hint"><input className="checkbox" type="checkbox"></input></div>
+                <div className={`star hover-hint ${mail.isStared ? 'stared' : 'unstared'}`}><i className="fa-regular fa-star"></i></div>
                 <div className="from">{mail.from}</div>
                 <div className="msg-details">
                     <div className="title">{mail.subject}</div>
