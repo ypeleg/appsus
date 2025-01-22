@@ -1,4 +1,6 @@
+
 import { storageService } from '../../../services/async-storage.service.js'
+import { utilService } from '../../../services/util.service.js'
 import { loadFromStorage, saveToStorage } from '../../../services/storage.service.js'
 
 const allNotes = [
@@ -81,27 +83,28 @@ function get(noteId) {
 }
 
 function remove(noteId) {
-  // return Promise.reject('Oh No!')
-  return storageService.remove(NOTE_KEY, noteId)
+    return storageService.remove(NOTE_KEY, noteId)
 }
 
 function save(note) {
-  if (note.id) {
-    return storageService.put(NOTE_KEY, note)
-  } else {
-    return storageService.post(NOTE_KEY, note)
+    console.log('a')
+    if (note.id) {
+        console.log('b')
+        return storageService.put(NOTE_KEY, note)
+    } else {
+        console.log('c')
+        return storageService.post(NOTE_KEY, note)
   }
 }
 
-function getEmptyNote(type = '', isPinned = false) {
-  return {
+function getEmptyNote(type = 'NoteTxt', isPinned = false, info = {}, style = {backgroundColor: '#00d'}) {
+    return {
+    // id: utilService.makeId(),
     type,
     createdAt: Date.now(),
     isPinned,
-    info: {},
-    style: {
-      backgroundColor: '#00d',
-    }
+    info,
+    style,
   }
 }
 
@@ -120,11 +123,7 @@ function _createNotes() {
   }
 }
 
-// function _createnote(crate, speed = 250) {
-//   const note = getEmptyNote(vendor, speed)
-//   note.id = makeId()
-//   return note
-// }
+
 
 
 

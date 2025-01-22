@@ -1,3 +1,5 @@
+import { mailsService } from "../../mail/services/mails.service"
+
 const { useEffect, useState } = React
 const { Link, useSearchParams } = ReactRouterDOM
 
@@ -15,19 +17,22 @@ export function NoteIndex() {
 
     useEffect(() => {
         loadNotes()
-    }, [])
-
-
-
+    }, [notes])
 
     function loadNotes() {
-        noteService.query()
-            .then(notes => {
-                console.log(notes);
-                setNotes(notes)
+        noteService.query().then(notes => setNotes(notes))
+    }
+
+    function onSaveNote(note) {
+        console.log('note', note);
+        // const noteToSave = getEmptyNote()
+        noteService.save(note)
+            .then(() => {
+                loadNotes()
+                console.log('Note saved!!')
             })
             .catch(err => {
-                console.log('Problems getting notes:', err)
+                console.log('Problems saving note:', err)
             })
     }
 
