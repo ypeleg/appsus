@@ -9,7 +9,7 @@ export function UpdateNote({ note, onClose, onSaveNote }) {
 
   function handleSave() {
     setEditedNote(editedNote)
-    onSaveNote(editedNote)
+    // onSaveNote(editedNote)
     onClose()
   }
 

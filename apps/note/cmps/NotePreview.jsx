@@ -1,15 +1,53 @@
+import { noteService } from "../services/note.service.js";
 import { ToolsBtnsNote } from "./ToolsBtnsNote.jsx";
 import { UpdateNote } from "./UpdateNote.jsx";
 
 const { useEffect, useState, useRef } = React
+const { useSearchParams, useParams, useNavigate } = ReactRouterDOM
 
 
 
 export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedNote, setSelectedNote] = useState(null);
+  const { noteId } = useParams()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (noteId) {
+      console.log(noteId);
+
+      noteService.get(noteId)
+        .then(startEditing)
+        .catch(err => {
+          console.log('Problem getting car', err)
+          // navigate('/note')
+        })
+
+      console.log(selectedNote);
 
 
+    }
+  }, [])
+
+  function startEditing(note) {
+    setSelectedNote(note)
+    setIsEditing(true)
+
+  }
+
+  // useEffect(() => {
+  //   console.log(noteId);
+  // }, [selectedNote])
+
+  function loadNote() {
+    noteService.get(noteId)
+      .then(setSelectedNote)
+      .catch(err => {
+        console.log('Problem getting car', err)
+        navigate('/note')
+      })
+  }
 
   function NoteTxt({ note }) {
     return (
@@ -80,7 +118,10 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
     // onOpenUpdate(note)}
     <div>
 
-      <pre className="note-preview" onClick={() => onOpenUpdate(note)} >
+      <pre className="note-preview"
+        onClick={() => onOpenUpdate(note)}
+      // style={note.style}
+      >
         <div className="remove fa-solid fa-circle-mark" onClick={() => onRemoveNote(note.id)}>X</div>
 
         {note.type === 'NoteTxt' &&
@@ -93,10 +134,11 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
           <NoteVideo note={note} />
         }
         {note.type === 'NoteTodos' &&
-          <NoteTodos note={note} />
+          <NoteTodos note={note}
+            onSaveNote={(note) => onSaveNote(note)} />
         }
 
-        <ToolsBtnsNote />
+        <ToolsBtnsNote note={note} />
 
       </pre>
 
@@ -104,7 +146,7 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
         <UpdateNote
           note={selectedNote}
           onClose={() => setIsEditing(false)}
-          onSaveNote={(note) => onSaveNote(note)}
+          onsaveNote={(note) => onSaveNote(note)}
         />
       )
       }

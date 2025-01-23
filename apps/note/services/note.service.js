@@ -10,7 +10,7 @@ const allNotes = [
     type: 'NoteTxt',
     isPinned: true,
     style: {
-      backgroundColor: '#00d'
+      backgroundColor: '#fff'
     },
     info: {
       title: 'Talshri',
@@ -27,7 +27,7 @@ const allNotes = [
       title: 'Bobi and Me'
     },
     style: {
-      backgroundColor: '#00d'
+      backgroundColor: '#fff'
     }
   },
   {
