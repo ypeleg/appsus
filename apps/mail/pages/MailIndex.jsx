@@ -20,13 +20,21 @@ export function MailIndex() {
 
     const [filterBy, setFilterBy] = useState(mailsService.getDefaultFilter())
 
+
     const [starredMails, setStarredMails] = useState([])
     const [unreadInboxMails, setUnreadInboxMails] = useState([])
     const [sentMails, setSentMails] = useState([])
+    const [draftMails, setDraftMails] = useState([])
+    const [trashMails, setTrashMails] = useState([])
 
     const [activePage, setActivePage] = useState('inbox')
     const [activeTab, setActiveTab] = useState('primary')
 
+    const [currentDefaultMailDetails, setCurrentDefaultMailDetails] = useState({})
+
+    function onSetActivePage(page) {
+        setActivePage(page)
+    }
 
     // search
     const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
@@ -39,12 +47,26 @@ export function MailIndex() {
         onSetFilterDebounce(filterByToEdit)
     }, [filterByToEdit])
 
+    useEffect(() => {
+        setIsLoading(true)
+        mailsService.query(filterBy)
+            .then(mails => setMails(mails))
+            .finally(() => setIsLoading(false))
+    }, [filterBy])
 
     useEffect(() => {
 
         mailsService.query({isRead: true}).then(mails => {setUnreadInboxMails(mails.length)})
+
+        // mailsService.query({isStared: true}).then(mails => {setStarredMails(mails.length)})
+
         mailsService.query({isStared: true}).then(mails => {setStarredMails(mails.length)})
-        mailsService.query({from: mailsService.getLoggedinUser().email }).then(mails => {setSentMails(mails.length)})
+
+        mailsService.query({from: mailsService.getLoggedinUser().email, sentAt: true }).then(mails => {setSentMails(mails.length)})
+
+        mailsService.query({from: mailsService.getLoggedinUser().email, sentAt: false }).then(mails => {setDraftMails(mails.length)})
+
+        mailsService.query({removedAt: true }).then(mails => {setTrashMails(mails.length)})
 
         onSetFilterBy({to: mailsService.getLoggedinUser().email})
 
@@ -104,11 +126,12 @@ export function MailIndex() {
 
 
     // const [book, setBook] = useState(null)
-    // const [isLoading, setIsLoading] = useState(true)
+    
+    const [isLoading, setIsLoading] = useState(true)
     // const [isLoadingReview, setIsLoadingReview] = useState(false)
+
     const [isShowComposeMail, setIsShowComposeMail] = useState(false)
     const [isMaximized, setIsMaximized] = useState(false)
-
 
     // isShowComposeMail
     // onToggleComposeModal
@@ -135,13 +158,23 @@ export function MailIndex() {
         // mailsService.save(mailToAdd).then(mails => setMails(mails))
     }
 
+    // {to: 'someone', body: 'body', subject: 'sub'}
 
+    function composeNewMail(mailTo = null, mailSubject = null, mailBody = null, focusOn = null) {
+        let defaultParams = {}
+        if (mailTo !== null) defaultParams.to = mailTo
+        if (mailBody !== null) defaultParams.body = mailBody
+        if (mailSubject !== null) defaultParams.subject = mailSubject
+        setCurrentDefaultMailDetails({...defaultParams})
+        onToggleComposeMail()
+    }
 
     return (
         <div className="mail-page">
 
             {isShowComposeMail && (
                 <ComposeMail
+                    defaultMailDetails={currentDefaultMailDetails}
                     toggleModal={onToggleComposeMail}
                     sendMail={onSaveMail}
                     isMaximized={isMaximized}
@@ -189,13 +222,14 @@ export function MailIndex() {
 
 
                     <section className="compose">
-                        <button onClick={onToggleComposeMail}><i className="far fa-pen"></i> <span>Compose</span></button>
+                        <button onClick={ () => {composeNewMail()} }><i className="far fa-pen"></i> <span>Compose</span></button>
                     </section>
 
                     <div className={`inbox side-bar-category ${(activePage === 'inbox') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                             onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)
-                             setActivePage('inbox')
+                            // goToPage('inbox')
+                            onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)
+                            setActivePage('inbox')
                          }}>
 
                         <i className="fa-solid fa-inbox"></i>
@@ -215,7 +249,7 @@ export function MailIndex() {
 
                     <div className={`sent side-bar-category ${(activePage === 'sent') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                             onSetFilterBy({from: mailsService.getLoggedinUser().email}, true)
+                             onSetFilterBy({from: mailsService.getLoggedinUser().email, sentAt: true}, true)
                              setActivePage('sent')
                          }}>
 
@@ -226,23 +260,23 @@ export function MailIndex() {
 
                     <div className={`draft side-bar-category ${(activePage === 'draft') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                             onSetFilterBy({sentAt: null, createdAt: true}, true)
+                             onSetFilterBy({sentAt: false, removedAt: false}, true)
                              setActivePage('draft')
                          }}>
                         <i className="fa-regular fa-file"></i>
                         <span>Drafts</span>
-                        <span>0</span>
+                        <span>{draftMails}</span>
                     </div>
 
                     <div className={`trash side-bar-category ${(activePage === 'trash') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                             onSetFilterBy({sentAt: null, createdAt: true}, true)
+                             onSetFilterBy({removedAt: true}, true)
                              setActivePage('trash')
                          }}>
 
                         <i className="fa-solid fa-trash"></i>
                         <span>Trash</span>
-                        <span></span>
+                        <span>{trashMails}</span>
                     </div>
 
                 </div>
@@ -278,7 +312,7 @@ export function MailIndex() {
                             </div>
 
                             <div className="mail-header-right-section">
-                                <span className="pagination-text">1-50 of 48,994</span>
+                                <span className="pagination-text">1-{(mails.length < 51)? mails.length: 50} of {mails.length}</span>
 
                                 <button className="font-awesome-hover-hint">
                                     <i className="far fa-chevron-left"></i>
@@ -358,7 +392,11 @@ export function MailIndex() {
                                     ).then(setActivePage('read-msg'))
 
                                 }
-                            }/>
+                            }
+
+
+
+                        />
 
                     </div>
 
@@ -366,7 +404,7 @@ export function MailIndex() {
 
                 {/*<div className="userMsg">loading...</div>*/}
 
-                <div className={`userMsg ${((activePage === 'read-msg') && (activeMail === null)) && 'shown'} `}>loading...</div>
+                <div className={`userMsg ${   (((activePage === 'read-msg') && (activeMail === null)) || ( isLoading ) )  && 'shown'} `}>loading...</div>
 
 
 
@@ -424,7 +462,9 @@ export function MailIndex() {
                                 <div className="sender-actions">
                                     <span className="timestamp">{activeMail.sentAt}</span>
                                     <button className="font-awesome-hover-hint"><i className="far fa-star"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-reply"></i></button>
+                                    <button className="font-awesome-hover-hint" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>
+                                        <i className="far fa-reply"></i>
+                                    </button>
                                     <button className="font-awesome-hover-hint"><i className="far fa-ellipsis-v"></i></button>
                                 </div>
                             </div>
@@ -437,8 +477,25 @@ export function MailIndex() {
                         </div>
 
                         <div className="read-msg-actions">
-                            <button className="reply-btn"><i className="far fa-reply"></i>Reply</button>
-                            <button className="forward-btn"><i className="far fa-share"></i>Forward</button>
+
+                            <button className="reply-btn" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>
+                                <i className="far fa-reply"></i>Reply
+                            </button>
+
+                            <button className="forward-btn" onClick={() => composeNewMail('', `Fwd: ${activeMail.subject}`, '' + '\n\n' +
+
+                                '---------- Forwarded message ---------' +
+                                '\nFrom: ' + activeMail.from +
+                                '\nDate: ' + activeMail.sentAt +
+                                '‪\nSubject: ' + activeMail.subject +
+                                '\n‪To: ' + activeMail.to +
+                                '\n\n‪‪' + activeMail.body)}>
+
+
+
+                                <i className="far fa-share"></i>Forward
+                            </button>
+
                         </div>
                     </div>
                 }

@@ -22,13 +22,30 @@ function TextBox({ handleChange, txt }) {
 }
 
 
-export function ComposeMail({ sendMail, toggleModal, isMaximized, toggleMaximizedModal }) {
+
+export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaximized, toggleMaximizedModal }) {
+
+    // let {defaultFrom, defaultTo, defaultBody} = defaultMailDetails
+
+    console.log('defaultMailDetails', defaultMailDetails)
+    
+    let defaultParams = {to: '', body: '' , subject: ''}
+    if (defaultMailDetails.to !== null) defaultParams.to = defaultMailDetails.to
+    if (defaultMailDetails.body !== null) defaultParams.body = defaultMailDetails.body
+    if (defaultMailDetails.subject !== null) defaultParams.subject = defaultMailDetails.subject
+
 
     const inputRef = useRef()
     const [mail, setMail] = useState(mailsService.getDefaultEmail())
 
 
+    console.log('defaultParams,', defaultParams)
+    console.log('defaultMailDetails,', defaultMailDetails)
+
     useEffect(() => {
+
+        setMail({...mail, ...defaultParams})
+
         // inputRef.current.focus()
     }, [])
 
