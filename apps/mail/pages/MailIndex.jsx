@@ -126,8 +126,11 @@ export function MailIndex() {
     function onSaveMail(mailToAdd) {
         mailsService.save(mailToAdd)
             .then((savedMails) => {
-                setMails((prevMails) => [...prevMails, savedMails]);
-                console.log("Mail saved:", savedMails);
+
+                mailsService.query(filterBy).then(mails => setMails(mails))
+
+                // setMails((prevMails) => [...prevMails, savedMails]);
+                // console.log("Mail saved:", savedMails);
             })
         // mailsService.save(mailToAdd).then(mails => setMails(mails))
     }
@@ -328,11 +331,32 @@ export function MailIndex() {
                         {/*    <div className="all-selection select-box"> All</div>*/}
                         {/*</div>*/}
 
-                        <MailList mails={mails} onRemove={removeMail} onReadMail=
+                        <MailList mails={mails} onRemove={removeMail} showFrom={activePage !== 'sent'} onReadMail=
                             {
                                 (mailId) => {
                                     setActiveMail(null)
-                                    mailsService.get(mailId).then(mail => setActiveMail(mail)).then(setActivePage('read-msg'))
+                                    mailsService.readMail(mailId)
+
+                                    // setMails(prevMails => ({ ...prevBook, [prop]: value }))
+
+                                    // mailsService.query(filterBy).then(mails => setMails(mails))
+
+                                    // mailsService.query(filterBy).then(mails => setMails(mails))
+                                    mailsService.get(mailId).then(mail => {
+
+
+                                            setMails(prevMails => prevMails.map(mail => {
+                                                if (mail.id === mailId) {
+                                                    mail.isRead = true
+                                                }
+                                                return mail
+                                            }))
+
+                                            setActiveMail(mail)
+
+                                        }
+                                    ).then(setActivePage('read-msg'))
+
                                 }
                             }/>
 

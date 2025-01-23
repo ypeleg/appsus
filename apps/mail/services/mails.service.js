@@ -14,6 +14,7 @@ export const mailsService = {
     save,
     query,
     remove,
+    readMail,
     getLoggedinUser,
     getDefaultEmail,
     getDefaultFilter,
@@ -76,6 +77,15 @@ function query(filterBy = {}) {
         })
 }
 
+function readMail(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            mail.isRead = true
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
+        })
+
+}
+
 function get(mailId) {
     return storageService.get(MAIL_KEY, mailId)
         // .then(mail => _setNextPrevMailId(mail))
@@ -119,12 +129,12 @@ function getDefaultEmail() {
         subject: '',
         body: '',
 
-        isRead: mailUtilService.random.choice([true, false]),
-        isStared: mailUtilService.random.choice([true, false]),
+        isRead: true,
+        isStared: false,
 
-        removedAt: mailUtilService.random.choice([null, mailUtilService.random.date('2021-01-01', '2025-01-22')]),
+        removedAt: null,
 
-        labels: mailUtilService.random.sample(['Primary', 'Promotions', 'Social'], mailUtilService.random.randint(0, 3)),
+        labels: [],
 
         from: getLoggedinUser().email,
         to: ''
