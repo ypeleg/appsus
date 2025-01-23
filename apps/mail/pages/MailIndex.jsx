@@ -1,4 +1,5 @@
 
+
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 
@@ -68,7 +69,7 @@ export function MailIndex() {
 
         mailsService.query({removedAt: true }).then(mails => {setTrashMails(mails.length)})
 
-        onSetFilterBy({to: mailsService.getLoggedinUser().email})
+        onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
 
     }, [])
 
@@ -136,7 +137,7 @@ export function MailIndex() {
 
 
     // const [book, setBook] = useState(null)
-    
+
     const [isLoading, setIsLoading] = useState(true)
     // const [isLoadingReview, setIsLoadingReview] = useState(false)
 
@@ -263,6 +264,35 @@ export function MailIndex() {
         })
     }
 
+
+    function filtersToBox(currentMail) {
+
+        const {to, sentAt, removedAt, from} = currentMail
+
+        if ((to === mailsService.getLoggedinUser().email) && (!removedAt)) {
+            return 'Inbox'
+        }
+
+        if (sentAt && (from === mailsService.getLoggedinUser().email) && (!removedAt)) {
+            return 'Sent'
+        }
+
+        if (!sentAt && (!removedAt)) {
+            return 'Draft'
+        }
+
+        if (removedAt) {
+            return 'Trash'
+        }
+
+        return 'Inbox'
+
+        // inbox {to: mailsService.getLoggedinUser().email, removedAt: false}
+        // sent { from: mailsService.getLoggedinUser().email, sentAt : true, removedAt : false }
+        // draft { sentAt: false, removedAt : false }
+        // trash { removedAt: true }
+    }
+
     return (
         <div className="mail-page">
 
@@ -322,7 +352,7 @@ export function MailIndex() {
                     <div className={`inbox side-bar-category ${(activePage === 'inbox') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
                             // goToPage('inbox')
-                            onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)
+                            onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
                             setActivePage('inbox')
                          }}>
 
@@ -343,7 +373,7 @@ export function MailIndex() {
 
                     <div className={`sent side-bar-category ${(activePage === 'sent') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                             onSetFilterBy({from: mailsService.getLoggedinUser().email, sentAt: true}, true)
+                             onSetFilterBy({from: mailsService.getLoggedinUser().email, sentAt: true, removedAt: false}, true)
                              setActivePage('sent')
                          }}>
 
@@ -462,6 +492,7 @@ export function MailIndex() {
                         <MailList mails={mails} onRemove={onRemove} showFrom={activePage !== 'sent'}
 
                                   onMarkAsRead = {onMarkAsRead}
+                                  nowRendering={activePage}
                                   onSelect = {onSelect}
                                   onReply = {onReply}
                                   onStar = {onStar}
@@ -543,7 +574,16 @@ export function MailIndex() {
                         <div className="read-msg-header">
                             <div className="subject-line">
                                 <h2>{activeMail.subject}</h2>
-                                <span className="label">Inbox</span>
+                                <span className="label">
+
+                                    {filtersToBox(activeMail)}
+
+
+                                    {/*Inbox*/}
+
+
+
+                                </span>
                                 <div className="header-actions">
                                     <button className="font-awesome-hover-hint"><i className="fa-solid fa-print"></i></button>
                                     <button className="font-awesome-hover-hint"><i className="fa-solid fa-external-link-alt"></i></button>

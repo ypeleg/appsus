@@ -21,7 +21,7 @@ function prettyShortPaddedDate(date) {
 
 }
 
-export function MailList({ mails, onRemove, onMarkAsRead, onReadMail, showFrom, onReply, onStar, onTag, onSelect }) {
+export function MailList({ nowRendering, mails, onRemove, onMarkAsRead, onReadMail, showFrom, onReply, onStar, onTag, onSelect }) {
 
     return (<div className="messages">
         {mails.map(mail =>
@@ -34,13 +34,38 @@ export function MailList({ mails, onRemove, onMarkAsRead, onReadMail, showFrom, 
                 <div onClick={(ev) => onStar(ev, mail.id)}
                      className={`fullksizediv tooltip star ${mail.isStared ? 'stared' : 'unstared'}`} data-tip = "Mark with Star"><i className="fa-regular fa-star"></i></div>
 
-                <div onClick={(ev) => onTag(ev, mail.id)}
-                     className={`fullksizediv tooltip star ${mail.labels.includes('important') ? 'stared' : 'unstared'}`} data-tip = "Mark as Important"><i className="fa-regular fa-bookmark"></i></div>
+
+                {!(nowRendering === 'trash') &&
+                    <div onClick={(ev) => onTag(ev, mail.id)}
+                         className={`fullksizediv tooltip star ${mail.labels.includes('important') ? 'stared' : 'unstared'}`} data-tip = "Mark as Important"><i className="fa-regular fa-bookmark"></i></div>
+                }
+
+                { (nowRendering === 'trash') &&
+                    <div onClick={(ev) => onTag(ev, mail.id)}
+                         className={`fullksizediv tooltip star`} data-tip = "Delete Forever"><i className="fas fa-trash"></i></div>
+                }
+
 
                 {/* {showFrom? <div className="from">{mail.from}</div>: <div className="from">To: {mail.to}</div>} */}
-                <div className="from">{mail.from}</div>
+
+                {(nowRendering === 'trash') && <div className="from drafts-placeholder"> {mail.to} <span className="draft-notice label">TRASH</span> </div>}
+                {(nowRendering === 'draft') && <div className="from drafts-placeholder"> {mail.to} <span className="draft-notice-lite">Draft</span> </div>}
+                {(nowRendering === 'sent') && <div className="from sent-placeholder"><b>To:</b> {mail.to}</div>}
+
+                {
+                    (!(nowRendering === 'draft')  &&
+                    (!(nowRendering === 'sent'))  &&
+                    (!(nowRendering === 'trash'))
+
+
+                    ) &&
+
+                    <div className="from">{mail.from}</div>}
+
+
                 <div className="msg-details">
-                    <div className="title">{mail.subject}</div>
+
+                    <div className="title">{(nowRendering === 'sent') && <span className="label">Inbox </span>}{mail.subject}</div>
                     <div className="subtitle"> - {mail.body}</div>
                 </div>
                 <div className="date">{prettyShortPaddedDate(mail.sentAt)}</div>

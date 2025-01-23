@@ -1377,3 +1377,26 @@ input[type="checkbox"] {
 
 
 
+
+
+.draft-notice {
+
+    /*color: red;*/
+    color: white;
+    /*font-size: 0.8em;*/
+    font-size: 10px;
+    font-weight: normal;
+    /*padding: 0.5em;*/
+    background-color: #d9534f;
+}
+
+.draft-notice-lite {
+
+    color: #d9534f;
+    /*color: white;*/
+    /*font-size: 0.8em;*/
+    /*font-size: 10px;*/
+    font-weight: normal;
+    /*padding: 0.5em;*/
+    /*background-color: #d9534f;*/
+}

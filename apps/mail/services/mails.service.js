@@ -90,6 +90,11 @@ function query(filterBy = {}) {
                 mails = mails.filter(mail => (mail.removedAt !== null))
             }
 
+            // NOT DELETED
+            if (filterBy.removedAt === false) {
+                mails = mails.filter(mail => ((mail.removedAt === null) || (mail.removedAt === undefined)))
+            }
+
 
             // // draft
             // if ( ((filterBy.sentAt === null) || (filterBy.sentAt === undefined)) && ((filterBy.createdAt === true) ) ) {
