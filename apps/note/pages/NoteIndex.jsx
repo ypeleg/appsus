@@ -1,4 +1,3 @@
-import { mailsService } from "../../mail/services/mails.service"
 
 const { useEffect, useState } = React
 const { Link, useSearchParams } = ReactRouterDOM
@@ -37,8 +36,7 @@ export function NoteIndex() {
         noteService
             .save(note)
             .then((savedNote) => {
-                setNotes((prevNotes) => [...prevNotes, savedNote]);
-                console.log("Note saved:", savedNote)
+                loadNotes()
             })
             .catch(err => {
                 console.log('err:', err)
@@ -70,6 +68,7 @@ export function NoteIndex() {
                     <AddNote onSaveNote={(note) => onSaveNote(note)} />
                     <NoteList
                         notes={notes}
+                        onRemoveNote={(noteId) => onRemoveNote(noteId)}
                     />
                 </div>
             </main>

@@ -7,15 +7,17 @@ export function AddNote({ onSaveNote }) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [notes, setNotes] = useState(null)
+  const [cmpType, setCmpType] = useState('NoteTxt')
 
-  // const openClass = isOpen ? 'open' : ''
   const [noteToEdit, setNoteToEdit] = useState(noteService.getEmptyNote())
   const texRef = useRef(null);
   const titleRef = useRef(null);
 
-  // useEffect(() => {
-  //   loadNotes()
-  // }, [])
+  useEffect(() => {
+    // loadNotes()
+    console.log(cmpType);
+
+  }, [cmpType])
 
   // // useEffect(() => {
   // //   loadNotes()
@@ -55,6 +57,31 @@ export function AddNote({ onSaveNote }) {
     onSaveNote(noteToEdit)
   }
 
+  function handaleType(ev, type) {
+    console.log(ev);
+    ev.stopPropagation()
+    setCmpType(type)
+  }
+
+
+
+
+
+
+
+
+
+
+  function DynamicCmp(props) {
+    // console.log('props:', props)
+    switch (cmpType) {
+      case 'TextBox':
+        return <ColorInput {...props} />
+      case 'fontSize':
+        return <FontsizeInput {...props} />
+    }
+  }
+
 
 
 
@@ -65,28 +92,29 @@ export function AddNote({ onSaveNote }) {
 
       {isOpen ?
         <div className="note-editor">
-          <form onSubmit={saveNote}>
 
-            <input type="text"
-              placeholder="Name"
-              ref={titleRef}
-            />
-            <blockquote contenteditable="true"
-              ref={texRef} >
-              <p contenteditable="true" data-placeholder="Type your text here..."></p>
-            </blockquote>
+          <input type="text"
+            placeholder="Name"
+            ref={titleRef}
+          />
+          <blockquote contentEditable="true"
+            ref={texRef}
+          >
+
+            <p data-placeholder="Type your text here..."></p>
+          </blockquote>
 
 
-            <section className="note-editor-button">
-              <button className="close">Close</button>
-              <section className="tools-btns">
-                <button className="fa-solid fa-download"></button>
-                <button className="fa-solid fa-image"></button>
-                <button className="fa-solid fa-palette"></button>
-              </section>
-
+          <section className="note-editor-button">
+            <button className="close" onClick={(ev) => saveNote(ev)}>Close</button>
+            <section className="tools-btns">
+              <button className="fa-solid fa-download"></button>
+              <button className="fa-solid fa-image"></button>
+              <button className="fa-solid fa-palette"></button>
             </section>
-          </form>
+
+          </section>
+
 
         </div>
         :
@@ -96,17 +124,17 @@ export function AddNote({ onSaveNote }) {
           </div>
 
           <div className="notes-buttons">
-            <div className="fa-regular fa-a" ></div>
-            <div className="fa-regular fa-image"> </div>
-            <div className="fa-brands fa-youtube"> </div>
-            <div className="fa-regular fa-circle-check"> </div>
+            <div className="fa-regular fa-a" onClick={(ev) => handaleType(ev, 'TextBox')}></div>
+            <div className="fa-regular fa-image" onClick={(ev) => handaleType(ev, 'NoteImg')}> </div>
+            <div className="fa-brands fa-youtube" onClick={(ev) => handaleType(ev, 'TextBox')}> </div>
+            <div className="fa-regular fa-circle-check" onClick={(ev) => handaleType(ev, 'NoteTodos')}> </div>
           </div>
         </div >
       }
 
 
 
-    </section>
+    </section >
   )
 
 }
