@@ -1331,7 +1331,8 @@ input[type="checkbox"] {
 
 
 .stared>.fa-star,
-.msg:hover .stared>.fa-star {
+.msg:hover .stared>.fa-star,
+.sender-actions .stared{
     /*font-family: "far";*/
     /*font-family: "fa-solid-fr";*/
     /*font-family: fa-solid-fr;*/
@@ -1349,11 +1350,16 @@ input[type="checkbox"] {
 }
 
 .msg .stared>.fa-star::before,
-.msg .stared>.fa-bookmark::before {
+.msg .stared>.fa-bookmark::before,
+.sender-actions .stared::before{
     font-family: fa-solid;
     font-weight: 400;
 }
 
+.stared .fa-bookmark::before {
+    font-family: fa-solid;
+    font-weight: 400;
+}
 
 /*td {*/
 /*    transition: */

@@ -27,6 +27,7 @@ export const mailsService = {
     tagMail,
     readMail,
     starMail,
+    unReadMail,
     getLoggedinUser,
     getDefaultEmail,
     getDefaultFilter,
@@ -34,7 +35,7 @@ export const mailsService = {
 
 window.bs = mailsService
 
-function query(filterBy = {}) {
+function query(filterBy = {}, sortAsc = true) {
     return storageService.query(MAIL_KEY)
         .then(mails => {
 
@@ -103,6 +104,24 @@ function query(filterBy = {}) {
             // }
 
 
+            const mailsNotSent = mails.filter(mail => mail.sentAt === null)
+            let mailsSent = mails.filter(mail => mail.sentAt !== null)
+
+
+            console.log(mailsSent[0])
+
+            if (sortAsc) { mailsSent = mailsSent.sort((mail1, mail2) => {
+                return Date.parse(mail1.sentAt) - Date.parse(mail2.sentAt)
+
+            })}
+            else { mailsSent = mailsSent.sort((mail1, mail2) => {
+                return Date.parse(mail2.sentAt) - Date.parse(mail1.sentAt)
+                    // mail2.sentAt - mail1.sentAt
+            })}
+
+            console.log(mailsSent[0])
+
+            mails = [...mailsNotSent, ...mailsSent]
 
             return mails
         })
@@ -114,6 +133,14 @@ function readMail(mailId) {
             mail.isRead = true
             storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
     })
+}
+
+function unReadMail(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            mail.isRead = false
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
+        })
 }
 
 function starMail(mailId) {
