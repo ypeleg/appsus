@@ -14,7 +14,7 @@ export const utilService = {
     padNum,
     random: {
 
-        id: (length=6) => [...'x'.repeat(length)].map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join(''),
+        id: (length = 6) => [...'x'.repeat(length)].map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join(''),
 
         randint: (min, max) => { return Math.floor(Math.random() * (max - min + 1)) + min },
 
@@ -22,7 +22,7 @@ export const utilService = {
 
         date: (start, end) => { return new Date(Math.floor(Math.random() * (Date.parse(end) - Date.parse(start) + 1) + Date.parse(start))) },
 
-        lorem: (length = 6) => [...'x'.repeat(length)].map(() => ['The sky','above','the port','was','the color of television','tuned','to','a dead channel','.','All','this happened','more or less','.','I','had','the story','bit by bit','from various people','and','as generally','happens','in such cases','each time','it','was','a different story','.','It','was','a pleasure','to','burn'][Math.floor(Math.random()*32)]).join(' '),
+        lorem: (length = 6) => [...'x'.repeat(length)].map(() => ['The sky', 'above', 'the port', 'was', 'the color of television', 'tuned', 'to', 'a dead channel', '.', 'All', 'this happened', 'more or less', '.', 'I', 'had', 'the story', 'bit by bit', 'from various people', 'and', 'as generally', 'happens', 'in such cases', 'each time', 'it', 'was', 'a different story', '.', 'It', 'was', 'a pleasure', 'to', 'burn'][Math.floor(Math.random() * 32)]).join(' '),
 
     }
 }
@@ -115,3 +115,8 @@ function getMonthName(date) {
     return monthNames[date.getMonth()]
 }
 
+export function modifyYoutubeUrl(inputUrl) {
+    let url = inputUrl
+    let embedUrl = url.replace("/watch?v=", "/embed/watch?v=")
+    return embedUrl
+}

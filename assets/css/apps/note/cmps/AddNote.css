@@ -26,6 +26,17 @@
   padding: 20px;
 }
 
+.editor {
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editor input {
+  padding: 10px;
+}
+
 
 
 .add-note-container {

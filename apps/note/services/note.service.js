@@ -13,6 +13,7 @@ const allNotes = [
       backgroundColor: '#00d'
     },
     info: {
+      title: 'Talshri',
       txt: 'Fullstack Me Baby!'
     }
   },
@@ -83,22 +84,22 @@ function get(noteId) {
 }
 
 function remove(noteId) {
-    return storageService.remove(NOTE_KEY, noteId)
+  return storageService.remove(NOTE_KEY, noteId)
 }
 
 function save(note) {
-    console.log('a')
-    if (note.id) {
-        console.log('b')
-        return storageService.put(NOTE_KEY, note)
-    } else {
-        console.log('c')
-        return storageService.post(NOTE_KEY, note)
+  console.log('a')
+  if (note.id) {
+    console.log('b')
+    return storageService.put(NOTE_KEY, note)
+  } else {
+    console.log('c')
+    return storageService.post(NOTE_KEY, note)
   }
 }
 
-function getEmptyNote(type = 'NoteTxt', isPinned = false, info = {}, style = {backgroundColor: '#00d'}) {
-    return {
+function getEmptyNote(type = 'NoteTxt', isPinned = false, info = {}, style = { backgroundColor: '#00d' }) {
+  return {
     // id: utilService.makeId(),
     type,
     createdAt: Date.now(),
