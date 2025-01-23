@@ -120,16 +120,6 @@ input.newnote {
 
 }
 
-
-
-
-
-.notes-workspace {
-
-    /* width: 80%; */
-    /* padding-inline: auto; */
-}
-
 .new-notea::before {
     /* z-index: 0; */
     left: 15px;
@@ -141,25 +131,6 @@ input.newnote {
     pointer-events: none;
     font-family: "fa-solid";
     /* text-shadow: 0 0 0 lightgray; */
-}
-
-.new-note {
-
-    /* display: flex; */
-    /* align-items: center; */
-    /* position: relative; */
-    /* cursor: text; */
-    /* border: none;    */
-    /* display: flex;     */
-    /* gap: 8px; */
-
-    /* margin-inline: auto; */
-
-
-}
-
-.new-note input {
-    /* margin-inline: auto; */
 }
 
 .note-page .note-page .new-note button {
@@ -276,7 +247,7 @@ input.searchbox {
     display: flex;
 }
 
-.note-page .msg-details .title {}
+
 
 .note-page .msg {
     display: grid;
