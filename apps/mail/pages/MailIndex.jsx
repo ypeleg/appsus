@@ -1,5 +1,3 @@
-import {mailUtilService} from "../services/mail-util.service"
-
 
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
