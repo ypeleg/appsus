@@ -78,9 +78,9 @@
 
 .fa-regular{ font-family:"Font Awesome 5 Pro" }
 
-.far{font-weight:400}
+/*.far{font-weight:400}*/
 
-.far { font-family: fa-solid }
+/*.far { font-family: fa-solid }*/
 
 .far::before {
     font-family: fa-solid;

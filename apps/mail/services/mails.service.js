@@ -24,7 +24,9 @@ export const mailsService = {
     save,
     query,
     remove,
+    tagMail,
     readMail,
+    starMail,
     getLoggedinUser,
     getDefaultEmail,
     getDefaultFilter,
@@ -106,9 +108,29 @@ function readMail(mailId) {
         .then(mail => {
             mail.isRead = true
             storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
-        })
-
+    })
 }
+
+function starMail(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            mail.isStared = !mail.isStared
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
+    })
+}
+
+function tagMail(mailId, tag = 'Important') {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            if (mail.labels.includes(tag)) {
+                mail.labels = mail.labels.filter(label => label !== tag)
+            } else {
+                mail.labels.push(tag)
+            }
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))})
+}
+
+
 
 function get(mailId) {
     return storageService.get(MAIL_KEY, mailId)
@@ -155,6 +177,7 @@ function getDefaultEmail() {
 
         isRead: true,
         isStared: false,
+        isSelected: true,
 
         removedAt: null,
 
