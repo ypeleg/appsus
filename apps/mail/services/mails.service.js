@@ -5,6 +5,16 @@ import { storageService } from '../../../services/async-storage.service.js'
 
 const MAIL_KEY = 'mailDB'
 
+const loggedinUser = {
+    email: 'user@appsus.com',
+    fullname: 'Mahatma Appsus'
+}
+
+function getLoggedinUser() {
+    return loggedinUser
+}
+
+
 
 _createMails()
 
@@ -14,21 +24,13 @@ export const mailsService = {
     save,
     query,
     remove,
+    readMail,
     getLoggedinUser,
+    getDefaultEmail,
     getDefaultFilter,
 }
 
 window.bs = mailsService
-
-
-const loggedinUser = {
-    email: 'user@appsus.com',
-    fullname: 'Mahatma Appsus'
-}
-
-function getLoggedinUser() {
-    return loggedinUser
-}
 
 function query(filterBy = {}) {
     return storageService.query(MAIL_KEY)
@@ -71,13 +73,46 @@ function query(filterBy = {}) {
                 mails = mails.filter(mail => (mail.to === filterBy.to))
             }
 
+            // sent
+            if (filterBy.sentAt === true) {
+                mails = mails.filter(mail => (mail.sentAt !== null))
+            }
+
+            // draft
+            if (filterBy.sentAt === false) {
+                mails = mails.filter(mail => (mail.sentAt === null))
+            }
+
+            // trash
+            if (filterBy.removedAt === true) {
+                mails = mails.filter(mail => (mail.removedAt !== null))
+            }
+
+
+            // // draft
+            // if ( ((filterBy.sentAt === null) || (filterBy.sentAt === undefined)) && ((filterBy.createdAt === true) ) ) {
+            //     mails = mails.filter(mail => (mail.sentAt === null))
+            //     console.log('drafts:' , mails.length)
+            // }
+
+
+
             return mails
         })
 }
 
+function readMail(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            mail.isRead = true
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
+        })
+
+}
+
 function get(mailId) {
     return storageService.get(MAIL_KEY, mailId)
-        .then(mail => _setNextPrevMailId(mail))
+        // .then(mail => _setNextPrevMailId(mail))
 }
 
 function remove(mailId) {
@@ -110,6 +145,28 @@ function getDefaultFilter(filterBy = {
     /* return { txt: filterBy.txt, minDate: filterBy.minDate, maxDate: filterBy.minDate } */
 }
 
+function getDefaultEmail() {
+    return {
+        sentAt: new Date().toISOString().slice(0, 10),
+        createdAt: new Date().toISOString().slice(0, 10),
+
+        subject: '',
+        body: '',
+
+        isRead: true,
+        isStared: false,
+
+        removedAt: null,
+
+        labels: [],
+
+        from: getLoggedinUser().email,
+        to: ''
+
+
+    }
+}
+
 function _createMails() {
     // const mails = utilService.loadFromStorage(MAIL_KEY) || []
     const mails = []
@@ -139,6 +196,22 @@ function _createMails() {
             )
 
         }
+
+        // drafts
+        if (mail.from === getLoggedinUser().email) {
+            if (mailUtilService.random.randint(0, 1)) {
+                mail.sentAt = null
+                mail.isRead = true
+            }
+        }
+
+        // sent
+        if ((mail.from === getLoggedinUser().email) && (mail.sentAt !== null)) {
+            if (mailUtilService.random.randint(0, 1)) {
+                mail.isRead = true
+            }
+        }
+
 
         // console.log(mail)
         mails.push(mail)
