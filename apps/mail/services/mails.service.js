@@ -15,6 +15,7 @@ export const mailsService = {
     query,
     remove,
     getLoggedinUser,
+    getDefaultEmail,
     getDefaultFilter,
 }
 
@@ -77,7 +78,7 @@ function query(filterBy = {}) {
 
 function get(mailId) {
     return storageService.get(MAIL_KEY, mailId)
-        .then(mail => _setNextPrevMailId(mail))
+        // .then(mail => _setNextPrevMailId(mail))
 }
 
 function remove(mailId) {
@@ -108,6 +109,28 @@ function getDefaultFilter(filterBy = {
     }
 
     /* return { txt: filterBy.txt, minDate: filterBy.minDate, maxDate: filterBy.minDate } */
+}
+
+function getDefaultEmail() {
+    return {
+        sentAt: new Date().toISOString().slice(0, 10),
+        createdAt: new Date().toISOString().slice(0, 10),
+
+        subject: '',
+        body: '',
+
+        isRead: mailUtilService.random.choice([true, false]),
+        isStared: mailUtilService.random.choice([true, false]),
+
+        removedAt: mailUtilService.random.choice([null, mailUtilService.random.date('2021-01-01', '2025-01-22')]),
+
+        labels: mailUtilService.random.sample(['Primary', 'Promotions', 'Social'], mailUtilService.random.randint(0, 3)),
+
+        from: getLoggedinUser().email,
+        to: ''
+
+
+    }
 }
 
 function _createMails() {

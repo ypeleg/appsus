@@ -56,11 +56,34 @@
 }
 
 
-/* Font Awesome */
+.fa-regular{ font-family:"Font Awesome 5 Pro" }
+
+.far{font-weight:400}
+
+
+    /* Font Awesome */
 .fa::before {
     font-family: fa;
 }
 
+.fa-regular::before {
+    /*font-family: fa-regular;*/
+    font-family:"Font Awesome 5 Pro";
+    /*font-style:normal;*/
+    font-weight:400;
+    font-display:block;
+    font-style: normal;
+}
+
+.fa-solid::before {
+    /*font-family: fa-solid;*/
+    font-family:"Font Awesome 5 Pro";
+    /*font-style:normal;*/
+    /*font-weight:400;*/
+    font-weight:400;
+    font-display:block;
+    font-style: normal;
+}
 
 .fa.facebook::before {
     font-family: fa-brands;
@@ -117,11 +140,11 @@
     font-style: normal;
 }
 
-.fa-solid.fa-trash::before {
-    font-family: fa-solid;
-    content: '\f1f8';
-    font-style: normal;
-}
+/*.fa-solid.fa-trash::before {*/
+/*    font-family: fa-solid;*/
+/*    content: '\f1f8';*/
+/*    font-style: normal;*/
+/*}*/
 
 .fa-solid.fa-plus::before {
     font-family: fa-solid;

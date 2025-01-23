@@ -1,4 +1,4 @@
-import { mailsService } from "../../mail/services/mails.service"
+
 
 const { useEffect, useState } = React
 const { Link, useSearchParams } = ReactRouterDOM
