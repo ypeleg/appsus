@@ -264,33 +264,13 @@ export function MailIndex() {
         })
     }
 
-
     function filtersToBox(currentMail) {
-
         const {to, sentAt, removedAt, from} = currentMail
-
-        if ((to === mailsService.getLoggedinUser().email) && (!removedAt)) {
-            return 'Inbox'
-        }
-
-        if (sentAt && (from === mailsService.getLoggedinUser().email) && (!removedAt)) {
-            return 'Sent'
-        }
-
-        if (!sentAt && (!removedAt)) {
-            return 'Draft'
-        }
-
-        if (removedAt) {
-            return 'Trash'
-        }
-
+        if ((to === mailsService.getLoggedinUser().email) && (!removedAt)) { return 'Inbox' }
+        if (sentAt && (from === mailsService.getLoggedinUser().email) && (!removedAt)) { return 'Sent' }
+        if (!sentAt && (!removedAt)) { return 'Draft' }
+        if (removedAt) { return 'Trash' }
         return 'Inbox'
-
-        // inbox {to: mailsService.getLoggedinUser().email, removedAt: false}
-        // sent { from: mailsService.getLoggedinUser().email, sentAt : true, removedAt : false }
-        // draft { sentAt: false, removedAt : false }
-        // trash { removedAt: true }
     }
 
     return (
@@ -312,7 +292,7 @@ export function MailIndex() {
                     <i className = "hover-hint fa-solid fa-bars hover-hint-strong"></i>
                     <img src="assets/img/gmail-logo.png"></img>
                     <h3>Gmail</h3>
-
+ 
                 </section>
 
                 {/* <section className = "compose">
