@@ -70,6 +70,7 @@ export function NoteIndex() {
                     <NoteList
                         notes={notes}
                         onRemoveNote={(noteId) => onRemoveNote(noteId)}
+                        onsaveNote={(note) => onSaveNote(note)}
                     />
                 </div>
             </main>

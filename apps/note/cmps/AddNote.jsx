@@ -1,6 +1,7 @@
 const { useEffect, useState, useRef } = React
 import { noteService } from "../services/note.service.js";
 import { modifyYoutubeUrl } from "../../../services/util.service.js"
+import { ToolsBtnsNote } from "./ToolsBtnsNote.jsx";
 
 
 export function AddNote({ onSaveNote }) {
@@ -9,12 +10,15 @@ export function AddNote({ onSaveNote }) {
   const [isOpen, setIsOpen] = useState(false)
   const [notes, setNotes] = useState(null)
   const [cmpType, setCmpType] = useState('NoteTxt')
-
+  const [todos, setTodos] = useState([])
   const [noteToEdit, setNoteToEdit] = useState(noteService.getEmptyNote())
+
   const txtRef = useRef(null);
   const titleRef = useRef(null);
   const urlImageRef = useRef(null);
   const urlVideoRef = useRef(null);
+  const todoRef = useRef(null);
+
 
   useEffect(() => {
     console.log(cmpType);
@@ -37,16 +41,14 @@ export function AddNote({ onSaveNote }) {
         return
       case 'NoteVideo':
         const url = modifyYoutubeUrl(urlVideoRef.current.value)
-
         noteToEdit.info.url = url
         return
-      case 'aa':
-        // noteToEdit.info.url = urlImageRef.current.value
+      case 'NoteTodos':
+        const txt = todoRef.current.value
+        const date = Date.now()
+        noteToEdit.info.todos.push({ txt, doneAt: date })
         return
-      // case 'NoteVideo':
-      //   return <NoteVideo />
-      // case 'NoteTodos':
-      //   return <NoteTodos />
+
     }
 
   }
@@ -120,9 +122,27 @@ export function AddNote({ onSaveNote }) {
 
   function NoteTodosEdit() {
     return (
-      <h1></h1>
-    )
+      <div className="editor">
+        <input type="text"
+          placeholder="Enter Title"
+          ref={titleRef}
+        />
 
+        <section className="add-todo">
+
+          <input type="text"
+            placeholder="Enter todo"
+            ref={todoRef}
+          />
+          <button onClick={() => addTodo(todoRef.current.value)}>+</button>
+        </section>
+
+        <ul className="todos">
+
+        </ul>
+      </div>
+
+    )
   }
 
 
@@ -160,11 +180,7 @@ export function AddNote({ onSaveNote }) {
           <section className="note-editor-button">
             <button className="close" onClick={(ev) => saveNote(ev)}>Close</button>
 
-            <section className="tools-btns">
-              <button className="fa-solid fa-download"></button>
-              <button className="fa-solid fa-image"></button>
-              <button className="fa-solid fa-palette"></button>
-            </section>
+            <ToolsBtnsNote />
           </section>
         </div>
         :

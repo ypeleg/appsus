@@ -1,9 +1,11 @@
 .note-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   position: relative;
   color: #202124;
   font-family: "Google Sans", Roboto, Arial, sans-serif;
   border: 1px solid #dfdfdf;
-  padding: 20px;
   border-radius: 10px;
   min-height: 100px;
   width: 240px;
@@ -30,4 +32,23 @@
   opacity: 1;
   background-color: #e0e0e0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.note-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-inline-start: 5px;
+  gap: 15px;
+}
+
+.note-preview .tools-btns {
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.note-preview:hover .tools-btns {
+  opacity: 1;
 }

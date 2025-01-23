@@ -1,21 +1,33 @@
+import { ToolsBtnsNote } from "./ToolsBtnsNote.jsx";
+import { UpdateNote } from "./UpdateNote.jsx";
+
+const { useEffect, useState, useRef } = React
 
 
-export function NotePreview({ note, onRemoveNote }) {
+
+export function NotePreview({ note, onRemoveNote, onSaveNote }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedNote, setSelectedNote] = useState(null);
 
 
 
   function NoteTxt({ note }) {
     return (
-      <div className="note-txt">
-        <h4>{note.info.title}</h4>
-        <h4>{note.info.txt}</h4>
+      <div className="note-layout">
+        <div>
+          <h4>{note.info.title}</h4>
+        </div>
+        <div>
+          <h4>{note.info.txt}</h4>
+        </div>
+
       </div>
     );
   }
 
   function NoteImg({ note }) {
     return (
-      <div className="note-img">
+      <div className="note-layout">
         <h1>{note.info.title}</h1>
         <img src={note.info.url} alt="Note" />
       </div>
@@ -24,7 +36,7 @@ export function NotePreview({ note, onRemoveNote }) {
 
   function NoteVideo({ note }) {
     return (
-      <div className="note-video">
+      <div className="note-layout">
         <iframe
           width="100%"
           height="200"
@@ -40,14 +52,23 @@ export function NotePreview({ note, onRemoveNote }) {
 
   function NoteTodos({ note }) {
     return (
-      <ul className="note-todos">
-        {note.content.map((todo, idx) => (
-          <li key={idx} style={{ textDecoration: todo.done ? 'line-through' : 'none' }}>
-            {todo.text}
+      <ul className="note-layout">
+        {note.info.todos.map((todo, idx) => (
+          <li key={idx} style={{ textDecoration: todo.doneAt ? 'line-through' : 'none' }}>
+            {todo.txt}
           </li>
         ))}
       </ul>
     );
+  }
+
+  function onOpenEdit() {
+
+  }
+
+  function onOpenUpdate(note) {
+    setIsEditing(true)
+    setSelectedNote(note)
   }
 
 
@@ -55,28 +76,40 @@ export function NotePreview({ note, onRemoveNote }) {
 
 
 
-
-
   return (
+    // onOpenUpdate(note)}
+    <div>
 
+      <pre className="note-preview" onClick={() => onOpenUpdate(note)} >
+        <div className="remove fa-solid fa-circle-mark" onClick={() => onRemoveNote(note.id)}>X</div>
 
-    <pre className="note-preview">
-      <div className="remove fa-solid fa-circle-mark" onClick={() => onRemoveNote(note.id)}>X</div>
+        {note.type === 'NoteTxt' &&
+          <NoteTxt note={note} />
+        }
+        {note.type === 'NoteImg' &&
+          <NoteImg note={note} />
+        }
+        {note.type === 'NoteVideo' &&
+          <NoteVideo note={note} />
+        }
+        {note.type === 'NoteTodos' &&
+          <NoteTodos note={note} />
+        }
 
-      {note.type === 'NoteTxt' &&
-        <NoteTxt note={note} />
+        <ToolsBtnsNote />
+
+      </pre>
+
+      {isEditing && (
+        <UpdateNote
+          note={selectedNote}
+          onClose={() => setIsEditing(false)}
+          onSaveNote={(note) => onSaveNote(note)}
+        />
+      )
       }
-      {note.type === 'NoteImg' &&
-        <NoteImg note={note} />
-      }
-      {note.type === 'NoteVideo' &&
-        <NoteVideo note={note} />
-      }
 
-
-
-    </pre>
-
+    </div>
 
   )
 }
