@@ -61,7 +61,6 @@
     src: url(../../fonts/FontAwesome/fa-regular-400.ttf);
 }
 
-
 .fa-solid-fr::before {
     /*font-family: fa;*/
     font-family: fa-solid-fr;

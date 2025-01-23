@@ -1,4 +1,5 @@
 
+
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 
@@ -68,7 +69,7 @@ export function MailIndex() {
 
         mailsService.query({removedAt: true }).then(mails => {setTrashMails(mails.length)})
 
-        onSetFilterBy({to: mailsService.getLoggedinUser().email})
+        onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
 
     }, [])
 
@@ -85,14 +86,24 @@ export function MailIndex() {
         } else {
             setFilterBy(prevFilter => ({...prevFilter, ...newFilter}))
         }
-
-
     }
 
 
+    const [selectedMails, setSelectedMails] = useState([])
+
+    function onSetSelected(selectedMails) {
+        setSelectedMails(selectedMails)
+    }
+
+    function onRemove(ev, mailId) {
+        ev.stopPropagation()
+
+        // add .deleting class to the mail element
+        ev.target.classList.add('deleting')
 
 
-    function removeMail(mailId) {
+
+
         mailsService.remove(mailId)
             .then(() => {
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
@@ -126,7 +137,7 @@ export function MailIndex() {
 
 
     // const [book, setBook] = useState(null)
-    
+
     const [isLoading, setIsLoading] = useState(true)
     // const [isLoadingReview, setIsLoadingReview] = useState(false)
 
@@ -160,13 +171,106 @@ export function MailIndex() {
 
     // {to: 'someone', body: 'body', subject: 'sub'}
 
-    function composeNewMail(mailTo = null, mailSubject = null, mailBody = null, focusOn = null) {
+
+
+    function onComposeNewMail(mailTo = null,
+                              mailSubject = null,
+                              mailBody = null,
+                              focusOn = null) {
         let defaultParams = {}
         if (mailTo !== null) defaultParams.to = mailTo
         if (mailBody !== null) defaultParams.body = mailBody
         if (mailSubject !== null) defaultParams.subject = mailSubject
         setCurrentDefaultMailDetails({...defaultParams})
         onToggleComposeMail()
+    }
+
+    function onReply(ev, targetMail) {
+        ev.stopPropagation()
+        // console.log('reply mailId:', mailId)
+        onComposeNewMail(targetMail.from,
+            `Re: ${targetMail.subject}`,
+            '' + '\n\n\n' + 'On ' + targetMail.sentAt +
+            ' ' + targetMail.from + ' wrote:' + '\n\n\n' + targetMail.body)
+    }
+
+    function onForward(ev, targetMail) {
+        ev.stopPropagation()
+        console.log('for mailId:', mailId)
+        onComposeNewMail('', `Fwd: ${targetMail.subject}`,
+            '' + '\n\n' + '---------- Forwarded message ---------' +
+            '\nFrom: ' + targetMail.from +
+            '\nDate: ' + targetMail.sentAt +
+            '‪\nSubject: ' + targetMail.subject +
+            '\n‪To: ' + targetMail.to +
+            '\n\n‪‪' + targetMail.body)
+    }
+
+    function onStar(ev, mailId) {
+        ev.stopPropagation()
+        console.log('star mailId:', mailId)
+        mailsService.starMail(mailId)
+        .then(() => {
+            setMails(prevMails => prevMails.map(mail => {
+                if (mail.id === mailId) {
+                    mail.isStared = !mail.isStared
+                }
+                return mail
+            }))
+        })
+    }
+
+    function onTag(ev, mailId) {
+        ev.stopPropagation()
+        console.log('tag mailId:', mailId)
+        mailsService.tagMail(mailId)
+        .then(() => {
+            setMails(prevMails => prevMails.map(mail => {
+                if (mail.id === mailId) {
+                    (mail.labels.includes('important')) ?
+                     mail.labels = mail.labels.filter(label => label !== 'important') :
+                     mail.labels.push('important')}
+                return mail
+            }))
+        })
+    }
+
+    function onSelect(ev, mailId) {
+        ev.stopPropagation()
+        // ev.preventDefault()
+        // ev.target.classList.toggle('selected')
+        selectedMails.includes(mailId) ?
+        setSelectedMails(selectedMails.filter(selectedMail => selectedMail !== mailId)) :
+        setSelectedMails([...selectedMails, mailId])
+        mails.map(mail => {
+            if (mail.id === mailId) {
+                mail.isSelected = !mail.isSelected
+            }
+            return mail
+        })
+    }
+
+    function onMarkAsRead(ev, mailId) {
+        ev.stopPropagation()
+        console.log('mark as read mailId:', mailId)
+        mailsService.readMail(mailId)
+        .then(() => {
+            setMails(prevMails => prevMails.map(mail => {
+                if (mail.id === mailId) {
+                    mail.isRead = !mail.isRead
+                }
+                return mail
+            }))
+        })
+    }
+
+    function filtersToBox(currentMail) {
+        const {to, sentAt, removedAt, from} = currentMail
+        if ((to === mailsService.getLoggedinUser().email) && (!removedAt)) { return 'Inbox' }
+        if (sentAt && (from === mailsService.getLoggedinUser().email) && (!removedAt)) { return 'Sent' }
+        if (!sentAt && (!removedAt)) { return 'Draft' }
+        if (removedAt) { return 'Trash' }
+        return 'Inbox'
     }
 
     return (
@@ -188,7 +292,7 @@ export function MailIndex() {
                     <i className = "hover-hint fa-solid fa-bars hover-hint-strong"></i>
                     <img src="assets/img/gmail-logo.png"></img>
                     <h3>Gmail</h3>
-
+ 
                 </section>
 
                 {/* <section className = "compose">
@@ -222,13 +326,13 @@ export function MailIndex() {
 
 
                     <section className="compose">
-                        <button onClick={ () => {composeNewMail()} }><i className="far fa-pen"></i> <span>Compose</span></button>
+                        <button onClick={ () => {onComposeNewMail()} }><i className="fa-solid fa-pen"></i> <span>Compose</span></button>
                     </section>
 
                     <div className={`inbox side-bar-category ${(activePage === 'inbox') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
                             // goToPage('inbox')
-                            onSetFilterBy({to: mailsService.getLoggedinUser().email}, true)
+                            onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
                             setActivePage('inbox')
                          }}>
 
@@ -249,7 +353,7 @@ export function MailIndex() {
 
                     <div className={`sent side-bar-category ${(activePage === 'sent') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                             onSetFilterBy({from: mailsService.getLoggedinUser().email, sentAt: true}, true)
+                             onSetFilterBy({from: mailsService.getLoggedinUser().email, sentAt: true, removedAt: false}, true)
                              setActivePage('sent')
                          }}>
 
@@ -290,7 +394,7 @@ export function MailIndex() {
                                 <div className="mail-header-checkbox-with-dropdown">
                                     <button className="checkbox-gmail-style">
                                         <input type="checkbox" className="checkbox"/>
-                                        <i className="far fa-chevron-down"></i>
+                                        <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items">
                                         <div className="dropdown-item">All</div>
@@ -303,11 +407,11 @@ export function MailIndex() {
                                 </div>
 
                                 <button className="font-awesome-hover-hint">
-                                    <i className="far fa-sync-alt"></i>
+                                    <i className="fa-solid fa-sync-alt"></i>
                                 </button>
 
                                 <button className="font-awesome-hover-hint">
-                                    <i className="far fa-ellipsis-v"></i>
+                                    <i className="fa-solid fa-ellipsis-v"></i>
                                 </button>
                             </div>
 
@@ -315,16 +419,16 @@ export function MailIndex() {
                                 <span className="pagination-text">1-{(mails.length < 51)? mails.length: 50} of {mails.length}</span>
 
                                 <button className="font-awesome-hover-hint">
-                                    <i className="far fa-chevron-left"></i>
+                                    <i className="fa-solid fa-chevron-left"></i>
                                 </button>
 
                                 <button className="font-awesome-hover-hint">
-                                    <i className="far fa-chevron-right"></i>
+                                    <i className="fa-solid fa-chevron-right"></i>
                                 </button>
 
                                 <div className="mail-header-checkbox-with-dropdown">
                                     <button className="font-awesome-hover-hint">
-                                        <i className="far fa-chevron-down"></i>
+                                        <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items right-dropdown-menu-items">
                                         <div className="dropdown-item">Newest</div>
@@ -365,7 +469,17 @@ export function MailIndex() {
                         {/*    <div className="all-selection select-box"> All</div>*/}
                         {/*</div>*/}
 
-                        <MailList mails={mails} onRemove={removeMail} showFrom={activePage !== 'sent'} onReadMail=
+                        <MailList mails={mails} onRemove={onRemove} showFrom={activePage !== 'sent'}
+
+                                  onMarkAsRead = {onMarkAsRead}
+                                  nowRendering={activePage}
+                                  onSelect = {onSelect}
+                                  onReply = {onReply}
+                                  onStar = {onStar}
+                                  onTag = {onTag}
+
+
+                                  onReadMail=
                             {
                                 (mailId) => {
                                     setActiveMail(null)
@@ -415,35 +529,44 @@ export function MailIndex() {
                             <div className="toolbar-left">
 
                                 <div className="first-button" onClick={() => setActivePage('inbox')}>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-arrow-left"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-arrow-left"></i></button>
                                 </div>
 
                                 <div className="sec-buttons-button">
-                                    <button className="font-awesome-hover-hint"><i className="far fa-archive"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-exclamation-circle"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-trash-alt"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-archive"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-exclamation-circle"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-trash-alt"></i></button>
                                     <div className="divider"></div>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-envelope"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-folder-plus"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-ellipsis-v"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-envelope"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-folder-plus"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-ellipsis-v"></i></button>
                                 </div>
 
                             </div>
 
                             <div className="toolbar-right">
                                 <span>10 of 7,408</span>
-                                <button className="font-awesome-hover-hint"><i className="far fa-chevron-left"></i></button>
-                                <button className="font-awesome-hover-hint"><i className="far fa-chevron-right"></i></button>
+                                <button className="font-awesome-hover-hint"><i className="fa-solid fa-chevron-left"></i></button>
+                                <button className="font-awesome-hover-hint"><i className="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
 
                         <div className="read-msg-header">
                             <div className="subject-line">
                                 <h2>{activeMail.subject}</h2>
-                                <span className="label">Inbox</span>
+                                <span className="label">
+
+                                    {filtersToBox(activeMail)}
+
+
+                                    {/*Inbox*/}
+
+
+
+                                </span>
                                 <div className="header-actions">
-                                    <button className="font-awesome-hover-hint"><i className="far fa-print"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-external-link-alt"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-print"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-external-link-alt"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -461,39 +584,46 @@ export function MailIndex() {
                                 </div>
                                 <div className="sender-actions">
                                     <span className="timestamp">{activeMail.sentAt}</span>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-star"></i></button>
-                                    <button className="font-awesome-hover-hint" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>
-                                        <i className="far fa-reply"></i>
+                                    <button className="font-awesome-hover-hint"
+                                            onClick={(ev) => onStar(ev, activeMail.id)}
+                                    ><i className="fa-solid fa-star"
+
+
+
+                                    ></i></button>
+                                    {/*<button className="font-awesome-hover-hint" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>*/}
+                                    <button className="font-awesome-hover-hint" onClick={(ev) => onReply(ev, activeMail)}>
+                                        <i className="fa-solid fa-reply"></i>
                                     </button>
-                                    <button className="font-awesome-hover-hint"><i className="far fa-ellipsis-v"></i></button>
+                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-ellipsis-v"></i></button>
                                 </div>
                             </div>
                         </div>
 
                         <div className="read-msg-content">
                             <div className="message-text">
-                                {activeMail.body}
+                            {activeMail.body}
                             </div>
                         </div>
 
                         <div className="read-msg-actions">
 
-                            <button className="reply-btn" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>
-                                <i className="far fa-reply"></i>Reply
+                            {/*<button className="reply-btn" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>*/}
+                            <button className="reply-btn" onClick={(ev) => onReply(ev, activeMail)}>
+                                    <i className="fa-solid fa-reply"></i>Reply
                             </button>
 
-                            <button className="forward-btn" onClick={() => composeNewMail('', `Fwd: ${activeMail.subject}`, '' + '\n\n' +
+                            {/*<button className="forward-btn" onClick={() => composeNewMail('', `Fwd: ${activeMail.subject}`, '' + '\n\n' +*/}
 
-                                '---------- Forwarded message ---------' +
-                                '\nFrom: ' + activeMail.from +
-                                '\nDate: ' + activeMail.sentAt +
-                                '‪\nSubject: ' + activeMail.subject +
-                                '\n‪To: ' + activeMail.to +
-                                '\n\n‪‪' + activeMail.body)}>
+                            {/*        '---------- Forwarded message ---------' +*/}
+                            {/*        '\nFrom: ' + activeMail.from +*/}
+                            {/*        '\nDate: ' + activeMail.sentAt +*/}
+                            {/*        '‪\nSubject: ' + activeMail.subject +*/}
+                            {/*        '\n‪To: ' + activeMail.to +*/}
+                            {/*        '\n\n‪‪' + activeMail.body)}>*/}
 
-
-
-                                <i className="far fa-share"></i>Forward
+                            <button className="forward-btn" onClick={(ev) => onForward(ev, activeMail)}>
+                                <i className="fa-solid fa-share"></i>Forward
                             </button>
 
                         </div>
