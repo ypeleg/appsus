@@ -19,7 +19,7 @@ export function NoteHeader() {
       </section>
 
       <section className="toolbar">
-        <div className="fa-solid fa-refresh toolbar-button"> </div>
+        <div className="fa-solid fa-refresh toolbar-button"></div>
         <div className="fa-solid fa-bars-progress toolbar-button"> </div>
         <div className="fa-solid fa-gear toolbar-button"> </div>
       </section>

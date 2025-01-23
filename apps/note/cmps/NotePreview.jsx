@@ -2,6 +2,8 @@
 
 export function NotePreview({ note, onRemoveNote }) {
 
+
+
   function NoteTxt({ note }) {
     return (
       <div className="note-txt">
