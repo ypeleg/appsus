@@ -16,21 +16,16 @@ import { mailsService } from '../services/mails.service.js'
 export function MailIndex() {
 
     const [mails, setMails] = useState([])
-
     const [activeMail, setActiveMail] = useState(null)
-
     const [filterBy, setFilterBy] = useState(mailsService.getDefaultFilter())
-
-
+    const [sortAscending, setSortAscending] = useState(true)
     const [starredMails, setStarredMails] = useState([])
     const [unreadInboxMails, setUnreadInboxMails] = useState([])
     const [sentMails, setSentMails] = useState([])
     const [draftMails, setDraftMails] = useState([])
     const [trashMails, setTrashMails] = useState([])
-
     const [activePage, setActivePage] = useState('inbox')
     const [activeTab, setActiveTab] = useState('primary')
-
     const [currentDefaultMailDetails, setCurrentDefaultMailDetails] = useState({})
 
     function onSetActivePage(page) {
@@ -43,14 +38,13 @@ export function MailIndex() {
     // const onSetFilterDebounce = useRef(mailUtilService.debounce(onFilterBy, 500)).current
     const onSetFilterDebounce = useRef(onSetFilterBy).current
 
-
     useEffect(() => {
         onSetFilterDebounce(filterByToEdit)
     }, [filterByToEdit])
 
     useEffect(() => {
         setIsLoading(true)
-        mailsService.query(filterBy)
+        mailsService.query(filterBy, sortAscending)
             .then(mails => setMails(mails))
             .finally(() => setIsLoading(false))
     }, [filterBy])
@@ -76,10 +70,9 @@ export function MailIndex() {
     const [selectedMails, setSelectedMails] = useState([])
 
     useEffect(() => {
-        console.log('out filterBy:', filterBy)
-        mailsService.query(filterBy).then(mails => setMails(mails))
-    }, [filterBy])
-
+        console.log('out filterBy:', filterBy, 'sortAscending:', sortAscending)
+        mailsService.query(filterBy, sortAscending).then(mails => setMails(mails))
+    }, [filterBy, sortAscending])
 
     function onSetFilterBy(newFilter, reset = false) {
         if (reset) {
@@ -89,8 +82,9 @@ export function MailIndex() {
         }
     }
 
-
-    
+    function onSortBy(sortAscendingToSet) {
+        setSortAscending(prevSort => sortAscendingToSet )
+    }
 
     function onSetSelected(selectedMails) {
         setSelectedMails(selectedMails)
@@ -98,13 +92,8 @@ export function MailIndex() {
 
     function onRemove(ev, mailId) {
         ev.stopPropagation()
-
         // add .deleting class to the mail element
         ev.target.classList.add('deleting')
-
-
-
-
         mailsService.remove(mailId)
             .then(() => {
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
@@ -116,11 +105,6 @@ export function MailIndex() {
             })
     }
 
-
-
-
-
-
     function handleSearchChange({ target }) {
         const { name: field, type } = target
         const value = type === 'number' ? +target.value : target.value
@@ -130,18 +114,11 @@ export function MailIndex() {
     function reset() {
         setFilterByToEdit(initialFilterBy.current)
     }
-
-
     // var pageToShow = 'main-table'
     // var pageToShow = 'read-msg'
-
-
-
     // const [book, setBook] = useState(null)
-
     const [isLoading, setIsLoading] = useState(true)
     // const [isLoadingReview, setIsLoadingReview] = useState(false)
-
     const [isShowComposeMail, setIsShowComposeMail] = useState(false)
     const [isMaximized, setIsMaximized] = useState(false)
 
@@ -161,18 +138,13 @@ export function MailIndex() {
     function onSaveMail(mailToAdd) {
         mailsService.save(mailToAdd)
             .then((savedMails) => {
-
-                mailsService.query(filterBy).then(mails => setMails(mails))
-
+                mailsService.query(filterBy, sortAscending).then(mails => setMails(mails))
                 // setMails((prevMails) => [...prevMails, savedMails]);
                 // console.log("Mail saved:", savedMails);
             })
         // mailsService.save(mailToAdd).then(mails => setMails(mails))
     }
-
     // {to: 'someone', body: 'body', subject: 'sub'}
-
-
 
     function onComposeNewMail(mailTo = null,
                               mailSubject = null,
@@ -281,16 +253,10 @@ export function MailIndex() {
             setSelectedMails(mails.filter(mail => !mail.isStared))
             mails.map(mail => { mail.isSelected = !mail.isStared} )
         }
-
-        
     }
-
-
 
     function onSelect(ev, mailId) {
         ev.stopPropagation()
-        // ev.preventDefault()
-        // ev.target.classList.toggle('selected')
         selectedMails.includes(mailId) ?
         setSelectedMails(selectedMails.filter(selectedMail => selectedMail !== mailId)) :
         setSelectedMails([...selectedMails, mailId])
@@ -347,17 +313,11 @@ export function MailIndex() {
  
                 </section>
 
-                {/* <section className = "compose">
-                            <button><i className = "fa-solid fa-pen"></i> <span>Compose</span></button>
-                        </section> */}
-
                 <section className="search">
                     <div className="search-bar">
                         <input name='txt' className="searchbox" type = "text" placeholder = "Search mail" onChange={handleSearchChange} value={filterByToEdit.txt} />
                     </div>
                 </section>
-
-                {/* <section className = "user-details"> </section>                 */}
 
                 <section className="user-details">
                     <i className="fa-solid fa-sliders"></i>
@@ -374,16 +334,12 @@ export function MailIndex() {
 
                 <div className="side-bar">
 
-                    {/*<button onClick={onToggleComposeModal}>Add Review</button>*/}
-
-
                     <section className="compose">
                         <button onClick={ () => {onComposeNewMail()} }><i className="fa-solid fa-pen"></i> <span>Compose</span></button>
                     </section>
 
                     <div className={`inbox side-bar-category ${(activePage === 'inbox') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                            // goToPage('inbox')
                             onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
                             setActivePage('inbox')
                          }}>
@@ -484,8 +440,8 @@ export function MailIndex() {
                                         <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items right-dropdown-menu-items">
-                                        <div className="dropdown-item">Newest</div>
-                                        <div className="dropdown-item">Oldest</div>
+                                        <div className="dropdown-item" onClick={() => onSortBy(true)}>Newest</div>
+                                        <div className="dropdown-item" onClick={() => onSortBy(false)}>Oldest</div>
                                     </div>
                                 </div>
                             </div>
@@ -537,11 +493,8 @@ export function MailIndex() {
                                 (mailId) => {
                                     setActiveMail(null)
                                     mailsService.readMail(mailId)
-
                                     // setMails(prevMails => ({ ...prevBook, [prop]: value }))
-
                                     // mailsService.query(filterBy).then(mails => setMails(mails))
-
                                     // mailsService.query(filterBy).then(mails => setMails(mails))
                                     mailsService.get(mailId).then(mail => {
 
@@ -587,7 +540,14 @@ export function MailIndex() {
 
                                 <div className="sec-buttons-button">
                                     <button className="font-awesome-hover-hint"><i className="fa-solid fa-archive"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-exclamation-circle"></i></button>
+                                    <button className={`font-awesome-hover-hint ${activeMail.labels.includes('important') ? 'stared' : 'unstared'}`}
+                                            onClick={(ev) => {
+                                                onTag(ev, activeMail.id)
+                                                setActiveMail({...activeMail, labels: (activeMail.labels.includes('important')) ? activeMail.labels.filter(label => label !== 'important') : [...activeMail.labels, 'important']})
+                                            }}>
+                                        <i className={`fa-bookmark ${activeMail.labels.includes('important') ? 'fa-regular stared' : 'fa-solid unstared'}`}
+
+                                    ></i></button>
                                     <button className="font-awesome-hover-hint"><i className="fa-solid fa-trash-alt"></i></button>
                                     <div className="divider"></div>
                                     <button className="font-awesome-hover-hint"><i className="fa-solid fa-envelope"></i></button>
@@ -638,8 +598,11 @@ export function MailIndex() {
                                 <div className="sender-actions">
                                     <span className="timestamp">{activeMail.sentAt}</span>
                                     <button className="font-awesome-hover-hint"
-                                            onClick={(ev) => onStar(ev, activeMail.id)}
-                                    ><i className="fa-solid fa-star"
+                                            onClick={(ev) => {
+                                                onStar(ev, activeMail.id)
+                                                setActiveMail({...activeMail, isStared: !activeMail.isStared})
+                                            }}
+                                    ><i className={`fa-solid fa-star  ${activeMail.isStared ? 'stared' : 'unstared'}`}
 
 
 
