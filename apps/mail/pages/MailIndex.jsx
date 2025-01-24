@@ -445,16 +445,17 @@ export function MailIndex() {
                             <div className="mail-header-left-section">
                                 <div className="mail-header-checkbox-with-dropdown">
                                     <button className="checkbox-gmail-style" onClick = {onSelectAll}>
-                                        <input type="checkbox" className="checkbox"/>
+                                        {/* <input type="checkbox" className="checkbox"/> */}
+                                        <input className={`checkbox ${(selectedMails.length === mails.length)? 'selected': '' }`} type="checkbox" checked={(selectedMails.length === mails.length)}></input>
                                         <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items">
                                         <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'all')}>All</div>
-                                        <div className="dropdown-item">None</div>
-                                        <div className="dropdown-item">Read</div>
-                                        <div className="dropdown-item">Unread</div>
-                                        <div className="dropdown-item">Starred</div>
-                                        <div className="dropdown-item">Unstarred</div>
+                                        <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'none')}>None</div>
+                                        <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'read')}>Read</div>
+                                        <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'unread')}>Unread</div>
+                                        <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'starred')}>Starred</div>
+                                        <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'unstarred')}>Unstarred</div>
                                     </div>
                                 </div>
 
