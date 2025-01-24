@@ -27,6 +27,7 @@ export const mailsService = {
     tagMail,
     readMail,
     starMail,
+    unReadMail,
     getLoggedinUser,
     getDefaultEmail,
     getDefaultFilter,
@@ -132,6 +133,14 @@ function readMail(mailId) {
             mail.isRead = true
             storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
     })
+}
+
+function unReadMail(mailId) {
+    return storageService.get(MAIL_KEY, mailId)
+        .then(mail => {
+            mail.isRead = false
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
+        })
 }
 
 function starMail(mailId) {

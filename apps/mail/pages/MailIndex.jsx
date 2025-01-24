@@ -97,10 +97,10 @@ export function MailIndex() {
         mailsService.remove(mailId)
             .then(() => {
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
-                showSuccessMsg('Mail has been successfully removed!')
+                // showSuccessMsg('Mail has been successfully removed!')
             })
             .catch(() => {
-                showErrorMsg(`couldn't remove mail`)
+                // showErrorMsg(`couldn't remove mail`)
                 navigate('/mail')
             })
     }
@@ -280,6 +280,20 @@ export function MailIndex() {
                 return mail
             }))
         })
+    }
+
+    function onMarkAsUnRead(ev, mailId) {
+        ev.stopPropagation()
+        console.log('mark as unread mailId:', mailId)
+        mailsService.unReadMail(mailId)
+            .then(() => {
+                setMails(prevMails => prevMails.map(mail => {
+                    if (mail.id === mailId) {
+                        mail.isRead = !mail.isRead
+                    }
+                    return mail
+                }))
+            })
     }
 
     function filtersToBox(currentMail) {
@@ -539,19 +553,46 @@ export function MailIndex() {
                                 </div>
 
                                 <div className="sec-buttons-button">
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-archive"></i></button>
+                                    <button className="font-awesome-hover-hint"
+                                            onClick={(ev) => {
+                                                onRemove(ev, activeMail.id)
+                                                setActiveMail(null)
+                                                setActivePage('inbox')
+                                            }}
+                                    ><i className="fa-solid fa-archive"></i></button>
                                     <button className={`font-awesome-hover-hint ${activeMail.labels.includes('important') ? 'stared' : 'unstared'}`}
                                             onClick={(ev) => {
                                                 onTag(ev, activeMail.id)
                                                 setActiveMail({...activeMail, labels: (activeMail.labels.includes('important')) ? activeMail.labels.filter(label => label !== 'important') : [...activeMail.labels, 'important']})
                                             }}>
-                                        <i className={`fa-bookmark ${activeMail.labels.includes('important') ? 'fa-regular stared' : 'fa-solid unstared'}`}
+                                        <i className={`fa-bookmark ${activeMail.labels.includes('important') ? 'fa-solid stared' : 'fa-solid unstared'}`}
 
                                     ></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-trash-alt"></i></button>
+                                    <button className="font-awesome-hover-hint"
+                                            onClick={(ev) => {
+                                                onRemove(ev, activeMail.id)
+                                                setActiveMail(null)
+                                                setActivePage('inbox')
+                                            }}
+                                            // TODO: Add user message here
+                                    ><i className="fa-solid fa-trash-alt"
+
+                                    ></i></button>
                                     <div className="divider"></div>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-envelope"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-folder-plus"></i></button>
+                                    <button className="font-awesome-hover-hint"
+
+                                            onClick={(ev) => {
+                                                onMarkAsUnRead(ev, activeMail.id)
+                                                setActiveMail({...activeMail, isRead: false})
+                                                setActivePage('inbox')
+                                            }}
+
+
+                                    ><i className="fa-solid fa-envelope"></i></button>
+                                    <button className="font-awesome-hover-hint"
+
+
+                                    ><i className="fa-solid fa-folder-plus"></i></button>
                                     <button className="font-awesome-hover-hint"><i className="fa-solid fa-ellipsis-v"></i></button>
                                 </div>
 
