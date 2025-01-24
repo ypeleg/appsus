@@ -73,6 +73,7 @@ export function MailIndex() {
 
     }, [])
 
+    const [selectedMails, setSelectedMails] = useState([])
 
     useEffect(() => {
         console.log('out filterBy:', filterBy)
@@ -89,7 +90,7 @@ export function MailIndex() {
     }
 
 
-    const [selectedMails, setSelectedMails] = useState([])
+    
 
     function onSetSelected(selectedMails) {
         setSelectedMails(selectedMails)
@@ -234,6 +235,57 @@ export function MailIndex() {
             }))
         })
     }
+
+    function onSelectAll(ev) {                
+        ev.stopPropagation()
+        if (selectedMails.length) {
+            setSelectedMails([])
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = false
+                 return mail} ))
+        } else {
+            setSelectedMails(mails)
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = true 
+                return mail} ))
+        }
+    }
+
+    function onSelectBy(ev, criteria) {        
+        ev.stopPropagation()
+        
+        if (criteria === 'all') {
+            setSelectedMails(mails)
+            mails.map(mail => { mail.isSelected = true} )
+        }
+
+        if (criteria === 'none') {
+            setSelectedMails([])
+            mails.map(mail => { mail.isSelected = false} )
+        }
+
+        if (criteria === 'read') {
+            setSelectedMails(mails.filter(mail => mail.isRead))
+            mails.map(mail => { mail.isSelected = mail.isRead} )
+        }
+
+        if (criteria === 'unread') {
+            setSelectedMails(mails.filter(mail => !mail.isRead))
+            mails.map(mail => { mail.isSelected = !mail.isRead} )
+        }
+
+        if (criteria === 'starred') {
+            setSelectedMails(mails.filter(mail => mail.isStared))
+            mails.map(mail => { mail.isSelected = mail.isStared} )
+        }
+
+        if (criteria === 'unstarred') {
+            setSelectedMails(mails.filter(mail => !mail.isStared))
+            mails.map(mail => { mail.isSelected = !mail.isStared} )
+        }
+
+        
+    }
+
+
 
     function onSelect(ev, mailId) {
         ev.stopPropagation()
@@ -392,12 +444,12 @@ export function MailIndex() {
                         <div className="mail-main-table-header">
                             <div className="mail-header-left-section">
                                 <div className="mail-header-checkbox-with-dropdown">
-                                    <button className="checkbox-gmail-style">
+                                    <button className="checkbox-gmail-style" onClick = {onSelectAll}>
                                         <input type="checkbox" className="checkbox"/>
                                         <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items">
-                                        <div className="dropdown-item">All</div>
+                                        <div className="dropdown-item" onClick = {(ev) => onSelectBy(ev, 'all')}>All</div>
                                         <div className="dropdown-item">None</div>
                                         <div className="dropdown-item">Read</div>
                                         <div className="dropdown-item">Unread</div>
