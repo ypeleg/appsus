@@ -116,7 +116,11 @@ function getMonthName(date) {
 }
 
 export function modifyYoutubeUrl(inputUrl) {
+    console.log(inputUrl);
+
     let url = inputUrl
-    let embedUrl = url.replace("/watch?v=", "/embed/watch?v=")
+    let embedUrl = url.split('&')[0].replace("/watch?v=", "/embed/")
+    console.log(embedUrl);
+
     return embedUrl
 }

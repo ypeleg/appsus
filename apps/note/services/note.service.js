@@ -57,6 +57,7 @@ export const noteService = {
   remove,
   save,
   getEmptyNote,
+  getEmptyTodos,
   getDefaultFilter,
   getFilterFromSearchParams,
 
@@ -107,6 +108,10 @@ function getEmptyNote(type = 'NoteTxt', isPinned = false, info = {}, style = { b
     info,
     style,
   }
+}
+
+function getEmptyTodos() {
+
 }
 
 function getDefaultFilter() {
