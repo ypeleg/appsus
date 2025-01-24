@@ -27,6 +27,10 @@ export function MailIndex() {
     const [activePage, setActivePage] = useState('inbox')
     const [activeTab, setActiveTab] = useState('primary')
     const [currentDefaultMailDetails, setCurrentDefaultMailDetails] = useState({})
+    const [statisticsFlag, setStatisticsFlag] = useState(false)
+
+    const [filterByCallback, setFilterByCallback] = useState([])
+
 
     function onSetActivePage(page) {
         setActivePage(page)
@@ -49,29 +53,46 @@ export function MailIndex() {
             .finally(() => setIsLoading(false))
     }, [filterBy])
 
+    function setStatistics() {
+                  mailsService.query({to: mailsService.getLoggedinUser().email, removedAt: false, sentAt: true}).then(TempMails => {setUnreadInboxMails(TempMails.length)})
+            .then(mailsService.query({isStared: true}).then(TempMails => {setStarredMails(TempMails.length)}))
+            .then(mailsService.query({from: mailsService.getLoggedinUser().email, sentAt: true }).then(TempMails => {setSentMails(TempMails.length)}))
+            .then(mailsService.query({from: mailsService.getLoggedinUser().email, sentAt: false }).then(TempMails => {setDraftMails(TempMails.length)}))
+            .then(mailsService.query({removedAt: true}).then(TempMails => {setTrashMails(TempMails.length)}))
+    }
+
     useEffect(() => {
-
-        mailsService.query({isRead: true}).then(mails => {setUnreadInboxMails(mails.length)})
-
-        // mailsService.query({isStared: true}).then(mails => {setStarredMails(mails.length)})
-
-        mailsService.query({isStared: true}).then(mails => {setStarredMails(mails.length)})
-
-        mailsService.query({from: mailsService.getLoggedinUser().email, sentAt: true }).then(mails => {setSentMails(mails.length)})
-
-        mailsService.query({from: mailsService.getLoggedinUser().email, sentAt: false }).then(mails => {setDraftMails(mails.length)})
-
-        mailsService.query({removedAt: true }).then(mails => {setTrashMails(mails.length)})
-
-        onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
-
+        setStatistics()
+        onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false, sentAt: true}, true)
     }, [])
+
+
+    useEffect(() => {
+        if (statisticsFlag) {
+            console.log('setting statistics')
+            setStatistics()
+            setStatisticsFlag(!statisticsFlag)
+        }
+    }, [statisticsFlag])
 
     const [selectedMails, setSelectedMails] = useState([])
 
     useEffect(() => {
         console.log('out filterBy:', filterBy, 'sortAscending:', sortAscending)
-        mailsService.query(filterBy, sortAscending).then(mails => setMails(mails))
+        mailsService.query(filterBy, sortAscending).then(mails => setMails(mails)).then(
+
+            () => {
+                if (filterByCallback)
+                {
+                    for (let i = 0; i < filterByCallback.length; i++) {
+                        console.log('using')
+                        filterByCallback[i]()
+                    }
+                    setFilterByCallback([])
+                }
+            }
+
+        )
     }, [filterBy, sortAscending])
 
     function onSetFilterBy(newFilter, reset = false) {
@@ -94,9 +115,29 @@ export function MailIndex() {
         ev.stopPropagation()
         // add .deleting class to the mail element
         ev.target.classList.add('deleting')
-        mailsService.remove(mailId)
-            .then(() => {
+        mailsService.moveToTrash(mailId)
+            .then((deletedMail) => {
+                console.log('mail removed:', deletedMail)
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
+
+                // inbox
+                if (deletedMail.to === mailsService.getLoggedinUser().email) {
+                    setUnreadInboxMails(unreadInboxMails - 1)
+                }
+                // starred
+                if (deletedMail.isStared) {
+                    setStarredMails(starredMails - 1)
+                }
+                // sent
+                if (deletedMail.sentAt && (deletedMail.from === mailsService.getLoggedinUser().email)) {
+                    setSentMails(sentMails - 1)
+                }
+                // draft
+                if (!deletedMail.sentAt && (deletedMail.from === mailsService.getLoggedinUser().email)) {
+                    setDraftMails(draftMails - 1)
+                }
+                setTrashMails(trashMails + 1)
+
                 // showSuccessMsg('Mail has been successfully removed!')
             })
             .catch(() => {
@@ -106,9 +147,27 @@ export function MailIndex() {
     }
 
     function handleSearchChange({ target }) {
-        const { name: field, type } = target
+
+        if (target.value === 'in:draft') {
+            if (activePage !== 'draft') setActivePage('draft')
+        }
+        else if (target.value === 'in:sent') {
+            if (activePage !== 'sent') setActivePage('sent')
+        }
+        else if (target.value === 'in:trash') {
+            if (activePage !== 'trash') setActivePage('trash')
+        }
+        else if (target.value === 'is:starred') {
+            if(activePage !== 'starred') setActivePage('starred')
+        } else if (target.value === 'in:inbox') {
+            if (activePage !== 'inbox') setActivePage('inbox')
+        }
+        if (activePage !== 'inbox') {
+            setActivePage('inbox')
+        }
+        const {name: field, type} = target
         const value = type === 'number' ? +target.value : target.value
-        setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
+        setFilterByToEdit(prevFilter => ({...prevFilter, [field]: value}))
     }
 
     function reset() {
@@ -169,7 +228,7 @@ export function MailIndex() {
 
     function onForward(ev, targetMail) {
         ev.stopPropagation()
-        console.log('for mailId:', mailId)
+        // console.log('for mailId:', mailId)
         onComposeNewMail('', `Fwd: ${targetMail.subject}`,
             '' + '\n\n' + '---------- Forwarded message ---------' +
             '\nFrom: ' + targetMail.from +
@@ -184,6 +243,7 @@ export function MailIndex() {
         console.log('star mailId:', mailId)
         mailsService.starMail(mailId)
         .then(() => {
+            setStarredMails(mails.filter(mail => mail.isStared).length)
             setMails(prevMails => prevMails.map(mail => {
                 if (mail.id === mailId) {
                     mail.isStared = !mail.isStared
@@ -226,32 +286,48 @@ export function MailIndex() {
         
         if (criteria === 'all') {
             setSelectedMails(mails)
-            mails.map(mail => { mail.isSelected = true} )
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = true
+                return mail}))
+            // mails.map(mail => { mail.isSelected = true} )
         }
 
         if (criteria === 'none') {
             setSelectedMails([])
-            mails.map(mail => { mail.isSelected = false} )
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = false
+                return mail}))
+            // mails.map(mail => { mail.isSelected = false} )
         }
 
         if (criteria === 'read') {
             setSelectedMails(mails.filter(mail => mail.isRead))
-            mails.map(mail => { mail.isSelected = mail.isRead} )
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = mail.isRead
+                return mail}))
+            // mails.map(mail => { mail.isSelected = mail.isRead} )
         }
 
         if (criteria === 'unread') {
+            // setSelectedMails(mails.filter(mail => !mail.isRead))
             setSelectedMails(mails.filter(mail => !mail.isRead))
-            mails.map(mail => { mail.isSelected = !mail.isRead} )
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = mail.isRead
+                return mail}))
+            // mails.map(mail => { mail.isSelected = !mail.isRead} )
         }
 
         if (criteria === 'starred') {
+            console.log('selected starred')
             setSelectedMails(mails.filter(mail => mail.isStared))
-            mails.map(mail => { mail.isSelected = mail.isStared} )
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = mail.isStared
+                return mail}))
+            // setSelectedMails(mails.filter(mail => mail.isStared))
+            // mails.map(mail => { mail.isSelected = mail.isStared} )
         }
 
         if (criteria === 'unstarred') {
             setSelectedMails(mails.filter(mail => !mail.isStared))
-            mails.map(mail => { mail.isSelected = !mail.isStared} )
+            // setSelectedMails(mails.filter(mail => !mail.isStared))
+            // mails.map(mail => { mail.isSelected = !mail.isStared} )
+            setMails(prevMails => prevMails.map(mail => { mail.isSelected = !mail.isStared
+                return mail}))
         }
     }
 
@@ -273,6 +349,7 @@ export function MailIndex() {
         console.log('mark as read mailId:', mailId)
         mailsService.readMail(mailId)
         .then(() => {
+            setUnreadInboxMails(mails.filter(mail => !mail.isRead).length)
             setMails(prevMails => prevMails.map(mail => {
                 if (mail.id === mailId) {
                     mail.isRead = !mail.isRead
@@ -287,6 +364,7 @@ export function MailIndex() {
         console.log('mark as unread mailId:', mailId)
         mailsService.unReadMail(mailId)
             .then(() => {
+                setUnreadInboxMails(mails.filter(mail => !mail.isRead).length)
                 setMails(prevMails => prevMails.map(mail => {
                     if (mail.id === mailId) {
                         mail.isRead = !mail.isRead
@@ -305,6 +383,14 @@ export function MailIndex() {
         return 'Inbox'
     }
 
+    function filterByLabels(mail) {
+        if (mail.labels.includes('primary')) return 'Primary'
+        if (mail.labels.includes('promotions')) return 'Promotions'
+        if (mail.labels.includes('social')) return 'Social'
+        if (mail.labels.includes('info')) return 'Updates'
+        return 'Primary'
+    }
+
     return (
         <div className="mail-page">
 
@@ -321,24 +407,38 @@ export function MailIndex() {
             <header className="mail-header">
 
                 <section className="logo">
-                    <i className = "hover-hint fa-solid fa-bars hover-hint-strong"></i>
+                    <i className = "font-awesome-hover-hint fa-solid fa-bars"></i>
                     <img src="assets/img/gmail-logo.png"></img>
                     <h3>Gmail</h3>
- 
+
                 </section>
 
                 <section className="search">
                     <div className="search-bar">
-                        <input name='txt' className="searchbox" type = "text" placeholder = "Search mail" onChange={handleSearchChange} value={filterByToEdit.txt} />
+                        <input name='txt' className="searchbox" type = "text" placeholder = "Search mail" onChange={handleSearchChange}
+
+
+                               value={
+                                   filterByToEdit.txt
+                                        // ((activePage === 'inbox')?
+                                        //     ((filterByToEdit.txt === '')? 'in:inbox': filterByToEdit.txt) :
+                                        //     ((filterByToEdit.txt !== 'in:inbox')? filterByToEdit.txt: 'in:inbox') ) +
+                                        // ((activePage === 'draft')? 'in:draft': '') +
+                                        // ((activePage === 'sent')? 'in:sent': '') +
+                                        // ((activePage === 'trash')? 'in:trash': '') +
+                                        // ((activePage === 'starred')? 'is:starred': '')
+                               }
+
+                        />
                     </div>
                 </section>
 
                 <section className="user-details">
                     <i className="fa-solid fa-sliders"></i>
-                    <div className="fa-solid fa-question-circle toolbar-button hover-hint hover-hint-strong"></div>
-                    <i className="fa-solid fa-cloud toolbar-button hover-hint hover-hint-strong"></i>
-                    <div className="fa-solid fa-grip-vertical toolbar-button hover-hint hover-hint-strong"></div>
-                    <img src="assets/img/user-avatar.png"></img>
+                    <div className="fa-solid fa-question-circle toolbar-button font-awesome-hover-hint tooltip tooltip-smaller" data-tip = "Help"></div>
+                    <i className="fa-solid fa-cloud toolbar-button font-awesome-hover-hint tooltip tooltip-smaller" data-tip = "Homepage"></i>
+                    <div className="fa-solid fa-grip-vertical toolbar-button font-awesome-hover-hint tooltip tooltip-smaller" data-tip = "All Apps"></div>
+                    <img className="tooltip" data-tip = "Your Account" src="assets/img/user-avatar.png"></img>
                 </section>
 
             </header>
@@ -349,13 +449,16 @@ export function MailIndex() {
                 <div className="side-bar">
 
                     <section className="compose">
-                        <button onClick={ () => {onComposeNewMail()} }><i className="fa-solid fa-pen"></i> <span>Compose</span></button>
+                        <button className="tooltip" data-tip="New mail" onClick={ () => {onComposeNewMail()} }><i className="fa-solid fa-pen "></i> <span>Compose</span></button>
                     </section>
 
-                    <div className={`inbox side-bar-category ${(activePage === 'inbox') ? 'mail-side-bar-active' : ''}`}
+                    <div data-tip="Inbox" className={`inbox  side-bar-category ${(activePage === 'inbox') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
-                            onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false}, true)
-                            setActivePage('inbox')
+                            setFilterByCallback([...filterByCallback, () => {setActivePage('inbox')}])
+                            // setFilterByCallback([...filterByCallback, () => {setFilterBy({txt: 'in:inbox'})}])
+                            onSetFilterBy({to: mailsService.getLoggedinUser().email, removedAt: false, txt: ''}, true)
+                            setFilterByToEdit({to: mailsService.getLoggedinUser().email, removedAt: false, txt: ''})
+                            // setActivePage('inbox')
                          }}>
 
                         <i className="fa-solid fa-inbox"></i>
@@ -363,20 +466,22 @@ export function MailIndex() {
                         <span>{unreadInboxMails}</span>
                     </div>
 
-                    <div className={`starred side-bar-category ${(activePage === 'starred') ? 'mail-side-bar-active' : ''}`}
+                    <div data-tip="Starred" className={`starred  side-bar-category ${(activePage === 'starred') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
+                             setFilterByCallback([...filterByCallback, () => {setActivePage('starred')}])
                              onSetFilterBy({isStared: true}, true)
-                             setActivePage('starred')
+                             setFilterByToEdit({isStared: true, txt: 'is:starred'})
                          }}>
                         <i className="fa-regular fa-star"></i>
                         <span>Starred</span>
                         <span>{starredMails}</span>
                     </div>
 
-                    <div className={`sent side-bar-category ${(activePage === 'sent') ? 'mail-side-bar-active' : ''}`}
+                    <div data-tip="Sent" className={`sent  side-bar-category ${(activePage === 'sent') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
+                             setFilterByCallback([...filterByCallback, () => {setActivePage('sent')}])
                              onSetFilterBy({from: mailsService.getLoggedinUser().email, sentAt: true, removedAt: false}, true)
-                             setActivePage('sent')
+                             setFilterByToEdit({from: mailsService.getLoggedinUser().email, sentAt: true, removedAt: false, txt: 'in:sent'})
                          }}>
 
                         <i className="fa-regular fa-paper-plane"></i>
@@ -384,20 +489,23 @@ export function MailIndex() {
                         <span>{sentMails}</span>
                     </div>
 
-                    <div className={`draft side-bar-category ${(activePage === 'draft') ? 'mail-side-bar-active' : ''}`}
+                    <div data-tip="Drafts" className={`draft side-bar-category ${(activePage === 'draft') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
+                             setFilterByCallback([...filterByCallback, () => {setActivePage('draft')}])
                              onSetFilterBy({sentAt: false, removedAt: false}, true)
-                             setActivePage('draft')
+                             setFilterByToEdit({sentAt: false, removedAt: false, txt: 'in:draft'})
                          }}>
                         <i className="fa-regular fa-file"></i>
                         <span>Drafts</span>
                         <span>{draftMails}</span>
                     </div>
 
-                    <div className={`trash side-bar-category ${(activePage === 'trash') ? 'mail-side-bar-active' : ''}`}
+                    <div data-tip="Trash" className={`trash  side-bar-category ${(activePage === 'trash') ? 'mail-side-bar-active' : ''}`}
                          onClick={() => {
+                             setFilterByCallback([...filterByCallback, () => {setActivePage('trash')}])
                              onSetFilterBy({removedAt: true}, true)
-                             setActivePage('trash')
+                             setFilterByToEdit({removedAt: true, txt: 'in:draft'})
+                             // setFilterByToEdit({from: mailsService.getLoggedinUser().email, sentAt: true, removedAt: false, txt: 'in:draft'})
                          }}>
 
                         <i className="fa-solid fa-trash"></i>
@@ -413,10 +521,10 @@ export function MailIndex() {
 
                         <div className="mail-main-table-header">
                             <div className="mail-header-left-section">
-                                <div className="mail-header-checkbox-with-dropdown">
-                                    <button className="checkbox-gmail-style" onClick = {onSelectAll}>
+                                <div className="mail-header-checkbox-with-dropdown tooltip tooltip-smaller tooltip-move-left" data-tip="select by..">
+                                    <button className="checkbox-gmail-style">
                                         {/* <input type="checkbox" className="checkbox"/> */}
-                                        <input className={`checkbox ${(selectedMails.length === mails.length)? 'selected': '' }`} type="checkbox" checked={(selectedMails.length === mails.length)}></input>
+                                        <input className={`checkbox ${(mails.length) && (selectedMails.length === mails.length)? 'selected': '' }`} type="checkbox" checked={(selectedMails.length === mails.length)} onClick = {onSelectAll}></input>
                                         <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items">
@@ -449,8 +557,8 @@ export function MailIndex() {
                                     <i className="fa-solid fa-chevron-right"></i>
                                 </button>
 
-                                <div className="mail-header-checkbox-with-dropdown">
-                                    <button className="font-awesome-hover-hint">
+                                <div className="mail-header-checkbox-with-dropdown tooltip tooltip-smaller tooltip-move-right" data-tip="sort by..">
+                                    <button className="font-awesome-hover-hint font-awesome-hover-hint-with-children">
                                         <i className="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div className="dropdown-menu-items right-dropdown-menu-items">
@@ -494,6 +602,7 @@ export function MailIndex() {
 
                         <MailList mails={mails} onRemove={onRemove} showFrom={activePage !== 'sent'}
 
+                                  usersDisplayMap = {mailsService.getUsersDisplayMap()}
                                   onMarkAsRead = {onMarkAsRead}
                                   nowRendering={activePage}
                                   onSelect = {onSelect}

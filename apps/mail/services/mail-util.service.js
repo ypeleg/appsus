@@ -19,7 +19,10 @@ export const mailUtilService = {
 
         date: (start, end) => { return new Date(Math.floor(Math.random() * (Date.parse(end) - Date.parse(start) + 1) + Date.parse(start))) },
 
-        lorem: (length = 6) => [...'x'.repeat(length)].map(() => ['The sky','above','the port','was','the color of television','tuned','to','a dead channel','.','All','this happened','more or less','.','I','had','the story','bit by bit','from various people','and','as generally','happens','in such cases','each time','it','was','a different story','.','It','was','a pleasure','to','burn'][Math.floor(Math.random()*32)]).join(' '),
+        lorem: (length = 6) => {
+
+                // console.log('length:', length)
+                return [...'x'.repeat(length)].map(() => ['The sky','above','the port','was','the color of television','tuned','to','a dead channel','.','All','this happened','more or less','.','I','had','the story','bit by bit','from various people','and','as generally','happens','in such cases','each time','it','was','a different story','.','It','was','a pleasure','to','burn'][Math.floor(Math.random()*32)]).join(' ')},
 
         color: () => '#' + [...'x'.repeat(6)].map(() => '0123456789ABCDEF'[Math.floor(Math.random()*16)]).join(''),
 

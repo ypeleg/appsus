@@ -43,7 +43,7 @@
     margin-inline: 45px;
 }
 
-.logo {
+.note-page .logo {
     /* margin-inline: 20px; */
     display: flex;
     align-items: center;
@@ -53,14 +53,14 @@
     font-family: "Product Sans", Arial, sans-serif;
 }
 
-.logo i {
+.note-page .logo i {
     color: #5f637c;
     font-size: 1.3em;
     margin-inline: 23px 20px;
 
 }
 
-.logo h3 {
+.note-page .logo h3 {
     color: #5f637c;
     font-weight: normal;
     font-size: 1.3em;

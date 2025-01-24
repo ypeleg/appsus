@@ -30,6 +30,12 @@
     src: url(../../fonts/OpenSans/OpenSans-Regular.ttf);
 }
 
+/* Product Sans */
+@font-face {
+    font-family: "Product-Sans";
+    src: url(../../fonts/ProductSans/Product-Sans-Regular.ttf);
+}
+
 /* Font Awesome */
 @font-face {
     font-family: fa;
@@ -61,9 +67,11 @@
     src: url(../../fonts/FontAwesome/fa-regular-400.ttf);
 }
 
+.fa-solid-fr{ font-family:'Font Awesome 5 Pro' }
 .fa-solid-fr::before {
     /*font-family: fa;*/
-    font-family: fa-solid-fr;
+    font-family:'Font Awesome 5 Pro'
+    /*font-family: fa-solid-fr;*/
     /*font-family: fa-solid-fr;*/
     /* font-family:"Font Awesome 5 Pro"; */
     /*font-style:normal;*/

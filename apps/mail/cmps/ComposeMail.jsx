@@ -73,9 +73,9 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
                     <span className="header-text">New Message</span>
                     <div>
                         <button className="close-btn"> <i className="fa-regular fa-window-minimize"></i></button>
-                        <button className="close-btn maximize-btn" onClick={toggleMaximizedModal}><i className="fa-solid fa-expand-arrows"></i></button>
+                        <button className="close-btn maximize-btn" onClick={toggleMaximizedModal}><i className="fa-solid-fr fa-expand"></i></button>
 
-                        <button className="close-btn" onClick={toggleModal}><i className="fa-solid fa-window-close"></i></button>
+                        <button className="close-btn" onClick={toggleModal}><i className="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
 
