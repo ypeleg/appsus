@@ -16,7 +16,7 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
 
     function NoteTxt({note}) {
         return (
-            <div className="note-layout">
+            <div className="note-layout" style={ {backgroundColor: note.style.backgroundColor} } >
                 <p className="note-preview-txt note-preview-title">{note.info.title}</p>
                 <p className="note-preview-txt">{note.info.txt}</p>
             </div>
@@ -24,10 +24,11 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
     }
 
     function NoteImg({note}) {
+        console.log('img', note)
         return (
             <div className="note-layout">
 
-                {( !note.info.url.includes('youtube') ) ? (
+                { ((note.info.url) && (!note.info.url.includes('youtube'))) ? (
 
                 <img src={note.info.url} alt="Note"/>
                     ) : (
@@ -63,8 +64,8 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
     }
 
     function NoteTodos({note}) {
-
-        console.log( 'a',  (note.info.todos.some((todo, idx) => (!!todo.doneAt)))  )
+        console.log('img', note)
+        // console.log( 'a',  (note.info.todos.some((todo, idx) => (!!todo.doneAt)))  )
         return (
             <section>{note.info.title && <p className="note-preview-txt note-preview-title">{note.info.title}</p>}
             <ul className="note-layout clean-list todo-list">
@@ -95,8 +96,8 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
 
     return (
 
-            <div>
-                <pre className="note-preview" onClick={() => onOpenUpdate(note)}>
+            <div >
+                <pre className="note-preview" onClick={() => onOpenUpdate(note)} style={ {backgroundColor: ( ((!!(note.type === 'NoteTxt')) || (!!(note.type === 'NoteTxt'))) ? note.style.backgroundColor: '') }}>
                     <div className="remove fa-solid fa-circle-mark" onClick={() => onRemoveNote(note.id)}>X</div>
                         { note.type === 'NoteTxt' && <NoteTxt note={note}/> }
                         { note.type === 'NoteImg' && <NoteImg note={note}/> }

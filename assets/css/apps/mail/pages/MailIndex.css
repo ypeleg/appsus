@@ -1083,6 +1083,11 @@ button.checkbox-gmail-style>input.checkbox:hover{
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+.font-awesome-hover-hint:active {
+    /*background: #f1f3f4;*/
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 /*.fas {*/
 /*    font-size: 14px;*/
 /*}*/

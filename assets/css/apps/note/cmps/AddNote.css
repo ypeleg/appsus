@@ -335,6 +335,7 @@
     /*font-family: "Google Sans",Roboto,Arial,sans-serif;*/
     font-family: "Open Sans";
     color: rgb(32,33,36);
+    padding-left: 40px;
 }
 
 .note-title {
@@ -350,12 +351,12 @@
     resize: none;
 }
 
-.note-image {
-    border-radius: 8px;
-    max-height: 200px;
-    object-fit: cover;
-    width: 100%;
-}
+/*.note-image {*/
+/*    border-radius: 8px;*/
+/*    max-height: 200px;*/
+/*    object-fit: cover;*/
+/*    width: 100%;*/
+/*}*/
 
 .note-actions {
     align-items: center;
@@ -470,8 +471,19 @@
     position: absolute;
     top: 8px;
     right: 8px;
+    padding: 4px;
     color: rgba(0,0,0,0.6);
     font-size: 20px;
+    cursor: pointer;
+}
+
+.note-pin:hover {
+    background-color: rgba(95,99,104,0.1);
+    border-radius: 5px;
+}
+
+.note-pin:active {
+    background-color: rgba(95,99,104,0.2);
 }
 
 .note-content {

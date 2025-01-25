@@ -102,7 +102,7 @@ function save(note) {
     }
 }
 
-function getEmptyNote(type = 'NoteTxt', isPinned = false, info = {}, style = { backgroundColor: '#00d' }) {
+function getEmptyNote(type = 'NoteTxt', isPinned = false, info = {}, style = { backgroundColor: '#FFFFFF' }) {
     return {
         // id: utilService.makeId(),
         type,
@@ -131,7 +131,21 @@ function _createNotes() {
 
     const notes = []
 
-    const bgColors = ['#fff', '#f28b82', '#fbbc04', '#fff475', '#ccff90', '#a7ffeb', '#cbf0f8', '#aecbfa', '#d7aefb', '#fdcfe8', '#e6c9a8']
+    const bgColors = [
+        '#fff',
+        '#ffd6d6',
+        '#ffe4cc',
+        '#fff4cc',
+        '#e6f5d6',
+        '#d6f5f0',
+        '#d6e9ff',
+        '#dde0ff',
+        '#e8ddff',
+        '#ffd6e5',
+        '#f2e6d9'
+    ]
+
+
 
     for (let i = 0; i < 20; i++) {
         const type = utilService.random.choice(['NoteTxt', 'NoteImg', 'NoteTodos', 'NoteVideo'])
