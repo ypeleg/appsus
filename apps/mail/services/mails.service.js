@@ -65,7 +65,7 @@ let gUsers = [
 
 function getLoggedinUser() {
     var loggedIn = gUsers.find(user => user.id === loggedinUserId)
-    console.log('loggedin:', loggedIn)
+    // console.log('loggedin:', loggedIn)
     return loggedIn
 }
 
@@ -74,7 +74,7 @@ function getUsersDisplayMap() {
         acc[user.email] = ((user.id !== loggedinUserId)?  user.fullname: 'me')
         return acc
     }, {})
-    console.log(displayMap)
+    // console.log(displayMap)
     return displayMap
 }
 
@@ -138,7 +138,7 @@ function query(filterBy = {}, sortAsc = true) {
             }
 
             if (filterBy.from) {
-                console.log('filterBy.from:', filterBy.from)
+                // console.log('filterBy.from:', filterBy.from)
                 mails = mails.filter(mail => (mail.from === filterBy.from))
             }
 

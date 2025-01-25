@@ -51,7 +51,7 @@ export function MailIndex() {
 
     useEffect(() => {
         if (isUsingSearchParams(searchParams)) {
-            console.log('using search params!')
+            // console.log('using search params!')
             // setNote({...note, info: {title: searchParams.get('title'), txt: searchParams.get('txt')}})
             // setIsOpen(true)
             setIsMaximized(true)
@@ -63,12 +63,9 @@ export function MailIndex() {
         }
     }, [])
 
-
-
     useEffect(() => {
         onSetFilterDebounce(filterByToEdit)
     }, [filterByToEdit])
-
 
     useEffect(() => {
         setIsLoading(true)
@@ -93,7 +90,7 @@ export function MailIndex() {
 
     useEffect(() => {
         if (statisticsFlag) {
-            console.log('setting statistics')
+            // console.log('setting statistics')
             setStatistics()
             setStatisticsFlag(!statisticsFlag)
         }
@@ -102,14 +99,14 @@ export function MailIndex() {
     const [selectedMails, setSelectedMails] = useState([])
 
     useEffect(() => {
-        console.log('out filterBy:', filterBy, 'sortAscending:', sortAscending)
+        // console.log('out filterBy:', filterBy, 'sortAscending:', sortAscending)
         mailsService.query(filterBy, sortAscending).then(mails => setMails(mails)).then(
 
             () => {
                 if (filterByCallback)
                 {
                     for (let i = 0; i < filterByCallback.length; i++) {
-                        console.log('using')
+                        // console.log('using')
                         filterByCallback[i]()
                     }
                     setFilterByCallback([])
@@ -139,7 +136,7 @@ export function MailIndex() {
         ev.stopPropagation()
         mailsService.get(mailId)
             .then((mail) => {
-                console.log('mail to convert:', mail)
+                // console.log('mail to convert:', mail)
                 // setSearchParams({txt: mail.body, title: mail.subject})
                 // navigate('/note')
                 navigate(`/note?txt=${encodeURIComponent(mail.body)}&title=${encodeURIComponent(mail.subject)}`)
@@ -154,7 +151,7 @@ export function MailIndex() {
         ev.target.classList.add('deleting')
         mailsService.moveToTrash(mailId)
             .then((deletedMail) => {
-                console.log('mail removed:', deletedMail)
+                // console.log('mail removed:', deletedMail)
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
 
                 // inbox
@@ -189,7 +186,7 @@ export function MailIndex() {
         ev.target.classList.add('deleting')
         mailsService.remove(mailId)
             .then((deletedMail) => {
-                console.log('mail removed FOREVER:', deletedMail)
+                // console.log('mail removed FOREVER:', deletedMail)
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
                 setTrashMails(trashMails - 1)
                 // showSuccessMsg('Mail has been successfully removed!')
@@ -301,7 +298,7 @@ export function MailIndex() {
 
     function onStar(ev, mailId) {
         ev.stopPropagation()
-        console.log('star mailId:', mailId)
+        // console.log('star mailId:', mailId)
         mailsService.starMail(mailId)
         .then(() => {
             setStarredMails(mails.filter(mail => mail.isStared).length)
@@ -316,7 +313,7 @@ export function MailIndex() {
 
     function onTag(ev, mailId) {
         ev.stopPropagation()
-        console.log('tag mailId:', mailId)
+        // console.log('tag mailId:', mailId)
         mailsService.tagMail(mailId)
         .then(() => {
             setMails(prevMails => prevMails.map(mail => {
@@ -375,7 +372,7 @@ export function MailIndex() {
         }
 
         if (criteria === 'starred') {
-            console.log('selected starred')
+            // console.log('selected starred')
             setSelectedMails(mails.filter(mail => mail.isStared))
             setMails(prevMails => prevMails.map(mail => { mail.isSelected = mail.isStared
                 return mail}))
@@ -407,7 +404,7 @@ export function MailIndex() {
 
     function onMarkAsRead(ev, mailId) {
         ev.stopPropagation()
-        console.log('mark as read mailId:', mailId)
+        // console.log('mark as read mailId:', mailId)
         mailsService.readMail(mailId)
         .then(() => {
             setUnreadInboxMails(mails.filter(mail => !mail.isRead).length)
@@ -422,7 +419,7 @@ export function MailIndex() {
 
     function onMarkAsUnRead(ev, mailId) {
         ev.stopPropagation()
-        console.log('mark as unread mailId:', mailId)
+        // console.log('mark as unread mailId:', mailId)
         mailsService.unReadMail(mailId)
             .then(() => {
                 setUnreadInboxMails(mails.filter(mail => !mail.isRead).length)

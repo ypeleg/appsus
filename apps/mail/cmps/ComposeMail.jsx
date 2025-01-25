@@ -27,7 +27,7 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
 
     // let {defaultFrom, defaultTo, defaultBody} = defaultMailDetails
 
-    console.log('defaultMailDetails', defaultMailDetails)
+    // console.log('defaultMailDetails', defaultMailDetails)
     
     let defaultParams = {to: '', body: '' , subject: ''}
     if (defaultMailDetails.id !== null) defaultParams.id = defaultMailDetails.id
@@ -44,8 +44,8 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
     const [mail, setMail] = useState(mailsService.getDefaultEmail())
 
 
-    console.log('defaultParams,', defaultParams)
-    console.log('defaultMailDetails,', defaultMailDetails)
+    // console.log('defaultParams,', defaultParams)
+    // console.log('defaultMailDetails,', defaultMailDetails)
 
     useEffect(() => {
 
