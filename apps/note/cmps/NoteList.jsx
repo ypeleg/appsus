@@ -11,7 +11,7 @@ export function NoteList({ notes, onRemoveNote, onsaveNote }) {
             {notes.map(note => (
                 <article key={note.id}>
                     <NotePreview note={note}
-                        onRemoveNote={(noteId) => onRemoveNote(noteId)}
+                        onRemoveNote={onRemoveNote}
                         onSaveNote={(note) => onsaveNote(note)} />
                 </article>
 

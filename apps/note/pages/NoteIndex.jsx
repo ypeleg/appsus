@@ -1,12 +1,9 @@
 
-
 const { useEffect, useState } = React
-
 
 import { AddNote } from "../cmps/AddNote.jsx"
 import { SideBar } from "../cmps/SideBar.jsx"
 import { NoteList } from "../cmps/NoteList.jsx"
-
 import { NoteHeader } from "../cmps/NoteHeader.jsx"
 import { noteService } from "../services/note.service.js"
 
@@ -14,10 +11,16 @@ import { noteService } from "../services/note.service.js"
 export function NoteIndex() {
 
     const [notes, setNotes] = useState(null)
+    const [filterBy, setFilterBy] = useState(noteService.getDefaultFilter())
 
     useEffect(() => {
         loadNotes()
     }, [])
+
+    useEffect(() => {
+        loadNotes()
+    }, [filterBy])
+
 
     function loadNotes() {
         noteService.query()
@@ -37,7 +40,19 @@ export function NoteIndex() {
         noteService
             .save(note)
             .then((savedNote) => {
+                console.log(savedNote);
+
                 loadNotes()
+
+                // if (notes.some(note => note.id === savedNote.id)) {
+                //     let noteIndex = notes.findIndex(note => savedNote.id === note.id)
+                //     let tmpNotes = [...notes]
+                //     tmpNotes[noteIndex] = savedNote
+                //     setNotes(tmpNotes)
+                // } else {
+                //     let tmpNotes = [savedNote, ...notes]
+                //     setNotes(tmpNotes)
+                // }
             })
             .catch(err => {
                 console.log('err:', err)
@@ -56,17 +71,24 @@ export function NoteIndex() {
             })
     }
 
+    function filterNotes(filterByType) {
+        console.log('filter type:' + filterByType);
+        setFilterBy(preFilter => ({ ...preFilter, ...filterBy }))
+        // let filterNotes = notes.filter(note => note.type === filterByType)
+        // setNotes(filterNotes)
+    }
+
     if (!notes) return <h1>Loading...</h1>
     return (
         <div className="note-page">
-            <NoteHeader />
+            <NoteHeader onFilterNotes={filterNotes} />
             <main className="main-layout">
                 <SideBar />
                 <div className="notes-workspace">
-                    <AddNote onSaveNote={(note) => onSaveNote(note)} />
+                    <AddNote onSaveNote={onSaveNote} />
                     <NoteList
                         notes={notes}
-                        onRemoveNote={(noteId) => onRemoveNote(noteId)}
+                        onRemoveNote={onRemoveNote}
                         onsaveNote={(note) => onSaveNote(note)}
                     />
                 </div>
