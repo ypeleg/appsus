@@ -261,7 +261,7 @@ export function MailIndex() {
                 mailsService.query(filterBy, sortAscending).then(mails => setMails(mails))
                 // setMails((prevMails) => [...prevMails, savedMails]);
                 // console.log("Mail saved:", savedMails);
-                notificationGreen('Message sent!')
+                // notificationGreen('Message sent!')
             })
         // mailsService.save(mailToAdd).then(mails => setMails(mails))
     }
