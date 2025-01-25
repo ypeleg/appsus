@@ -2,7 +2,7 @@ export function About() {
     return (
         <section className="about-page">
             <div className="about-banner">
-                <h1>About Us</h1>
+                <h1 className="animate__heartBeat">About Us</h1>
             </div>
             <div className="about-content">
                 <div className="images-content">
