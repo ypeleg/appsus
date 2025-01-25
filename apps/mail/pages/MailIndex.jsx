@@ -1,5 +1,6 @@
 
 
+
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
@@ -9,6 +10,7 @@ import { MailList } from '../cmps/MailList.jsx'
 import { ComposeMail } from "../cmps/ComposeMail.jsx"
 import { mailsService } from '../services/mails.service.js'
 import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
+import {mailUtilService} from "../services/mail-util.service"
 
 
 // import {mailUtilService} from "../services/mail-util.service.js"
@@ -486,6 +488,19 @@ export function MailIndex() {
         notificationGreen('Messages starred')
     }
 
+    function padNum(num) { return (num > 9) ? num + '' : '0' + num }
+
+    function prettyShortPaddedDate(date) {
+        if (date !== null) {
+            // console.log('date:', date)
+            date = new Date(date)
+            return `${padNum(date.getDate())}/${padNum(date.getMonth() + 1)}`
+        } else {
+            return ''
+        }
+    }
+
+
     function onBulkDelete(ev) {
         ev.stopPropagation()
         selectedMails.map(mail => {
@@ -899,16 +914,17 @@ export function MailIndex() {
 
 
                                 </span>
-                                <div className="header-actions">
-                                    <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-print"></i></button>
-                                    <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-external-link-alt"></i></button>
-                                </div>
+                            <div className="header-actions">
+                                <button onClick = {(ev) => { onConvertToNote(ev, activeMail.id) } } className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="Export as Keep Note"><i className="fa-solid fa-paper-plane"></i></button>
+                                <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-print"></i></button>
+                                <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-external-link-alt"></i></button>
                             </div>
+                        </div>
                         </div>
 
                         <div className="read-msg-sender">
 
-                            <div className="sender-info">
+                        <div className="sender-info">
                                 <div className="sender-name-time">
                                     <i className="fas fa-user-circle sender-avatar"></i>
                                     <div className="sender-from-to">
@@ -918,7 +934,7 @@ export function MailIndex() {
 
                                 </div>
                                 <div className="sender-actions">
-                                    <span className="timestamp">{activeMail.sentAt}</span>
+                                    <span className="timestamp">{prettyShortPaddedDate(activeMail.sentAt)}</span>
                                     <button data-tip="Star msg" className="font-awesome-hover-hint tooltip tooltip-smaller"
                                             onClick={(ev) => {
                                                 onStar(ev, activeMail.id)
