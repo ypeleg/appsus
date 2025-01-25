@@ -761,12 +761,14 @@ export function MailIndex() {
                                                 onRemove(ev, activeMail.id)
                                                 setActiveMail(null)
                                                 setActivePage('inbox')
+                                                notificationGreen('moved to archive..')
                                             }}
                                     ><i className="fa-solid fa-archive"></i></button>
                                     <button className={`font-awesome-hover-hint ${activeMail.labels.includes('important') ? 'stared' : 'unstared'}`}
                                             onClick={(ev) => {
                                                 onTag(ev, activeMail.id)
                                                 setActiveMail({...activeMail, labels: (activeMail.labels.includes('important')) ? activeMail.labels.filter(label => label !== 'important') : [...activeMail.labels, 'important']})
+                                                notificationGreen('marked as "important.."')
                                             }}>
                                         <i className={`fa-bookmark ${activeMail.labels.includes('important') ? 'fa-solid stared' : 'fa-solid unstared'}`}
 
@@ -776,6 +778,7 @@ export function MailIndex() {
                                                 onRemove(ev, activeMail.id)
                                                 setActiveMail(null)
                                                 setActivePage('inbox')
+                                                notificationGreen('moved to trash..')
                                             }}
                                             // TODO: Add user message here
                                     ><i className="fa-solid fa-trash-alt"
@@ -788,11 +791,13 @@ export function MailIndex() {
                                                 onMarkAsUnRead(ev, activeMail.id)
                                                 setActiveMail({...activeMail, isRead: false})
                                                 setActivePage('inbox')
+                                                notificationGreen('marked as unread..')
                                             }}
 
 
                                     ><i className="fa-solid fa-envelope"></i></button>
                                     <button className="font-awesome-hover-hint"
+
 
 
                                     ><i className="fa-solid fa-folder-plus"></i></button>
@@ -802,14 +807,15 @@ export function MailIndex() {
                             </div>
 
                             <div className="toolbar-right">
-                                <span>10 of 7,408</span>
+                                <span className="pagination-text">1-{(mails.length < 51) ? mails.length : 50} of {mails.length}</span>
+                                {/*<span>10 of 7,408</span>*/}
                                 <button className="font-awesome-hover-hint"><i className="fa-solid fa-chevron-left"></i></button>
                                 <button className="font-awesome-hover-hint"><i className="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
 
                         <div className="read-msg-header">
-                            <div className="subject-line">
+                        <div className="subject-line">
                                 <h2>{activeMail.subject}</h2>
                                 <span className="label">
 
