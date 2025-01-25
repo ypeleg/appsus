@@ -1,13 +1,14 @@
-import {noteService} from "../../note/services/note.service"
 
 
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
 
+
 import { MailList } from '../cmps/MailList.jsx'
 import { ComposeMail } from "../cmps/ComposeMail.jsx"
 import { mailsService } from '../services/mails.service.js'
+import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
 
 
 // import {mailUtilService} from "../services/mail-util.service.js"
@@ -35,6 +36,11 @@ export function MailIndex() {
     const navigate = useNavigate()
 
 
+    useEffect(() => {
+        // notificationGreen('New mail has been successfully created!')
+    } , [activePage])
+
+
     function onSetActivePage(page) {
         setActivePage(page)
     }
@@ -50,10 +56,12 @@ export function MailIndex() {
     function isUsingSearchParams(searchParams) { return (searchParams.get('body') && searchParams.get('subject')) }
 
     useEffect(() => {
+
         if (isUsingSearchParams(searchParams)) {
             // console.log('using search params!')
             // setNote({...note, info: {title: searchParams.get('title'), txt: searchParams.get('txt')}})
             // setIsOpen(true)
+
             setIsMaximized(true)
             onComposeNewMail(null,
                 searchParams.get('subject'),

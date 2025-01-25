@@ -1,8 +1,9 @@
 
 
-import { mailsService } from "../services/mails.service.js"
-
 const { useState, useRef, useEffect } = React
+
+import { mailsService } from "../services/mails.service.js"
+import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
 
 
 function TextBox({ handleChange, txt }) {
