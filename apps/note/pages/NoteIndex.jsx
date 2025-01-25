@@ -1,14 +1,14 @@
 
 
 const { useEffect, useState } = React
-const { Link, useSearchParams, useParams } = ReactRouterDOM
 
 
-import { noteService } from "../services/note.service.js"
-import { NoteList } from "../cmps/NoteList.jsx"
-import { NoteHeader } from "../cmps/NoteHeader.jsx"
-import { SideBar } from "../cmps/SideBar.jsx"
 import { AddNote } from "../cmps/AddNote.jsx"
+import { SideBar } from "../cmps/SideBar.jsx"
+import { NoteList } from "../cmps/NoteList.jsx"
+
+import { NoteHeader } from "../cmps/NoteHeader.jsx"
+import { noteService } from "../services/note.service.js"
 
 
 export function NoteIndex() {
@@ -55,9 +55,6 @@ export function NoteIndex() {
                 showErrorMsg(`Problems removing note (${noteId})`)
             })
     }
-
-
-
 
     if (!notes) return <h1>Loading...</h1>
     return (

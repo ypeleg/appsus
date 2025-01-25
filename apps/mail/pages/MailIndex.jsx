@@ -46,6 +46,7 @@ export function MailIndex() {
         onSetFilterDebounce(filterByToEdit)
     }, [filterByToEdit])
 
+
     useEffect(() => {
         setIsLoading(true)
         mailsService.query(filterBy, sortAscending)

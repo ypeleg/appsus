@@ -27,7 +27,8 @@
 /* Open Sans */
 @font-face {
     font-family: "Open Sans";
-    src: url(../../fonts/OpenSans/OpenSans-Regular.ttf);
+    /*src: url(../../fonts/OpenSans/OpenSans-VariableFont_wdth,wght.ttf);*/
+    src: url(../../fonts/OpenSans/OpenSans-Medium.ttf);
 }
 
 /* Product Sans */

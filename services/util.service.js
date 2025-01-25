@@ -11,6 +11,7 @@ export const utilService = {
     animateCSS,
     debounce,
     getRandomColor,
+    modifyYoutubeUrl,
     padNum,
     random: {
 
@@ -115,7 +116,7 @@ function getMonthName(date) {
     return monthNames[date.getMonth()]
 }
 
-export function modifyYoutubeUrl(inputUrl) {
+function modifyYoutubeUrl(inputUrl) {
     console.log(inputUrl);
 
     let url = inputUrl
