@@ -71,11 +71,10 @@ export function NoteIndex() {
             })
     }
 
-    function filterNotes(filterByType) {
-        console.log('filter type:' + filterByType);
-        setFilterBy(preFilter => ({ ...preFilter, ...filterByType }))
-        // let filterNotes = notes.filter(note => note.type === filterByType)
-        // setNotes(filterNotes)
+    function filterNotes(filterBy) {
+        console.log('filter type:' + filterBy);
+        // setFilterBy(preFilter => ({ ...preFilter, ...filterBy }))
+        setFilterBy(preFilter => preFilter)
     }
 
     if (!notes) return <h1>Loading...</h1>

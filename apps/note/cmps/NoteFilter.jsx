@@ -5,7 +5,7 @@ const { useState, useEffect, useRef } = React
 
 export function NoteFilter({ onFilterNotes }) {
 
-  const [filterByToEdit, setFilterByToEdit] = useState({ }) // useState({ ...filterBy })
+  const [filterByToEdit, setFilterByToEdit] = useState({}) // useState({ ...filterBy })
 
 
   // function handleChange(ev) {
@@ -15,11 +15,11 @@ export function NoteFilter({ onFilterNotes }) {
 
   // }
 
-  useEffect(() => {
-    console.log(filterByToEdit);
+  // useEffect(() => {
+  //   console.log(filterByToEdit);
 
-    onFilterNotes(filterByToEdit)
-  }, [filterByToEdit])
+  //   onFilterNotes(filterByToEdit)
+  // }, [filterByToEdit])
 
 
   function handleChange({ target }) {
@@ -37,6 +37,7 @@ export function NoteFilter({ onFilterNotes }) {
         break
     }
     setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
+    onFilterNotes(filterByToEdit)
   }
 
   const { type } = filterByToEdit
