@@ -1,8 +1,9 @@
+import {noteService} from "../../note/services/note.service"
 
 
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
-
+const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
 
 import { MailList } from '../cmps/MailList.jsx'
 import { ComposeMail } from "../cmps/ComposeMail.jsx"
@@ -31,6 +32,8 @@ export function MailIndex() {
 
     const [filterByCallback, setFilterByCallback] = useState([])
 
+    const navigate = useNavigate()
+
 
     function onSetActivePage(page) {
         setActivePage(page)
@@ -41,6 +44,26 @@ export function MailIndex() {
     const initialFilterBy = useRef({ ...filterBy })
     // const onSetFilterDebounce = useRef(mailUtilService.debounce(onFilterBy, 500)).current
     const onSetFilterDebounce = useRef(onSetFilterBy).current
+
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    function isUsingSearchParams(searchParams) { return (searchParams.get('body') && searchParams.get('subject')) }
+
+    useEffect(() => {
+        if (isUsingSearchParams(searchParams)) {
+            console.log('using search params!')
+            // setNote({...note, info: {title: searchParams.get('title'), txt: searchParams.get('txt')}})
+            // setIsOpen(true)
+            setIsMaximized(true)
+            onComposeNewMail(null,
+                searchParams.get('subject'),
+                searchParams.get('body'),
+                null,
+                null)
+        }
+    }, [])
+
+
 
     useEffect(() => {
         onSetFilterDebounce(filterByToEdit)
@@ -112,6 +135,19 @@ export function MailIndex() {
         setSelectedMails(selectedMails)
     }
 
+    function onConvertToNote(ev, mailId) {
+        ev.stopPropagation()
+        mailsService.get(mailId)
+            .then((mail) => {
+                console.log('mail to convert:', mail)
+                // setSearchParams({txt: mail.body, title: mail.subject})
+                // navigate('/note')
+                navigate(`/note?txt=${encodeURIComponent(mail.body)}&title=${encodeURIComponent(mail.subject)}`)
+                // onComposeNewMail(mail.to, mail.subject, mail.body)
+            })
+
+    }
+
     function onRemove(ev, mailId) {
         ev.stopPropagation()
         // add .deleting class to the mail element
@@ -139,6 +175,23 @@ export function MailIndex() {
                 }
                 setTrashMails(trashMails + 1)
 
+                // showSuccessMsg('Mail has been successfully removed!')
+            })
+            .catch(() => {
+                // showErrorMsg(`couldn't remove mail`)
+                navigate('/mail')
+            })
+    }
+
+
+    function onDeleteForever(ev, mailId) {
+        ev.stopPropagation()
+        ev.target.classList.add('deleting')
+        mailsService.remove(mailId)
+            .then((deletedMail) => {
+                console.log('mail removed FOREVER:', deletedMail)
+                setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
+                setTrashMails(trashMails - 1)
                 // showSuccessMsg('Mail has been successfully removed!')
             })
             .catch(() => {
@@ -209,11 +262,18 @@ export function MailIndex() {
     function onComposeNewMail(mailTo = null,
                               mailSubject = null,
                               mailBody = null,
-                              focusOn = null) {
+                              focusOn = null,
+                              mailId = null) {
         let defaultParams = {}
+        if (mailId !== null) defaultParams.id = mailId
         if (mailTo !== null) defaultParams.to = mailTo
         if (mailBody !== null) defaultParams.body = mailBody
         if (mailSubject !== null) defaultParams.subject = mailSubject
+        defaultParams.from = mailsService.getLoggedinUser().email
+        defaultParams.createdAt = Date.now()
+        defaultParams.sentAt = Date.now()
+        defaultParams.isRead = true
+
         setCurrentDefaultMailDetails({...defaultParams})
         onToggleComposeMail()
     }
@@ -601,9 +661,15 @@ export function MailIndex() {
                         {/*    <div className="all-selection select-box"> All</div>*/}
                         {/*</div>*/}
 
-                        <MailList mails={mails} onRemove={onRemove} showFrom={activePage !== 'sent'}
+                        <MailList mails={mails}
+
+                                  onRemove={onRemove}
+                                  onDeleteForever={onDeleteForever}
+
+                                  showFrom={activePage !== 'sent'}
 
                                   usersDisplayMap = {mailsService.getUsersDisplayMap()}
+                                  onConvertToNote = {onConvertToNote}
                                   onMarkAsRead = {onMarkAsRead}
                                   nowRendering={activePage}
                                   onSelect = {onSelect}
@@ -612,31 +678,40 @@ export function MailIndex() {
                                   onTag = {onTag}
 
 
-                                  onReadMail=
-                            {
-                                (mailId) => {
-                                    setActiveMail(null)
-                                    mailsService.readMail(mailId)
-                                    // setMails(prevMails => ({ ...prevBook, [prop]: value }))
-                                    // mailsService.query(filterBy).then(mails => setMails(mails))
-                                    // mailsService.query(filterBy).then(mails => setMails(mails))
-                                    mailsService.get(mailId).then(mail => {
+                                  onReadMail = {
+                                                    (mailId) => {
+                                                        setActiveMail(null)
+                                                        mailsService.readMail(mailId)
+                                                        // setMails(prevMails => ({ ...prevBook, [prop]: value }))
+                                                        // mailsService.query(filterBy).then(mails => setMails(mails))
+                                                        // mailsService.query(filterBy).then(mails => setMails(mails))
+                                                        mailsService.get(mailId).then(mail => {
 
 
-                                            setMails(prevMails => prevMails.map(mail => {
-                                                if (mail.id === mailId) {
-                                                    mail.isRead = true
-                                                }
-                                                return mail
-                                            }))
+                                                                setMails(prevMails => prevMails.map(mail => {
+                                                                    if (mail.id === mailId) {
+                                                                        mail.isRead = true
+                                                                    }
+                                                                    return mail
+                                                                }))
 
-                                            setActiveMail(mail)
+                                                                setActiveMail(mail)
 
-                                        }
-                                    ).then(setActivePage('read-msg'))
+                                                            }
+                                                        ).then(setActivePage('read-msg'))
 
-                                }
-                            }
+                                                    }
+                                               }
+
+                                  onReEditDraft = {
+                                                        (mailId) => {
+                                                            setActiveMail(null)
+                                                            mailsService.get(mailId).then(mail => {
+                                                                onComposeNewMail(mail.to, mail.subject, mail.body, 'body', mailId)
+                                                            })
+
+                                                        }
+                                                  }
 
 
 

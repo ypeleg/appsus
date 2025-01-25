@@ -24,12 +24,17 @@ function displayName(userName, usernameMap) {
     return userName
 }
 
-export function MailList({ nowRendering, mails, onRemove, onMarkAsRead, onReadMail, showFrom, onReply, onStar, onTag, onSelect, usersDisplayMap }) {
+export function MailList({ nowRendering, mails, onRemove, onDeleteForever, onMarkAsRead, onReadMail, showFrom, onReply, onStar, onTag, onSelect, usersDisplayMap, onReEditDraft, onConvertToNote }) {
 
     return (<div className="messages">
         {mails.map(mail =>
 
-            <article className={`msg ${mail.isRead ? 'read' : 'unread'}`} key={mail.id} onClick={() => {onReadMail(mail.id)}}>
+            <article className={`msg ${mail.isRead ? 'read' : 'unread'}`} key={mail.id}
+
+                     onClick={() => {
+                                        if (nowRendering === 'draft') onReEditDraft(mail.id)
+                                        else onReadMail(mail.id)
+                                    }}>
 
                 <div onClick={(ev) => onSelect(ev, mail.id)}
                      className="fullksizediv tooltip star unread-checkbox " data-tip = "Select"><input className={`checkbox ${mail.isSelected? 'selected': '' }`} type="checkbox" checked={mail.isSelected}></input></div>
@@ -44,7 +49,7 @@ export function MailList({ nowRendering, mails, onRemove, onMarkAsRead, onReadMa
                 }
 
                 { (nowRendering === 'trash') &&
-                    <div onClick={(ev) => onTag(ev, mail.id)}
+                    <div onClick={(ev) => { onDeleteForever(ev, mail.id)}}
                          className={`fullksizediv tooltip star`} data-tip = "Delete Forever"><i className="fa-regular fa-trash"></i></div>
                 }
 
@@ -80,6 +85,7 @@ export function MailList({ nowRendering, mails, onRemove, onMarkAsRead, onReadMa
                 </div>
                 <div className="date">{prettyShortPaddedDate(mail.sentAt)}</div>
                 <div className="overlay-buttons">
+                    <button onClick = {(ev) => { onConvertToNote(ev, mail.id) } } className = "tooltip font-awesome-hover-hint " data-tip = "Export as Keep Note"><i className="fa-regular fa-paper-plane"></i></button>
                     <button onClick = {(ev) => { onRemove(ev, mail.id) } } className = "tooltip font-awesome-hover-hint " data-tip = "Delete"><i className="fa-regular fa-trash"></i></button>
                     <button onClick = {(ev) => { onReply(ev, mail) } } className = "font-awesome-hover-hint tooltip " data-tip = "Reply"><i className="fa-regular fa-reply"></i></button>
                     <button onClick = {(ev) => { onMarkAsRead(ev, mail.id) } } className = "font-awesome-hover-hint tooltip " data-tip = "Mark as read"><i className={`fa-regular ${mail.isRead ? 'fa-envelope': 'fa-envelope-open'}`} ></i></button>
