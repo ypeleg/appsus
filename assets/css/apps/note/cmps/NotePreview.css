@@ -89,7 +89,7 @@
 
 
 
-input[type=checkbox].todo-checkbox {
+.note-page input[type=checkbox].todo-checkbox {
   /*filter: grayscale(1);*/
   appearance: none;
   width: 15px;
@@ -104,7 +104,7 @@ input[type=checkbox].todo-checkbox {
 
 }
 
-input[type=checkbox].todo-checkbox:checked {
+.note-page input[type=checkbox].todo-checkbox:checked {
 
   /*appearance: auto;*/
   color: transparent;
@@ -117,7 +117,7 @@ input[type=checkbox].todo-checkbox:checked {
   /*text-shadow: #333333;*/
 }
 
-input[type=checkbox].todo-checkbox:checked::after {
+.note-page input[type=checkbox].todo-checkbox:checked::after {
   font-family: 'Font Awesome 5 Pro';
   content: '\f00c';
   position: absolute;

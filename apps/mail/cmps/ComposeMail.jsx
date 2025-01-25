@@ -62,6 +62,7 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
         const newMail = { ...mail, sentAt: null }
         sendMail(newMail)
         toggleModal()
+        notificationGreen('message saved to drafts..')
     }
 
     function onSendMail(ev) {
@@ -70,6 +71,7 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
         const newMail = { ...mail, sentAt: Date.now() }
         sendMail(newMail)
         toggleModal()
+        notificationGreen('message sent..')
     }
 
     function handleChange({ target }) {
