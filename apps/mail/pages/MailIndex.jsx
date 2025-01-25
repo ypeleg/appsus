@@ -341,7 +341,7 @@ export function MailIndex() {
         })
     }
 
-    function onSelectAll(ev) {                
+    function onSelectAll(ev) {
         ev.stopPropagation()
         if (selectedMails.length) {
             setSelectedMails([])
