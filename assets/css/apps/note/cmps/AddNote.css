@@ -19,14 +19,12 @@
   cursor: pointer;
 }
 
-.focusable {}
 
 .note-edit-open {
   min-height: 136px;
   transition: all 1s;
 }
 
-.focusable {}
 
 .invisible {
   height: 0px;
@@ -481,8 +479,4 @@
 
 .note-pin:active {
   background-color: rgba(95, 99, 104, 0.2);
-}
-
-.note-content {
-  /*margin-right: 24px;*/
 }
