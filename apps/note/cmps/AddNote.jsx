@@ -6,6 +6,7 @@ const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
 import { ToolsBtnsNote } from "../cmps/ToolsBtnsNote.jsx"
 import { noteService } from "../services/note.service.js"
 import { utilService } from "../../../services/util.service.js"
+import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
 
 const NOTE_EDITORS = {
   NoteTxt: NoteTxtInput,
@@ -46,6 +47,8 @@ export function AddNote({ onSaveNote }) {
     onSaveNote(note)
     setNote(noteService.getEmptyNote())
     setIsOpen(false)
+    notificationGreen('Note is !')
+
     navigate('/note')
   }
 

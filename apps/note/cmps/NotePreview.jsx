@@ -6,6 +6,7 @@ const { useSearchParams, useParams, useNavigate } = ReactRouterDOM
 
 import { UpdateNote } from "./UpdateNote.jsx";
 import { ToolsBtnsNote } from "../cmps/ToolsBtnsNote.jsx";
+import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
 
 
 
@@ -13,6 +14,7 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
 
   const [isEditing, setIsEditing] = useState(false)
   const [selectedNote, setSelectedNote] = useState(null)
+
 
   function NoteTxt({ note }) {
     return (
@@ -95,12 +97,28 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   function onRemoveClicked(ev) {
     ev.stopPropagation()
     onRemoveNote(note.id)
+    notificationGreen('Note is removed!')
+
   }
 
+  function onPinClicked(ev) {
+    ev.stopPropagation()
+    ev.preventDefault()
+    note.isPinned = !note.isPinned
+    if (note.isPinned) notificationGreen('Note is pinned!')
+    else notificationGreen('Note unpinned!')
+
+    onSaveNote(note)
+
+  }
+
+
+  const stylePin = note.isPinned ? 'red' : ''
   return (
 
     <div >
       <pre className="note-preview" onClick={() => onOpenUpdate(note)} style={{ backgroundColor: note.style.backgroundColor }}>
+        <i className="note-pin-preview fa-solid fa-thumbtack" style={{ color: stylePin }} onClick={onPinClicked}></i>
         <div className="remove fa-solid fa-circle-mark" onClick={onRemoveClicked}>X</div>
         {note.type === 'NoteTxt' && <NoteTxt note={note} />}
         {note.type === 'NoteImg' && <NoteImg note={note} />}

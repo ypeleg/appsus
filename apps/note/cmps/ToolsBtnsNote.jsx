@@ -39,6 +39,7 @@ export function ToolsBtnsNote({ note, onsaveNote }) {
     <section className="tools-btns">
       <button className="fa-solid fa-download"></button>
       <button className="fa-solid fa-image"></button>
+      {/* <button className="fa-solid fa-thumbtack"></button> */}
       <button className="fa-solid fa-palette" onClick={onTogglePalette}></button>
       <button className="fa-solid fa-envelope" onClick={(ev) => onSentNoteToMail(ev)}></button>
 

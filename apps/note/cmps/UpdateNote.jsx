@@ -4,6 +4,7 @@ const { useState, useEffect } = React
 
 
 import { ToolsBtnsNote } from "../cmps/ToolsBtnsNote.jsx";
+import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
 
 
 export function UpdateNote({ note, onClose, onSaveNote }) {
@@ -16,7 +17,7 @@ export function UpdateNote({ note, onClose, onSaveNote }) {
   function handleSave() {
     setEditedNote(editedNote)
     onSaveNote(editedNote)
-    // console.log('sss');
+    notificationGreen('Note is edited!')
 
     onClose()
   }
@@ -97,6 +98,10 @@ export function UpdateNote({ note, onClose, onSaveNote }) {
             onChange={handleChange}
           />
         )}
+
+        {note.type === 'NoteTodos'
+
+        }
         <section className="time-edit">
           <h5>{`Edited At: ${prettyShortPaddedDate(note.createdAt)}`}</h5>
         </section>
