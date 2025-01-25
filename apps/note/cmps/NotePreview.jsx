@@ -14,9 +14,6 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   const [isEditing, setIsEditing] = useState(false)
   const [selectedNote, setSelectedNote] = useState(null)
 
-  console.log(onSaveNote);
-
-
   function NoteTxt({ note }) {
     return (
       <div className="note-layout" style={{ backgroundColor: note.style.backgroundColor }} >
@@ -27,7 +24,6 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   }
 
   function NoteImg({ note }) {
-    console.log('img', note)
     return (
       <div className="note-layout">
 
@@ -96,11 +92,16 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
     setSelectedNote(note)
   }
 
+  function onRemoveClicked(ev) {
+    ev.stopPropagation()
+    onRemoveNote(note.id)
+  }
+
   return (
 
     <div >
       <pre className="note-preview" onClick={() => onOpenUpdate(note)} style={{ backgroundColor: note.style.backgroundColor }}>
-        <div className="remove fa-solid fa-circle-mark" onClick={() => onRemoveNote(note.id)}>X</div>
+        <div className="remove fa-solid fa-circle-mark" onClick={onRemoveClicked}>X</div>
         {note.type === 'NoteTxt' && <NoteTxt note={note} />}
         {note.type === 'NoteImg' && <NoteImg note={note} />}
         {note.type === 'NoteVideo' && <NoteVideo note={note} />}

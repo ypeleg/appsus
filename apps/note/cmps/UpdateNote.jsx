@@ -63,51 +63,54 @@ export function UpdateNote({ note, onClose, onSaveNote }) {
   const { title, url } = editedNote.info
 
   return (
+    <div>
 
-    <section className="update-note">
-      <input type="text"
-        name="title"
-        value={title}
-        onChange={handleChange}
-      />
-
-      {note.type === 'NoteTxt' ? (
-        <blockquote
-          contentEditable="true"
-          suppressContentEditableWarning={true}
-          onChange={handleChange}
-          onInput={(ev) =>
-            setEditedNote((prevNote) => ({
-              ...prevNote,
-              info: { ...prevNote.info, txt: ev.target.textContent },
-            }))
-          }
-        >
-          {editedNote.info.txt}
-        </blockquote>
-
-      ) : (
-        <input
-          type="text"
-          placeholder="Enter Url"
-          name='url'
-          value={url}
+      <div className="backdrop" onClick={onClose}></div>
+      <section className="update-note">
+        <input type="text"
+          name="title"
+          value={title}
           onChange={handleChange}
         />
-      )}
-      <section className="time-edit">
-        <h5>{`Edited At: ${prettyShortPaddedDate(note.createdAt)}`}</h5>
-      </section>
 
-      <section className="note-editor-button">
-        <button className="close" onClick={handleSave}>Save</button>
-        <ToolsBtnsNote
-          note={editedNote}
-          onsaveNote={onSaveNote}
-        />
-      </section>
+        {note.type === 'NoteTxt' ? (
+          <blockquote
+            contentEditable="true"
+            suppressContentEditableWarning={true}
+            onChange={handleChange}
+            onInput={(ev) =>
+              setEditedNote((prevNote) => ({
+                ...prevNote,
+                info: { ...prevNote.info, txt: ev.target.textContent },
+              }))
+            }
+          >
+            {editedNote.info.txt}
+          </blockquote>
 
-    </section>
+        ) : (
+          <input
+            type="text"
+            placeholder="Enter Url"
+            name='url'
+            value={url}
+            onChange={handleChange}
+          />
+        )}
+        <section className="time-edit">
+          <h5>{`Edited At: ${prettyShortPaddedDate(note.createdAt)}`}</h5>
+        </section>
+
+        <section className="note-editor-button">
+          <button className="close" onClick={handleSave}>Save</button>
+          <ToolsBtnsNote
+            note={editedNote}
+            onsaveNote={onSaveNote}
+          />
+        </section>
+
+      </section>
+    </div>
 
   )
 }
