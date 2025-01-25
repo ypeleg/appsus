@@ -335,6 +335,10 @@
     /*font-family: "Google Sans",Roboto,Arial,sans-serif;*/
     font-family: "Open Sans";
     color: rgb(32,33,36);
+
+}
+
+.todo-input {
     padding-left: 40px;
 }
 

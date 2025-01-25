@@ -1,7 +1,7 @@
 
 
 const { useEffect, useState } = React
-const { useParams, useNavigate } = ReactRouterDOM
+const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
 
 import { ToolsBtnsNote } from "../cmps/ToolsBtnsNote.jsx"
 import { noteService } from "../services/note.service.js"
@@ -20,6 +20,10 @@ const NOTE_EDITORS = {
 export function AddNote({ onSaveNote }) {
 
 
+
+
+
+
     const [isOpen, setIsOpen] = useState(false)
     const [isPaletteOpen, setPaletteOpen] = useState(false)
     const [note, setNote] = useState(() => noteService.getEmptyNote())
@@ -28,12 +32,22 @@ export function AddNote({ onSaveNote }) {
     const navigate = useNavigate()
 
 
+
+
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    function isUsingSearchParams(searchParams) { return (searchParams.get('title') && searchParams.get('txt')) }
+
     useEffect(() => {
         if (noteId) {
             noteService.get(noteId).then(noteLoaded => {
                 setNote(noteLoaded)
                 setIsOpen(true)
             })
+        } else if (isUsingSearchParams(searchParams)) {
+            console.log('using search params!')
+            setNote({...note, info: {title: searchParams.get('title'), txt: searchParams.get('txt')}})
+            setIsOpen(true)
         }
     }, [noteId])
 
@@ -77,6 +91,8 @@ export function AddNote({ onSaveNote }) {
         ev.stopPropagation()
         ev.preventDefault()
         console.log('Sent to mail')
+
+        navigate(`/mail?body=${encodeURIComponent(note.info.txt)}&subject=${encodeURIComponent(note.info.title)}`)
     }
 
     function handleColorSelect(ev) {

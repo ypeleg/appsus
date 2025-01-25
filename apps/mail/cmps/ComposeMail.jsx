@@ -27,20 +27,25 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
 
     // let {defaultFrom, defaultTo, defaultBody} = defaultMailDetails
 
-    console.log('defaultMailDetails', defaultMailDetails)
+    // console.log('defaultMailDetails', defaultMailDetails)
     
     let defaultParams = {to: '', body: '' , subject: ''}
+    if (defaultMailDetails.id !== null) defaultParams.id = defaultMailDetails.id
     if (defaultMailDetails.to !== null) defaultParams.to = defaultMailDetails.to
+    if (defaultMailDetails.from !== null) defaultParams.from = defaultMailDetails.from
     if (defaultMailDetails.body !== null) defaultParams.body = defaultMailDetails.body
     if (defaultMailDetails.subject !== null) defaultParams.subject = defaultMailDetails.subject
+
+    defaultParams.createdAt = Date.now()
+    defaultParams.sentAt = Date.now()
 
 
     const inputRef = useRef()
     const [mail, setMail] = useState(mailsService.getDefaultEmail())
 
 
-    console.log('defaultParams,', defaultParams)
-    console.log('defaultMailDetails,', defaultMailDetails)
+    // console.log('defaultParams,', defaultParams)
+    // console.log('defaultMailDetails,', defaultMailDetails)
 
     useEffect(() => {
 
@@ -49,12 +54,19 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
         // inputRef.current.focus()
     }, [])
 
-    function onAddMail(ev) {
+
+    function onSaveDraft(ev) {
         ev.preventDefault()
-
         console.log(ev)
+        const newMail = { ...mail, sentAt: null }
+        sendMail(newMail)
+        toggleModal()
+    }
 
-        const newMail = { ...mail, date: new Date(mail.date).getTime() }
+    function onSendMail(ev) {
+        ev.preventDefault()
+        console.log(ev)
+        const newMail = { ...mail, sentAt: Date.now() }
         sendMail(newMail)
         toggleModal()
     }
@@ -68,14 +80,14 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
     return (
         <section className={`mail-add ` + (!!(isMaximized)? "maximized": "") }>
 
-            <form onSubmit={onAddMail} className='mail-form modal mail-modal'>
+            <form onSubmit={onSendMail} className='mail-form modal mail-modal'>
                 <div className="header mail-modal-header">
                     <span className="header-text">New Message</span>
                     <div>
-                        <button className="close-btn"> <i className="fa-regular fa-window-minimize"></i></button>
+                        <button className="close-btn" onClick={onSaveDraft}> <i className="fa-regular fa-window-minimize"></i></button>
                         <button className="close-btn maximize-btn" onClick={toggleMaximizedModal}><i className="fa-solid-fr fa-expand"></i></button>
 
-                        <button className="close-btn" onClick={toggleModal}><i className="fa-solid fa-xmark"></i></button>
+                        <button className="close-btn" onClick={onSaveDraft}><i className="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
 
@@ -100,7 +112,7 @@ export function ComposeMail({ defaultMailDetails , sendMail, toggleModal, isMaxi
 
             </form>
 
-            <section className = "screen" onClick={toggleModal}>
+            <section className = "screen" onClick={onSaveDraft}>
 
             </section>
 
