@@ -25,10 +25,11 @@ export function UserMsg() {
 
   if (!msg) return <span></span>
   return (
-    <section className={`user-msg ${msg.type}`}>
-      <button onClick={closeMsg}>x</button>
-      {msg.txt}
-    </section>
-  )
+      <div className={`notification ${msg.type}`}>
+          <div className="notification-content">
+              <p className="notification-message">{msg.txt}</p>
+          </div>
+          <button className="notification-close" onClick={closeMsg}>Close</button>
+      </div> )
 }
 

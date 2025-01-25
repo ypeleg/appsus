@@ -1,13 +1,14 @@
-import {noteService} from "../../note/services/note.service"
 
 
 const { Link } = ReactRouterDOM
 const { useState, useEffect, useRef } = React
 const { useParams, useNavigate, useSearchParams } = ReactRouterDOM
 
+
 import { MailList } from '../cmps/MailList.jsx'
 import { ComposeMail } from "../cmps/ComposeMail.jsx"
 import { mailsService } from '../services/mails.service.js'
+import { notificationGreen, notificationRed } from "../../../services/event-bus.service.js"
 
 
 // import {mailUtilService} from "../services/mail-util.service.js"
@@ -35,6 +36,11 @@ export function MailIndex() {
     const navigate = useNavigate()
 
 
+    useEffect(() => {
+        // notificationGreen('New mail has been successfully created!')
+    } , [activePage])
+
+
     function onSetActivePage(page) {
         setActivePage(page)
     }
@@ -50,10 +56,12 @@ export function MailIndex() {
     function isUsingSearchParams(searchParams) { return (searchParams.get('body') && searchParams.get('subject')) }
 
     useEffect(() => {
+
         if (isUsingSearchParams(searchParams)) {
             // console.log('using search params!')
             // setNote({...note, info: {title: searchParams.get('title'), txt: searchParams.get('txt')}})
             // setIsOpen(true)
+
             setIsMaximized(true)
             onComposeNewMail(null,
                 searchParams.get('subject'),
@@ -172,10 +180,11 @@ export function MailIndex() {
                 }
                 setTrashMails(trashMails + 1)
 
-                // showSuccessMsg('Mail has been successfully removed!')
+                notificationGreen('Message moved to trash')
+
             })
             .catch(() => {
-                // showErrorMsg(`couldn't remove mail`)
+                notificationRed('Error moving to trash..')
                 navigate('/mail')
             })
     }
@@ -189,10 +198,11 @@ export function MailIndex() {
                 // console.log('mail removed FOREVER:', deletedMail)
                 setMails(prevMails => prevMails.filter(mail => mailId !== mail.id))
                 setTrashMails(trashMails - 1)
-                // showSuccessMsg('Mail has been successfully removed!')
+                notificationGreen('Message has been successfully deleted (forever)')
+
             })
             .catch(() => {
-                // showErrorMsg(`couldn't remove mail`)
+                notificationRed('Error deleting message..')
                 navigate('/mail')
             })
     }
@@ -251,6 +261,7 @@ export function MailIndex() {
                 mailsService.query(filterBy, sortAscending).then(mails => setMails(mails))
                 // setMails((prevMails) => [...prevMails, savedMails]);
                 // console.log("Mail saved:", savedMails);
+                notificationGreen('Message sent!')
             })
         // mailsService.save(mailToAdd).then(mails => setMails(mails))
     }
@@ -304,10 +315,13 @@ export function MailIndex() {
             setStarredMails(mails.filter(mail => mail.isStared).length)
             setMails(prevMails => prevMails.map(mail => {
                 if (mail.id === mailId) {
+                    if(mail.isStared) notificationGreen('Message unstarred')
+                    else notificationGreen('Message starred')
                     mail.isStared = !mail.isStared
                 }
                 return mail
             }))
+
         })
     }
 
@@ -323,6 +337,7 @@ export function MailIndex() {
                      mail.labels.push('important')}
                 return mail
             }))
+            notificationGreen('Message tagged "important"')
         })
     }
 
@@ -410,10 +425,13 @@ export function MailIndex() {
             setUnreadInboxMails(mails.filter(mail => !mail.isRead).length)
             setMails(prevMails => prevMails.map(mail => {
                 if (mail.id === mailId) {
+                    if (mail.isRead) notificationGreen('marked as unread..')
+                    else notificationGreen('marked as read..')
                     mail.isRead = !mail.isRead
                 }
                 return mail
             }))
+
         })
     }
 
@@ -425,11 +443,14 @@ export function MailIndex() {
                 setUnreadInboxMails(mails.filter(mail => !mail.isRead).length)
                 setMails(prevMails => prevMails.map(mail => {
                     if (mail.id === mailId) {
+                        if (mail.isRead) notificationGreen('marked as unread..')
+                        else notificationGreen('marked as read..')
                         mail.isRead = !mail.isRead
                     }
                     return mail
                 }))
             })
+
     }
 
     function filtersToBox(currentMail) {
@@ -595,11 +616,11 @@ export function MailIndex() {
                                     </div>
                                 </div>
 
-                                <button className="font-awesome-hover-hint">
+                                <button className="font-awesome-hover-hint tooltip tooltip-smaller tooltip-move-left" data-tip="Refresh">
                                     <i className="fa-solid fa-sync-alt"></i>
                                 </button>
 
-                                <button className="font-awesome-hover-hint">
+                                <button className="font-awesome-hover-hint muted">
                                     <i className="fa-solid fa-ellipsis-v"></i>
                                 </button>
                             </div>
@@ -607,11 +628,11 @@ export function MailIndex() {
                             <div className="mail-header-right-section">
                                 <span className="pagination-text">1-{(mails.length < 51)? mails.length: 50} of {mails.length}</span>
 
-                                <button className="font-awesome-hover-hint">
+                                <button className="font-awesome-hover-hint muted">
                                     <i className="fa-solid fa-chevron-left"></i>
                                 </button>
 
-                                <button className="font-awesome-hover-hint">
+                                <button className="font-awesome-hover-hint muted">
                                     <i className="fa-solid fa-chevron-right"></i>
                                 </button>
 

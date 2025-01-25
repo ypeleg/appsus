@@ -140,7 +140,7 @@
     position: relative;
     cursor: text;
     border: none;
-
+    width: 100%;
     
     display: flex;
     gap: 8px;
@@ -208,11 +208,12 @@
 }
 
 .mail-page .search {
+
     /* background-color: #f1f3f4; */
     /* border-radius: 8px; */
     /* padding: 8px 16px; */
     /* margin: 8px; */
-    /* width: 100%; */
+    /* width: 100%;*/
     /* max-width: 720px; */
   }
   
@@ -824,6 +825,19 @@ button.checkbox-gmail-style>input.checkbox:hover{
     border-radius: 4px;
 }
 
+.muted.font-awesome-hover-hint:hover {
+    /*background: #f1f3f4;*/
+    background: none;
+    /*border-radius: 4px;*/
+    cursor: default;
+}
+
+.muted.font-awesome-hover-hint {
+    cursor: default;
+}
+
+
+
 .pagination-text {
     color: #5f6368;
     font-size: 12px;
@@ -1205,7 +1219,7 @@ button.checkbox-gmail-style>input.checkbox:hover{
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     /*box-shadow: 0 4px 12px rgba(0,0,0,0.15);*/
-    box-shadow: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12),0 5px 5px -3px rgba(0,0,0,.2)
+    box-shadow: 0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12),0 5px 5px -3px rgba(0,0,0,.2);
     font-family: sans-serif;
 }
 

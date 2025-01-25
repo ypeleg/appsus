@@ -71,7 +71,7 @@
 .fa-solid-fr{ font-family:'Font Awesome 5 Pro' }
 .fa-solid-fr::before {
     /*font-family: fa;*/
-    font-family:'Font Awesome 5 Pro'
+    font-family:'Font Awesome 5 Pro';
     /*font-family: fa-solid-fr;*/
     /*font-family: fa-solid-fr;*/
     /* font-family:"Font Awesome 5 Pro"; */

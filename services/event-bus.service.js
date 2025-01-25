@@ -30,6 +30,10 @@ export function showErrorMsg(txt) {
 }
 
 
+export function notificationGreen(txt) { showUserMsg({ txt, type: 'success' }) }
+export function notificationRed(txt) { showUserMsg({ txt, type: 'error' }) }
+
+
 // Service Testing:
 // eventBus.on('muk', (data)=>{
 //     console.log('Got Muk with data:', data)
