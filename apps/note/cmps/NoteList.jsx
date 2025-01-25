@@ -1,11 +1,9 @@
 
-
 const { Link } = ReactRouterDOM
 import { NotePreview } from "./NotePreview.jsx";
 
 
 export function NoteList({ notes, onRemoveNote, onsaveNote }) {
-
     return (
         <section>
             <h1>Pinned:</h1>
@@ -39,16 +37,6 @@ export function NoteList({ notes, onRemoveNote, onsaveNote }) {
                         </article>
                     ))}
             </ul>
-
         </section>
-        //     <ul className="note-list">
-        //         {notes.map(note => (
-        //             <article key={note.id}>
-        //                 <NotePreview note={note}
-        //                     onRemoveNote={onRemoveNote}
-        //                     onSaveNote={(note) => onsaveNote(note)} />
-        //             </article>
-        //         ))}
-        //     </ul>
     )
 }

@@ -15,7 +15,6 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   const [isEditing, setIsEditing] = useState(false)
   const [selectedNote, setSelectedNote] = useState(null)
 
-
   function NoteTxt({ note }) {
     return (
       <div className="note-layout" style={{ backgroundColor: note.style.backgroundColor }} >
@@ -28,9 +27,7 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   function NoteImg({ note }) {
     return (
       <div className="note-layout">
-
         {((note.info.url) && (!note.info.url.includes('youtube'))) ? (
-
           <img src={note.info.url} alt="Note" />
         ) : (
           <iframe

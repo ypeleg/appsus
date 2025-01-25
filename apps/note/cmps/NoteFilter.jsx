@@ -1,26 +1,14 @@
-// import { useEffectUpdate } from "../customHooks/useEffectUpdate.js"
-// import { debounce } from "../../../services/util.service.js"
 
 const { useState, useEffect, useRef } = React
 
 export function NoteFilter({ onFilterNotes }) {
 
-  const [filterByToEdit, setFilterByToEdit] = useState({}) // useState({ ...filterBy })
-
-
-  // function handleChange(ev) {
-  //   console.log(ev.target.value);
-  //   onFilterNotes(ev.target.value)
-
-
-  // }
-
+  const [filterByToEdit, setFilterByToEdit] = useState({})
   useEffect(() => {
     console.log(filterByToEdit);
 
     onFilterNotes(filterByToEdit)
   }, [filterByToEdit])
-
 
   function handleChange({ target }) {
     const field = target.name
