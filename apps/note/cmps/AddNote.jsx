@@ -47,7 +47,7 @@ export function AddNote({ onSaveNote }) {
     onSaveNote(note)
     setNote(noteService.getEmptyNote())
     setIsOpen(false)
-    notificationGreen('Note is !')
+    notificationGreen('Note is added !')
 
     navigate('/note')
   }
