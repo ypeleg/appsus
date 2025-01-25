@@ -3,9 +3,9 @@
 
 const { useState, useEffect, useRef } = React
 
-export function NoteFilter({ filterBy, onFilterNotes }) {
+export function NoteFilter({ onFilterNotes }) {
 
-  const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
+  const [filterByToEdit, setFilterByToEdit] = useState({ }) // useState({ ...filterBy })
 
 
   // function handleChange(ev) {
@@ -46,6 +46,7 @@ export function NoteFilter({ filterBy, onFilterNotes }) {
       <div className="search-bar">
         <input className="searchbox"
           type="text"
+          name='type'
           value={type}
           placeholder="Search"
           onChange={handleChange}

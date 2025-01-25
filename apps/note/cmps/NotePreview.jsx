@@ -63,7 +63,7 @@ export function NotePreview({ note, onRemoveNote, onSaveNote }) {
   }
 
   function NoteTodos({ note }) {
-    console.log('img', note)
+    // console.log('img', note)
     return (
       <section>{note.info.title && <p className="note-preview-txt note-preview-title">{note.info.title}</p>}
         <ul className="note-layout clean-list todo-list">
