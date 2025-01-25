@@ -470,6 +470,50 @@ export function MailIndex() {
         return 'Primary'
     }
 
+    function onBulkStar(ev) {
+        ev.stopPropagation()
+        selectedMails.map(mail => {
+            mailsService.starMail(mail.id)
+                .then(() => {
+                    setMails(prevMails => prevMails.map(prevMail => {
+                        if (mail.id === prevMail.id) {
+                            prevMail.isStared = !prevMail.isStared
+                        }
+                        return prevMail
+                    }))
+                })
+        })
+        notificationGreen('Messages starred')
+    }
+
+    function onBulkDelete(ev) {
+        ev.stopPropagation()
+        selectedMails.map(mail => {
+            mailsService.moveToTrash(mail.id)
+                .then(() => {
+                    setMails(prevMails => prevMails.filter(prevMail2 => prevMail2.id !== mail.id))
+                })
+        })
+        notificationGreen('Messages moved to trash')
+    }
+
+    function onBulkMarkUnread(ev) {
+        ev.stopPropagation()
+        selectedMails.map(mail => {
+            mailsService.unReadMail(mail.id)
+                .then(() => {
+                    setMails(prevMails => prevMails.map(prevMail => {
+                        if (mail.id === prevMail.id) {
+                            prevMail.isRead = !prevMail.isRead
+                        }
+                        return prevMail
+                    }))
+                })
+        })
+        notificationGreen('Messages marked as unread')
+    }
+
+
     return (
         <div className="mail-page">
 
@@ -616,13 +660,41 @@ export function MailIndex() {
                                     </div>
                                 </div>
 
-                                <button className="font-awesome-hover-hint tooltip tooltip-smaller tooltip-move-left" data-tip="Refresh">
-                                    <i className="fa-solid fa-sync-alt"></i>
-                                </button>
+                                {!!(selectedMails.length > 0) && (
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={onBulkDelete}
+                                            className="font-awesome-hover-hint tooltip tooltip-smaller"
+                                            data-tip="Delete selected">
+                                            <i className="fa-solid fa-trash-alt"></i>
+                                        </button>
+                                        <button
+                                            onClick={onBulkStar}
+                                            className="font-awesome-hover-hint tooltip tooltip-smaller"
+                                            data-tip="Star selected">
+                                            <i className="fa-regular fa-star"></i>
+                                        </button>
+                                        <button
+                                            onClick={onBulkMarkUnread}
+                                            className="font-awesome-hover-hint tooltip tooltip-smaller"
+                                            data-tip="Mark selected as unread">
+                                            <i className="fa-solid fa-envelope"></i>
+                                        </button>
+                                    </div>
+                                )}
 
-                                <button className="font-awesome-hover-hint muted">
-                                    <i className="fa-solid fa-ellipsis-v"></i>
-                                </button>
+                                {!(selectedMails.length) && (
+                                    <div className="flex items-center gap-2">
+                                        <button className="font-awesome-hover-hint tooltip tooltip-smaller tooltip-move-left" data-tip="Refresh">
+                                            <i className="fa-solid fa-sync-alt"></i>
+                                        </button>
+
+                                        <button className="font-awesome-hover-hint muted">
+                                            <i className="fa-solid fa-ellipsis-v"></i>
+                                        </button>
+                                    </div>
+                                    )}
+
                             </div>
 
                             <div className="mail-header-right-section">
