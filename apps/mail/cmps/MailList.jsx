@@ -88,7 +88,7 @@ export function MailList({ nowRendering, mails, onRemove, onDeleteForever, onMar
                     <button onClick = {(ev) => { onConvertToNote(ev, mail.id) } } className = "tooltip font-awesome-hover-hint " data-tip = "Export as Keep Note"><i className="fa-regular fa-paper-plane"></i></button>
                     <button onClick = {(ev) => { onRemove(ev, mail.id) } } className = "tooltip font-awesome-hover-hint " data-tip = "Delete"><i className="fa-regular fa-trash"></i></button>
                     <button onClick = {(ev) => { onReply(ev, mail) } } className = "font-awesome-hover-hint tooltip " data-tip = "Reply"><i className="fa-regular fa-reply"></i></button>
-                    <button onClick = {(ev) => { onMarkAsRead(ev, mail.id) } } className = "font-awesome-hover-hint tooltip " data-tip = "Mark as read"><i className={`fa-regular ${mail.isRead ? 'fa-envelope': 'fa-envelope-open'}`} ></i></button>
+                    <button onClick = {(ev) => { onMarkAsRead(ev, mail.id) } } className = "font-awesome-hover-hint tooltip " data-tip = {`Mark as ${mail.isRead? "unread":"read"}`}><i className={`fa-regular ${mail.isRead ? 'fa-envelope': 'fa-envelope-open'}`} ></i></button>
                     <button onClick = {(ev) => { onStar(ev, mail.id) } } className = {`font-awesome-hover-hint tooltip  ${mail.isStared ? 'stared' : 'unstared'}`} data-tip = "Star"><i className={`fa-regular fa-star`}></i></button>
                     {/*<button><i className="fa-regular fa-ellipsis-v"></i></button>*/}
                 </div>

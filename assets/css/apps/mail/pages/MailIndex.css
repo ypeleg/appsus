@@ -140,7 +140,7 @@
     position: relative;
     cursor: text;
     border: none;
-
+    width: 100%;
     
     display: flex;
     gap: 8px;
@@ -208,11 +208,12 @@
 }
 
 .mail-page .search {
+
     /* background-color: #f1f3f4; */
     /* border-radius: 8px; */
     /* padding: 8px 16px; */
     /* margin: 8px; */
-    /* width: 100%; */
+    /* width: 100%;*/
     /* max-width: 720px; */
   }
   
@@ -823,6 +824,19 @@ button.checkbox-gmail-style>input.checkbox:hover{
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 4px;
 }
+
+.muted.font-awesome-hover-hint:hover {
+    /*background: #f1f3f4;*/
+    background: none;
+    /*border-radius: 4px;*/
+    cursor: default;
+}
+
+.muted.font-awesome-hover-hint {
+    cursor: default;
+}
+
+
 
 .pagination-text {
     color: #5f6368;
