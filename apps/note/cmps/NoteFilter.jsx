@@ -5,7 +5,7 @@ const { useState, useEffect, useRef } = React
 
 export function NoteFilter({ onFilterNotes }) {
 
-  const [filterByToEdit, setFilterByToEdit] = useState({ }) // useState({ ...filterBy })
+  const [filterByToEdit, setFilterByToEdit] = useState({}) // useState({ ...filterBy })
 
 
   // function handleChange(ev) {

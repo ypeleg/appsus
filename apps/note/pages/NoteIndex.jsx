@@ -18,7 +18,15 @@ export function NoteIndex() {
     }, [])
 
     useEffect(() => {
-        loadNotes()
+        noteService.query(filterBy)
+            .then((notes) => {
+                console.log(notes)
+                setNotes(notes)
+            })
+            .catch((err) => {
+                console.log("Problems getting notes:", err)
+                setError("Failed to load notes.")
+            })
     }, [filterBy])
 
 
@@ -71,11 +79,10 @@ export function NoteIndex() {
             })
     }
 
-    function filterNotes(filterByType) {
-        console.log('filter type:' + filterByType);
-        setFilterBy(preFilter => ({ ...preFilter, ...filterByType }))
-        // let filterNotes = notes.filter(note => note.type === filterByType)
-        // setNotes(filterNotes)
+    function filterNotes(filterBy) {
+        console.log(filterBy);
+        setFilterBy(preFilter => ({ ...preFilter, ...filterBy }))
+        // setFilterBy(preFilter => preFilter)
     }
 
     if (!notes) return <h1>Loading...</h1>
