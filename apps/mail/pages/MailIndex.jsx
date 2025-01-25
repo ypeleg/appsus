@@ -752,11 +752,11 @@ export function MailIndex() {
                             <div className="toolbar-left">
 
                                 <div className="first-button" onClick={() => setActivePage('inbox')}>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-arrow-left"></i></button>
+                                    <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip = "back"><i className="fa-solid fa-arrow-left"></i></button>
                                 </div>
 
                                 <div className="sec-buttons-button">
-                                    <button className="font-awesome-hover-hint"
+                                    <button data-tip = "Archive msg" className="font-awesome-hover-hint tooltip tooltip-smaller"
                                             onClick={(ev) => {
                                                 onRemove(ev, activeMail.id)
                                                 setActiveMail(null)
@@ -764,7 +764,7 @@ export function MailIndex() {
                                                 notificationGreen('moved to archive..')
                                             }}
                                     ><i className="fa-solid fa-archive"></i></button>
-                                    <button className={`font-awesome-hover-hint ${activeMail.labels.includes('important') ? 'stared' : 'unstared'}`}
+                                    <button data-tip = "Tag as 'important'" className={`font-awesome-hover-hint ${activeMail.labels.includes('important') ? 'stared' : 'unstared'} tooltip tooltip-smaller`}
                                             onClick={(ev) => {
                                                 onTag(ev, activeMail.id)
                                                 setActiveMail({...activeMail, labels: (activeMail.labels.includes('important')) ? activeMail.labels.filter(label => label !== 'important') : [...activeMail.labels, 'important']})
@@ -773,7 +773,7 @@ export function MailIndex() {
                                         <i className={`fa-bookmark ${activeMail.labels.includes('important') ? 'fa-solid stared' : 'fa-solid unstared'}`}
 
                                     ></i></button>
-                                    <button className="font-awesome-hover-hint"
+                                    <button data-tip = "Move to trash" className="font-awesome-hover-hint tooltip tooltip-smaller"
                                             onClick={(ev) => {
                                                 onRemove(ev, activeMail.id)
                                                 setActiveMail(null)
@@ -785,7 +785,7 @@ export function MailIndex() {
 
                                     ></i></button>
                                     <div className="divider"></div>
-                                    <button className="font-awesome-hover-hint"
+                                    <button data-tip = "Mark as unread" className="font-awesome-hover-hint tooltip tooltip-smaller"
 
                                             onClick={(ev) => {
                                                 onMarkAsUnRead(ev, activeMail.id)
@@ -796,12 +796,12 @@ export function MailIndex() {
 
 
                                     ><i className="fa-solid fa-envelope"></i></button>
-                                    <button className="font-awesome-hover-hint"
+                                    <button className="font-awesome-hover-hint muted tooltip tooltip-smaller" data-tip="under construction.. sry.."
 
 
 
                                     ><i className="fa-solid fa-folder-plus"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-ellipsis-v"></i></button>
+                                    <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-ellipsis-v"></i></button>
                                 </div>
 
                             </div>
@@ -809,8 +809,8 @@ export function MailIndex() {
                             <div className="toolbar-right">
                                 <span className="pagination-text">1-{(mails.length < 51) ? mails.length : 50} of {mails.length}</span>
                                 {/*<span>10 of 7,408</span>*/}
-                                <button className="font-awesome-hover-hint"><i className="fa-solid fa-chevron-left"></i></button>
-                                <button className="font-awesome-hover-hint"><i className="fa-solid fa-chevron-right"></i></button>
+                                <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-chevron-left"></i></button>
+                                <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
 
@@ -828,8 +828,8 @@ export function MailIndex() {
 
                                 </span>
                                 <div className="header-actions">
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-print"></i></button>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-external-link-alt"></i></button>
+                                    <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-print"></i></button>
+                                    <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-external-link-alt"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -847,7 +847,7 @@ export function MailIndex() {
                                 </div>
                                 <div className="sender-actions">
                                     <span className="timestamp">{activeMail.sentAt}</span>
-                                    <button className="font-awesome-hover-hint"
+                                    <button data-tip="Star msg" className="font-awesome-hover-hint tooltip tooltip-smaller"
                                             onClick={(ev) => {
                                                 onStar(ev, activeMail.id)
                                                 setActiveMail({...activeMail, isStared: !activeMail.isStared})
@@ -858,10 +858,10 @@ export function MailIndex() {
 
                                     ></i></button>
                                     {/*<button className="font-awesome-hover-hint" onClick={() => composeNewMail(activeMail.from, `Re: ${activeMail.subject}`, '' + '\n\n\n' + 'On ' + activeMail.sentAt + ' ' + activeMail.from + ' wrote:' + '\n\n\n' + activeMail.body)}>*/}
-                                    <button className="font-awesome-hover-hint" onClick={(ev) => onReply(ev, activeMail)}>
+                                    <button data-tip="reply" className="font-awesome-hover-hint tooltip tooltip-smaller" onClick={(ev) => onReply(ev, activeMail)}>
                                         <i className="fa-solid fa-reply"></i>
                                     </button>
-                                    <button className="font-awesome-hover-hint"><i className="fa-solid fa-ellipsis-v"></i></button>
+                                    <button data-tip="Under construction" className="font-awesome-hover-hint tooltip tooltip-smaller"><i className="fa-solid fa-ellipsis-v"></i></button>
                                 </div>
                             </div>
                         </div>
