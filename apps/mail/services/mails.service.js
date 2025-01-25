@@ -28,7 +28,8 @@ let gUsers = [
         email: 'The-Absolute-Real-And-Legit-Price-Of-Nigeria@gmail.com',
         fullname: 'Nigerian Prince'
     },
-    {   id: '4',
+    {
+        id: '4',
         email: 'spam.i.am@gmail.spam',
         fullname: 'Dr. Spam A. Lot'
     },
@@ -52,7 +53,8 @@ let gUsers = [
         email: 'mr.helpful@fake.supportline.org',
         fullname: 'Customer “Service”'
     },
-    {   id: '9',
+    {
+        id: '9',
         email: 'notifications@social.app',
         fullname: 'Someone Liked Your Post'
     }
@@ -65,13 +67,13 @@ let gUsers = [
 
 function getLoggedinUser() {
     var loggedIn = gUsers.find(user => user.id === loggedinUserId)
-    console.log('loggedin:', loggedIn)
+    // console.log('loggedin:', loggedIn)
     return loggedIn
 }
 
 function getUsersDisplayMap() {
     var displayMap = gUsers.reduce((acc, user) => {
-        acc[user.email] = ((user.id !== loggedinUserId)?  user.fullname: 'me')
+        acc[user.email] = ((user.id !== loggedinUserId) ? user.fullname : 'me')
         return acc
     }, {})
     console.log(displayMap)
@@ -113,10 +115,10 @@ function query(filterBy = {}, sortAsc = true) {
             if (filterBy.txt) {
                 if (!['in:inbox', 'in:sent', 'in:trash', 'in:draft', 'is:starred'].includes(filterBy.txt)) {
                     mails = mails.filter(mail =>
-                        (RegExp(filterBy.txt, 'i').test(mail.subject)
-                            || RegExp(filterBy.txt, 'i').test(mail.body)
-                            || RegExp(filterBy.txt, 'i').test(mail.from)
-                            || RegExp(filterBy.txt, 'i').test(mail.to))
+                    (RegExp(filterBy.txt, 'i').test(mail.subject)
+                        || RegExp(filterBy.txt, 'i').test(mail.body)
+                        || RegExp(filterBy.txt, 'i').test(mail.from)
+                        || RegExp(filterBy.txt, 'i').test(mail.to))
                     )
                 }
             }
@@ -184,14 +186,18 @@ function query(filterBy = {}, sortAsc = true) {
 
             // console.log(mailsSent[0])
 
-            if (sortAsc) { mailsSent = mailsSent.sort((mail1, mail2) => {
-                return Date.parse(mail1.sentAt) - Date.parse(mail2.sentAt)
+            if (sortAsc) {
+                mailsSent = mailsSent.sort((mail1, mail2) => {
+                    return Date.parse(mail1.sentAt) - Date.parse(mail2.sentAt)
 
-            })}
-            else { mailsSent = mailsSent.sort((mail1, mail2) => {
-                return Date.parse(mail2.sentAt) - Date.parse(mail1.sentAt)
+                })
+            }
+            else {
+                mailsSent = mailsSent.sort((mail1, mail2) => {
+                    return Date.parse(mail2.sentAt) - Date.parse(mail1.sentAt)
                     // mail2.sentAt - mail1.sentAt
-            })}
+                })
+            }
 
             // console.log(mailsSent[0])
 
@@ -206,7 +212,7 @@ function readMail(mailId) {
         .then(mail => {
             mail.isRead = true
             storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
-    })
+        })
 }
 
 function unReadMail(mailId) {
@@ -222,7 +228,7 @@ function starMail(mailId) {
         .then(mail => {
             mail.isStared = !mail.isStared
             storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
-    })
+        })
 }
 
 function tagMail(mailId, tag = 'Important') {
@@ -233,14 +239,15 @@ function tagMail(mailId, tag = 'Important') {
             } else {
                 mail.labels.push(tag)
             }
-            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))})
+            storageService.put(MAIL_KEY, mail).then(() => storageService.get(MAIL_KEY, mailId))
+        })
 }
 
 
 
 function get(mailId) {
     return storageService.get(MAIL_KEY, mailId)
-        // .then(mail => _setNextPrevMailId(mail))
+    // .then(mail => _setNextPrevMailId(mail))
 }
 
 function moveToTrash(mailId) {
@@ -325,12 +332,12 @@ function _createMails() {
             isRead: mailUtilService.random.choice([true, false]),
             isStared: mailUtilService.random.choice([true, false]),
 
-            removedAt : mailUtilService.random.choice([null, mailUtilService.random.date('2021-01-01', '2025-01-22')]),
+            removedAt: mailUtilService.random.choice([null, mailUtilService.random.date('2021-01-01', '2025-01-22')]),
 
             labels: mailUtilService.random.sample(['Primary', 'Promotions', 'Social'], mailUtilService.random.randint(0, 3)),
 
-            ...( (mailUtilService.random.randint(0, 1)) ? {from: mailUtilService.random.choice(gUsers).email,   to: getLoggedinUser().email}:
-                                                          {from: getLoggedinUser().email, to: mailUtilService.random.choice(gUsers).email}
+            ...((mailUtilService.random.randint(0, 1)) ? { from: mailUtilService.random.choice(gUsers).email, to: getLoggedinUser().email } :
+                { from: getLoggedinUser().email, to: mailUtilService.random.choice(gUsers).email }
             )
 
         }

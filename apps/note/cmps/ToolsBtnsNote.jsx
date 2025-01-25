@@ -6,54 +6,59 @@ const { useState } = React
 export function ToolsBtnsNote({ note, onsaveNote }) {
 
 
-    const [isPaletteOpen, setPaletteOpen] = useState(false)
+  const [isPaletteOpen, setPaletteOpen] = useState(false)
+  const [editedNote, setEditedNote] = useState(note);
 
 
-    function handleColorSelect(ev) {
-        ev.stopPropagation()
-        note.style.backgroundColor
-        onsaveNote(note)
-    }
+  function handleColorSelect(ev, color) {
+    ev.stopPropagation()
+    console.log(color);
 
-    function onTogglePalette(ev) {
-        ev.stopPropagation()
-        setPaletteOpen(!isPaletteOpen)
-    }
+    editedNote.style.backgroundColor = color
 
-    return (
-        <section className="tools-btns">
-            <button className="fa-solid fa-download"></button>
-            <button className="fa-solid fa-image"></button>
-            <button className="fa-solid fa-palette" onClick={onTogglePalette}></button>
-            <button className="fa-solid fa-envelope" onClick={() => onSentNoteToMail()}></button>
+    setEditedNote(editedNote)
+    onsaveNote(editedNote)
+  }
 
-            {isPaletteOpen &&
+  function onTogglePalette(ev) {
+    ev.stopPropagation()
+    setPaletteOpen(!isPaletteOpen)
+  }
 
-                <div className="palette-modal">
-                    <div className="color-grid">
-                        {[
-                            "#F28B82",
-                            "#FBBC04",
-                            "#FFF475",
-                            "#CCFF90",
-                            "#A7FFEB",
-                            "#CBF0F8",
-                            "#AECBFA",
-                            "#D7AEFB",
-                            "#FDCFE8",
-                        ].map((color) => (
-                            <div
-                                key={color}
-                                className="color-circle"
-                                style={{ backgroundColor: color }}
-                                onClick={(color) => handleColorSelect(color)}
-                            ></div>
-                        ))}
-                    </div>
-                </div>
-            }
-        </section>
-    )
+  return (
+    <section className="tools-btns">
+      <button className="fa-solid fa-download"></button>
+      <button className="fa-solid fa-image"></button>
+      <button className="fa-solid fa-palette" onClick={onTogglePalette}></button>
+      <button className="fa-solid fa-envelope" onClick={() => onSentNoteToMail()}></button>
+
+      {isPaletteOpen &&
+
+        <div className="palette-modal">
+          <div className="color-grid">
+            {[
+              "#F28B82",
+              "#FBBC04",
+              "#FFF475",
+              "#CCFF90",
+              "#A7FFEB",
+              "#CBF0F8",
+              "#AECBFA",
+              "#D7AEFB",
+              "#FDCFE8",
+            ].map((color) => (
+              <div
+                key={color}
+                className="color-circle"
+                style={{ backgroundColor: color }}
+                onClick={(ev) => handleColorSelect(ev, color)}
+              ></div>
+            ))}
+          </div>
+        </div>
+      }
+    </section>
+  )
 
 
 }
