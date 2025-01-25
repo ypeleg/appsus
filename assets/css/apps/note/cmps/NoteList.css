@@ -1,6 +1,6 @@
  /* note list */
 
- .note-list {
+ .anote-list {
    display: grid;
    grid-auto-flow: dense;
    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -10,3 +10,4 @@
  .notes-workspace {
    margin-top: 10px;
  }
+

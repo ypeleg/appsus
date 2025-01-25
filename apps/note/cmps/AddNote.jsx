@@ -58,21 +58,23 @@ export function AddNote({ onSaveNote }) {
                         <NoteInput note={note} onChange={handleChange}/>
                         <div className="note-actions">
                             <div className="note-tools">
-                            {/*    <button type="button" onClick={() => handleTypeChange('NoteImg')}>*/}
-                            {/*        <i className="fa-regular fa-image"/>*/}
-                            {/*    </button>*/}
-                            {/*    <button type="button" onClick={() => handleTypeChange('NoteTodos')}>*/}
-                            {/*        <i className="fa-regular fa-check-square"/>*/}
-                            {/*    </button>*/}
+                                <button title="Reminder" className="tooltip tooltip-smaller" data-tip="Remind Me" ><i className="fa-regular fa-bell"/></button>
+                                <button title="Collaborator" className="tooltip tooltip-smaller" data-tip="Collaborators" ><i className="fa-regular fa-user"/></button>
+                                <button title="Background"  className="tooltip tooltip-smaller" onClick={() => handleTypeChange('NoteImg')} data-tip="Add Image / Video"  ><i className="fa-regular fa-image"/></button>
+                                <button title="Image"  className="tooltip tooltip-smaller" onClick={() => handleTypeChange('NoteImg')} data-tip="ToDo List"><i className="fa-regular fa-check-square"/></button>
+                                <button title="Background Color" className="tooltip tooltip-smaller" data-tip="Background Color"><i className="fa-regular fa-palette"/></button>
+                                <button title="More" className="tooltip tooltip-smaller" data-tip="More" ><i className="fa-solid fa-ellipsis-vertical"/></button>
+                                <button title="Undo" className="tooltip tooltip-smaller" data-tip="Undo" ><i className="fa-solid fa-reply"/></button>
+                                <button title="Redo" className="tooltip tooltip-smaller" data-tip="Redo" ><i className="fa-solid fa-share"/></button>
                             </div>
                             <button type="submit" className="close-button">Close</button>
                         </div>
                     </form>
-                ): (
+                ) : (
                     <div className="note-placeholders-before-open">
                         <div className="note-placeholder">Take a note...</div>
                         <div className="note-tools">
-                            <button><i className="fa-regular fa-check-square" /></button>
+                            <button><i className="fa-regular fa-check-square"/></button>
                             <button><i className="fa-regular fa-image" /></button>
                         </div>
                     </div>
@@ -95,16 +97,17 @@ function NoteInput({ note, onChange}) {
 function NoteTxtInput({ note, onChange}) {
     return (
         <div className="note-content" aria-hidden={false}>
+            <i className="note-pin fa-solid fa-thumbtack"></i>
             <input
                 type="text"
                 value={note.info.title || ''}
-                onChange={ev => onChange({ title: ev.target.value })}
+                onChange={ev => onChange({title: ev.target.value})}
                 placeholder="Title"
                 className="note-title"
             />
             <textarea
                 value={note.info.txt || ''}
-                onChange={ev => onChange({ txt: ev.target.value })}
+                onChange={ev => onChange({txt: ev.target.value})}
                 placeholder="Take a note..."
                 className="note-text"
             />
@@ -112,7 +115,7 @@ function NoteTxtInput({ note, onChange}) {
     )
 }
 
-function NoteImgInput({ note, onChange }) {
+function NoteImgInput({note, onChange}) {
     return (
         <div className="note-content">
             <input

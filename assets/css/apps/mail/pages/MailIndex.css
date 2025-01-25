@@ -836,7 +836,7 @@ button.checkbox-gmail-style>input.checkbox:hover{
 
 }
 
-input[type="checkbox"] {
+.mail-page input[type="checkbox"] {
     cursor: pointer;
     box-sizing: border-box;
     /*width: 20px;*/

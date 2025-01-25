@@ -65,7 +65,7 @@
     /*box-shadow: 0 3px 5px rgba(0,0,0,.20);*/
     /*box-shadow: 0 3px 5px 0 rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);*/
     box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149), 0 3px 5px rgba(0,0,0,.20);
-    border-color: #e0e0e0;
+    border: 1px solid #e0e0e0;
 
 }
 
@@ -146,7 +146,15 @@
     padding: 10px;
     border: 1px solid #dfdfdf;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: .875rem;
+    color: rgb(32,33,36);
+}
+
+/*change the placeholder text color now*/
+
+.note-content input::placeholder,
+.note-content textarea::placeholder {
+    color: rgba(0,0,0,0.6)
 }
 
 
@@ -245,10 +253,20 @@
 
 
 .note-preview {
+    break-inside: avoid;
+    /*margin-bottom: 16px;*/
+    height: fit-content;
+    margin-block-end: 16px;
+    position: relative;
+
+
+}
+
+.note-preview {
     background: #fff;
     border-radius: 8px;
     /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
-    padding: 12px 16px;
+    /*padding: 12px 16px;*/
     transition: box-shadow 0.15s ease-in-out;
 }
 
@@ -256,6 +274,9 @@
     box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
     cursor: pointer;
 }
+
+
+
 
 .note-placeholders-before-open {
     display: flex;
@@ -276,7 +297,7 @@
 .note-tools {
     place-self: center end;
     display: flex;
-    gap: 12px;
+    gap: 16px;
     /*margin-top: 8px;*/
 }
 
@@ -313,13 +334,15 @@
     width: 100%;
     /*font-family: "Google Sans",Roboto,Arial,sans-serif;*/
     font-family: "Open Sans";
+    color: rgb(32,33,36);
 }
 
 .note-title {
-    font-size: 1rem;
+    font-size: 15px;
     letter-spacing: .00625em;
     font-weight: 500;
     line-height: 1.5rem;
+    color: rgb(32,33,36);
 }
 
 .note-text {
@@ -346,7 +369,8 @@
     border: none;
     border-radius: 4px;
     /*color: #1a73e8;*/
-    color: #5f6368;
+    /*color: #5f6368;*/
+    color: rgba(0,0,0,0.87);
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
@@ -375,11 +399,7 @@
     padding: 4px 8px;
 }
 
-.todo-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+
 
 .todo-item {
     align-items: center;
@@ -395,7 +415,7 @@
 }
 
 .completed .todo-text {
-    color: #5f6368;
+    /*color: #5f6368;*/
     text-decoration: line-through;
 }
 
@@ -444,4 +464,16 @@
 
 .checkbox input:checked .checkmark:after {
     display: block;
+}
+
+.note-pin {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: rgba(0,0,0,0.6);
+    font-size: 20px;
+}
+
+.note-content {
+    /*margin-right: 24px;*/
 }

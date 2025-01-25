@@ -1,4 +1,5 @@
 
+
 import { storageService } from '../../../services/async-storage.service.js'
 import { utilService } from '../../../services/util.service.js'
 import { loadFromStorage, saveToStorage } from '../../../services/storage.service.js'
@@ -124,6 +125,56 @@ function getDefaultFilter() {
 }
 
 function _createNotes() {
+    console.log('lol')
+    // const notes = utilService.loadFromStorage(NOTE_KEY) || []
+    // if (notes.length) return
+
+    const notes = []
+
+    const bgColors = ['#fff', '#f28b82', '#fbbc04', '#fff475', '#ccff90', '#a7ffeb', '#cbf0f8', '#aecbfa', '#d7aefb', '#fdcfe8', '#e6c9a8']
+
+    for (let i = 0; i < 20; i++) {
+        const type = utilService.random.choice(['NoteTxt', 'NoteImg', 'NoteTodos', 'NoteVideo'])
+        const note = {
+            id: utilService.random.id(),
+            createdAt: Date.now(),
+            type,
+            isPinned: utilService.random.choice([true, false]),
+            style: {
+                backgroundColor: utilService.random.choice(bgColors)
+            },
+            info: {
+                title: utilService.random.lorem(utilService.random.randint(1, 5))
+            }
+        }
+
+        switch(type) {
+            case 'NoteTxt':
+                note.info.txt = utilService.random.lorem(utilService.random.randint(5, 20))
+                break
+            case 'NoteImg':
+                note.info.url = `https://picsum.photos/${utilService.random.randint(200,400)}/${utilService.random.randint(200,400)}`
+                break
+            case 'NoteVideo':
+                note.info.url = `https://www.youtube.com/embed/${utilService.random.choice(['U06jlgpMtQs', '9bZkp7q19f0'])}`
+                break
+            case 'NoteTodos':
+                const numTodos = utilService.random.randint(2, 6)
+                note.info.todos = Array(numTodos).fill().map(() => ({
+                    txt: utilService.random.lorem(utilService.random.randint(2, 5)),
+                    doneAt: utilService.random.choice([null, Date.now()])
+                }))
+                break
+        }
+
+        notes.push(note)
+    }
+    console.log('notes', notes)
+
+    utilService.saveToStorage(NOTE_KEY, notes)
+}
+
+function _createNotess() {
     let notes = loadFromStorage(NOTE_KEY)
     if (!notes || !notes.length) {
         notes = allNotes

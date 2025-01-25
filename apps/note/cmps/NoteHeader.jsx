@@ -5,7 +5,7 @@ export function NoteHeader() {
 
     <header className="note-header">
       <section className="logo">
-        <i className="fa-solid fa-bars"></i>
+        <i className="fa-solid fa-bars font-awesome-hover-hint fa-solid fa-bars"></i>
         <img src="assets/img/note-logo.png"></img>
         <h3>Keep</h3>
       </section>

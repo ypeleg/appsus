@@ -6,7 +6,7 @@ const {useSearchParams, useParams, useNavigate} = ReactRouterDOM
 
 import {UpdateNote} from "./UpdateNote.jsx";
 import {ToolsBtnsNote} from "../cmps/ToolsBtnsNote.jsx";
-// import {noteService} from "../services/note.service.js";
+
 
 
 export function NotePreview({note, onRemoveNote, onSaveNote}) {
@@ -14,54 +14,11 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
     const [isEditing, setIsEditing] = useState(false)
     const [selectedNote, setSelectedNote] = useState(null)
 
-    // const {noteId} = useParams()
-    // const navigate = useNavigate()
-
-    // useEffect(() => {
-    //     if (noteId) {
-    //         console.log(noteId);
-    //
-    //         noteService.get(noteId)
-    //             .then(startEditing)
-    //             .catch(err => {
-    //                 console.log('Problem getting car', err)
-    //                 // navigate('/note')
-    //             })
-    //
-    //         console.log(selectedNote);
-    //
-    //
-    //     }
-    // }, [])
-
-    // function startEditing(note) {
-    //     setSelectedNote(note)
-    //     setIsEditing(true)
-    // }
-
-    // useEffect(() => {
-    //   console.log(noteId);
-    // }, [selectedNote])
-
-    // function loadNote() {
-    //     noteService.get(noteId)
-    //         .then(setSelectedNote)
-    //         .catch(err => {
-    //             console.log('Problem getting car', err)
-    //             navigate('/note')
-    //         })
-    // }
-
     function NoteTxt({note}) {
         return (
             <div className="note-layout">
-                <div>
-                    <h4>{note.info.title}</h4>
-                </div>
-                <div>
-                    <h4>{note.info.txt}</h4>
-                </div>
-
+                <p className="note-preview-txt note-preview-title">{note.info.title}</p>
+                <p className="note-preview-txt">{note.info.txt}</p>
             </div>
         );
     }
@@ -69,10 +26,24 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
     function NoteImg({note}) {
         return (
             <div className="note-layout">
-                <h1>{note.info.title}</h1>
+
+                {( !note.info.url.includes('youtube') ) ? (
+
                 <img src={note.info.url} alt="Note"/>
+                    ) : (
+                <iframe
+                    width="100%"
+                    height="200"
+                    src={note.info.url}
+                    frameBorder="0"
+                    // allow="autoplay; encrypted-media"
+                    // allowFullScreen
+                    title="Video Note"
+                ></iframe> )}
+
+                <p className="note-preview-txt note-preview-title">{note.info.title}</p>
             </div>
-        );
+        )
     }
 
     function NoteVideo({note}) {
@@ -92,20 +63,30 @@ export function NotePreview({note, onRemoveNote, onSaveNote}) {
     }
 
     function NoteTodos({note}) {
+
+        console.log( 'a',  (note.info.todos.some((todo, idx) => (!!todo.doneAt)))  )
         return (
-            <ul className="note-layout">
+            <section>{note.info.title && <p className="note-preview-txt note-preview-title">{note.info.title}</p>}
+            <ul className="note-layout clean-list todo-list">
+
                 {note.info.todos.map((todo, idx) => (
-                    <li key={idx} style={{textDecoration: todo.doneAt ? 'line-through' : 'none'}}>
-                        {todo.txt}
+                    <li key={idx} className={`todo-item ${todo.doneAt ? 'completed' : ''}`}>
+                        <input
+                            type="checkbox"
+                            className="todo-checkbox"
+                            checked={!!todo.doneAt}
+                            onChange={() => {}}
+                        />
+                        <span className="todo-text">{todo.txt}</span>
                     </li>
                 ))}
+                {note.info.todos.some((todo, idx) => (!!todo.doneAt))
+                    && <li className="completed-split"> </li>
+                }
             </ul>
+            </section>
         );
     }
-
-    // function onOpenEdit() {
-    //
-    // }
 
     function onOpenUpdate(note) {
         setIsEditing(true)
