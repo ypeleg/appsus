@@ -4,7 +4,6 @@
 @import './setup/typography.css';
 
 /* Basics */
-
 @import './basics/base.css';
 @import './basics/helpers.css';
 /* @import './basics/layout.css'; */
@@ -27,3 +26,6 @@
 @import './cmps/AppHeader.css';
 
 /* @import './apps/mail/cmps/MailList.css'; */
+
+/* Media Queries */
+@import url(setup/mq.css);

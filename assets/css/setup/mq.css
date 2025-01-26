@@ -1,0 +1,86 @@
+
+
+
+/* Tiny */
+@media (max-width: 230px) {
+
+}
+
+@media (min-width: 230px) {
+
+}
+
+@media (max-width: 450px) {
+
+}
+
+/* Small */
+@media (max-width: 640px) {
+    #searchbox {
+        width: 100%;
+    }
+    .mail-page .search-bar input {
+        width: 100%;
+    }
+    .logo h3 {
+        display: none;
+    }
+    .mail-page .logo {
+        width: auto;
+    }
+}
+
+@media (min-width: 640px) {
+
+}
+
+/* Medium */
+@media (max-width: 900px) {
+    .mail-page .tab-bar,
+    .mail-page .date{
+    /*.mail-main-table-header{*/
+        display: none;
+    }
+
+    .side-bar {
+        z-index: 1;
+        left: 0;
+        top: 158px;
+        position: absolute;
+        translate: -100% 0;
+    }
+
+    .mail-page .main-table {
+        margin-right: 0px;
+    }
+
+    .mail-header img {
+        display: none;
+    }
+
+}
+
+@media (min-width: 900px) {
+
+    /*.mail-page .tab-bar {*/
+    /*    display: none;*/
+    /*}*/
+}
+
+/* Font Fix */
+@media (max-width: 1130px) {
+
+    .user-details i,
+    .user-details .fa-solid{
+        display: none;
+    }
+}
+
+/* Large */
+@media (max-width: 1130px) {
+
+}
+
+@media (min-width: 1130px) {
+
+}

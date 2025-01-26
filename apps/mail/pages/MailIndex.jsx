@@ -35,6 +35,10 @@ export function MailIndex() {
 
     const [filterByCallback, setFilterByCallback] = useState([])
 
+    // const [nextPrevMails, setNextPrevMails] = useState({next: null, prev: null})
+
+
+
     const navigate = useNavigate()
 
 
@@ -800,6 +804,7 @@ export function MailIndex() {
                                                                     return mail
                                                                 }))
 
+                                                                // setNextPrevMails(mailsService.getPrevNextIdFor(mail))
                                                                 setActiveMail(mail)
 
                                                             }
@@ -895,7 +900,8 @@ export function MailIndex() {
 
                             <div className="toolbar-right">
                                 <span className="pagination-text">1-{(mails.length < 51) ? mails.length : 50} of {mails.length}</span>
-                                {/*<span>10 of 7,408</span>*/}
+                                {/*<span>10 of 7,408</span>prev*/}
+
                                 <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-chevron-left"></i></button>
                                 <button className="font-awesome-hover-hint tooltip tooltip-smaller" data-tip="under construction.. sry.."><i className="fa-solid fa-chevron-right"></i></button>
                             </div>

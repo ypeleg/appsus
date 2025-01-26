@@ -97,6 +97,7 @@ export const mailsService = {
     getLoggedinUser,
     getDefaultEmail,
     getDefaultFilter,
+    // getPrevNextIdFor,
     getUsersDisplayMap,
 }
 
@@ -363,3 +364,11 @@ function _createMails() {
     }
     mailUtilService.saveToStorage(MAIL_KEY, mails)
 }
+
+
+// function getPrevNextIdFor(mail) {
+//     const mailIdx = mail.findIndex((currMail) => currMail.id === mail.id)
+//     const nextMail = mails[mailIdx + 1] ? mails[mailIdx + 1] : mails[0]
+//     const prevMail = mails[mailIdx - 1] ? mails[mailIdx - 1] : mails[mails.length - 1]
+//     return {next: nextMail.id, prev: prevMail.id}
+// }
