@@ -8,9 +8,6 @@ import { notificationGreen, notificationRed } from "../../../services/event-bus.
 
 
 export function UpdateNote({ note, onClose, onSaveNote }) {
-
-
-
   const [editedNote, setEditedNote] = useState(note);
 
 
@@ -18,7 +15,6 @@ export function UpdateNote({ note, onClose, onSaveNote }) {
     setEditedNote(editedNote)
     onSaveNote(editedNote)
     notificationGreen('Note is edited!')
-
     onClose()
   }
 
@@ -58,11 +54,9 @@ export function UpdateNote({ note, onClose, onSaveNote }) {
     } else {
       return ''
     }
-
   }
 
   const { title, url } = editedNote.info
-
   return (
     <div>
 

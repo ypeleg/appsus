@@ -1,160 +1,151 @@
-
-
-
 .note-bottom-bar {
-    padding-top: 20px;
-    background-color: #0b57cf;
+  padding-top: 20px;
+  background-color: #0b57cf;
 }
 
 .new-note {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
 
 }
 
 .notes-buttons {
-    display: flex;
-    gap: 15px;
+  display: flex;
+  gap: 15px;
 }
 
 .notes-buttons>* {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.focusable {
-
-}
 
 .note-edit-open {
-    min-height: 136px;
-    transition: all 1s;
+  min-height: 136px;
+  transition: all 1s;
 }
 
-.focusable {
-
-}
 
 .invisible {
-    height: 0px;
-    opacity: 0;
-    /*display: none;*/
-    transition: all 0.5s;
+  height: 0px;
+  opacity: 0;
+  /*display: none;*/
+  transition: all 0.5s;
 }
 
 .invisible-shown {
-    height: auto;
-    opacity: 1;
-    /*display: block;*/
-    transition: all 0.5s;
+  height: auto;
+  opacity: 1;
+  /*display: block;*/
+  transition: all 0.5s;
 }
 
 .note-editor {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*height: 48px;*/
-    /*gap: 10px;*/
-    /*padding: 20px;*/
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*height: 48px;*/
+  /*gap: 10px;*/
+  /*padding: 20px;*/
 
-    background: #fff;
-    border-radius: 8px;
-    /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
-    /*padding: 12px 16px;*/
-    transition: box-shadow 0.15s ease-in-out;
+  background: #fff;
+  border-radius: 8px;
+  /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
+  /*padding: 12px 16px;*/
+  transition: box-shadow 0.15s ease-in-out;
 
-    /*box-shadow: 0 3px 5px rgba(0,0,0,.20);*/
-    /*box-shadow: 0 3px 5px 0 rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);*/
-    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149), 0 3px 5px rgba(0,0,0,.20);
-    border: 1px solid #e0e0e0;
+  /*box-shadow: 0 3px 5px rgba(0,0,0,.20);*/
+  /*box-shadow: 0 3px 5px 0 rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);*/
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 2px 6px 2px rgba(60, 64, 67, 0.149), 0 3px 5px rgba(0, 0, 0, .20);
+  border: 1px solid #e0e0e0;
 
 }
 
 .editor {
-    font-family: "Google Sans",Roboto,Arial,sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .editor input {
-    padding: 10px;
+  padding: 10px;
 }
 
 
 
 .add-note-container {
 
-    flex: 1;
-    margin-inline-start: 200px;
-    border: none;
-    outline: none;
-    width: 600px;
-    padding: 2px 10px;
-    font-size: 14px;
-    border-radius: 15px;
-    box-shadow: -1px -1px 13px 6px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
+  flex: 1;
+  margin-inline-start: 200px;
+  border: none;
+  outline: none;
+  width: 600px;
+  padding: 2px 10px;
+  font-size: 14px;
+  border-radius: 15px;
+  box-shadow: -1px -1px 13px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
 
 
 }
 
 
 .note-editor-button {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 
 }
 
 .note-editor-button .close {
-    border: none;
-    background-color: inherit;
-    cursor: pointer;
-    height: max-content;
-    padding: 10px;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  height: max-content;
+  padding: 10px;
 
 }
 
 .backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 }
 
 .update-note {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    z-index: 11;
-    width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 11;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .update-note input,
 .update-note textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #dfdfdf;
-    border-radius: 5px;
-    font-size: .875rem;
-    color: rgb(32,33,36);
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+  font-size: .875rem;
+  color: rgb(32, 33, 36);
 }
 
 /*change the placeholder text color now*/
 
 .note-content input::placeholder,
 .note-content textarea::placeholder {
-    color: rgba(0,0,0,0.6)
+  color: rgba(0, 0, 0, 0.6)
 }
 
 
@@ -162,31 +153,31 @@
 
 
 .keep-note-container {
-    /*height: 46px;*/
-    width: 100%;
-    max-width: 600px;
-    margin: 32px auto;
-    padding: 0 16px;
-    /*transition: all 10s;*/
+  /*height: 46px;*/
+  width: 100%;
+  max-width: 600px;
+  margin: 32px auto;
+  padding: 0 16px;
+  /*transition: all 10s;*/
 
-    /*transition: all 0.5s;*/
-    /*box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);*/
+  /*transition: all 0.5s;*/
+  /*box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);*/
 
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*gap: 10px;*/
-    /*!*padding: 20px;*!*/
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*gap: 10px;*/
+  /*!*padding: 20px;*!*/
 
-    /*background: #fff;*/
-    /*border-radius: 8px;*/
-    /*!*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*!*/
-    /*!*padding: 12px 16px;*!*/
-    /*transition: box-shadow 0.15s ease-in-out;*/
+  /*background: #fff;*/
+  /*border-radius: 8px;*/
+  /*!*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*!*/
+  /*!*padding: 12px 16px;*!*/
+  /*transition: box-shadow 0.15s ease-in-out;*/
 
-    /*!*box-shadow: 0 3px 5px rgba(0,0,0,.20);*!*/
-    /*!*box-shadow: 0 3px 5px 0 rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);*!*/
-    /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149), 0 3px 5px rgba(0,0,0,.20);*/
-    /*border-color: #e0e0e0;*/
+  /*!*box-shadow: 0 3px 5px rgba(0,0,0,.20);*!*/
+  /*!*box-shadow: 0 3px 5px 0 rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);*!*/
+  /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149), 0 3px 5px rgba(0,0,0,.20);*/
+  /*border-color: #e0e0e0;*/
 
 }
 
@@ -228,24 +219,24 @@
 
 
 .note-edit-open {
-    min-height: 136px;
-    transition: all 1s;
+  min-height: 136px;
+  transition: all 1s;
 }
 
 
 .note-placeholder-container {
 
-    min-height: 48px;
-    display: flex;
-    gap: 8px;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    border-radius: 8px;
-    /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
-    padding-inline: 16px;
+  min-height: 48px;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-radius: 8px;
+  /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
+  padding-inline: 16px;
 
-    cursor: text;
+  cursor: text;
 
 
 }
@@ -253,106 +244,107 @@
 
 
 .note-preview {
-    break-inside: avoid;
-    /*margin-bottom: 16px;*/
-    height: fit-content;
-    margin-block-end: 16px;
-    position: relative;
+  break-inside: avoid;
+  /*margin-bottom: 16px;*/
+  height: fit-content;
+  margin-block-end: 16px;
+  position: relative;
 
 
 }
 
 .note-preview {
-    background: #fff;
-    border-radius: 8px;
-    /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
-    /*padding: 12px 16px;*/
-    transition: box-shadow 0.15s ease-in-out;
+  background: #fff;
+  border-radius: 8px;
+  /*box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);*/
+  /*padding: 12px 16px;*/
+  transition: box-shadow 0.15s ease-in-out;
 }
 
 .note-preview:hover {
-    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
-    cursor: pointer;
+  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.302), 0 4px 8px 3px rgba(60, 64, 67, 0.149);
+  cursor: pointer;
 }
 
 
 
 
 .note-placeholders-before-open {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 4px 16px;
-    /*height: 32px;*/
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 16px;
+  /*height: 32px;*/
 
 }
+
 .note-placeholder {
-    place-self: center start ;
-    color: #5f6368;
-    font-size: 14px;
-    padding: 8px 0;
+  place-self: center start;
+  color: #5f6368;
+  font-size: 14px;
+  padding: 8px 0;
 }
 
 .note-tools {
-    place-self: center end;
-    display: flex;
-    gap: 16px;
-    /*margin-top: 8px;*/
+  place-self: center end;
+  display: flex;
+  gap: 16px;
+  /*margin-top: 8px;*/
 }
 
 .note-tools button {
-    background: none;
-    border: none;
-    color: #5f6368;
-    cursor: pointer;
-    font-size: 20px;
-    padding: 4px 8px;
-    border-radius: 50%;
-    transition: background-color 0.2s;
+  background: none;
+  border: none;
+  /* color: #5f6368; */
+  cursor: pointer;
+  /* font-size: 20px; */
+  padding: 4px 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
 }
 
 .note-tools button:hover {
-    background-color: rgba(95,99,104,0.1);
+  background-color: rgba(95, 99, 104, 0.1);
 }
 
 .note-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .note-title,
 .note-text,
 .note-url,
 .todo-input {
-    border: none;
-    font-size: 14px;
-    line-height: 1.5;
-    outline: none;
-    padding: 4px 0;
-    width: 100%;
-    /*font-family: "Google Sans",Roboto,Arial,sans-serif;*/
-    font-family: "Open Sans";
-    color: rgb(32,33,36);
+  border: none;
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  padding: 4px 0;
+  width: 100%;
+  /*font-family: "Google Sans",Roboto,Arial,sans-serif;*/
+  font-family: "Open Sans";
+  color: rgb(32, 33, 36);
 
 }
 
 .todo-input {
-    padding-left: 40px;
+  padding-left: 40px;
 }
 
 .note-title {
-    font-size: 15px;
-    letter-spacing: .00625em;
-    font-weight: 500;
-    line-height: 1.5rem;
-    color: rgb(32,33,36);
+  font-size: 15px;
+  letter-spacing: .00625em;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: rgb(32, 33, 36);
 }
 
 .note-text {
-    /*min-height: 100px;*/
-    resize: none;
+  /*min-height: 100px;*/
+  resize: none;
 }
 
 /*.note-image {*/
@@ -363,132 +355,128 @@
 /*}*/
 
 .note-actions {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
 }
 
 .close-button {
-    background: none;
-    border: none;
-    border-radius: 4px;
-    /*color: #1a73e8;*/
-    /*color: #5f6368;*/
-    color: rgba(0,0,0,0.87);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 8px 24px;
-    transition: background-color 0.2s;
-    /*font-family: "google sans",Roboto,Arial,sans-serif;*/
+  background: none;
+  border: none;
+  border-radius: 4px;
+  /*color: #1a73e8;*/
+  /*color: #5f6368;*/
+  color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 24px;
+  transition: background-color 0.2s;
+  /*font-family: "google sans",Roboto,Arial,sans-serif;*/
 }
 
 .close-button:hover {
-    background-color: rgba(95,99,104,0.1);
-    /*background-color: rgba(26,115,232,0.039);*/
+  background-color: rgba(95, 99, 104, 0.1);
+  /*background-color: rgba(26,115,232,0.039);*/
 }
 
 .todo-form {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .todo-add {
-    background: none;
-    border: none;
-    color: #1a73e8;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 4px 8px;
+  background: none;
+  border: none;
+  color: #1a73e8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 8px;
 }
 
 
 
 .todo-item {
-    align-items: center;
-    cursor: pointer;
-    display: flex;
-    gap: 8px;
-    padding: 4px 0;
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
 }
 
 .todo-text {
-    font-size: 14px;
-    line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .completed .todo-text {
-    /*color: #5f6368;*/
-    text-decoration: line-through;
+  /*color: #5f6368;*/
+  text-decoration: line-through;
 }
 
 .note-page .checkbox {
-    position: relative;
-    display: inline-block;
-    width: 18px;
-    height: 18px;
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
 }
 
 .note-page .checkbox input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 18px;
-    width: 18px;
-    border: 2px solid #5f6368;
-    border-radius: 2px;
-    transition: all 0.2s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border: 2px solid #5f6368;
+  border-radius: 2px;
+  transition: all 0.2s;
 }
 
 .note-page .checkbox input:checked .checkmark {
-    background-color: #1a73e8;
-    border-color: #1a73e8;
+  background-color: #1a73e8;
+  border-color: #1a73e8;
 }
 
 .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-    left: 5px;
-    top: 1px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .note-page .checkbox input:checked .checkmark:after {
-    display: block;
+  display: block;
 }
 
 .note-pin {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    padding: 4px;
-    color: rgba(0,0,0,0.6);
-    font-size: 20px;
-    cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .note-pin:hover {
-    background-color: rgba(95,99,104,0.1);
-    border-radius: 5px;
+  background-color: rgba(95, 99, 104, 0.1);
+  border-radius: 5px;
 }
 
 .note-pin:active {
-    background-color: rgba(95,99,104,0.2);
-}
-
-.note-content {
-    /*margin-right: 24px;*/
+  background-color: rgba(95, 99, 104, 0.2);
 }

@@ -25,16 +25,14 @@ img {
 
 
 :root {
-    --variable: 20px;  /* var() */
+    --variable: 20px;
+    /* var() */
 }
 
 *,
 *::before,
 *::after {
     box-sizing: border-box;
-}
-
-html {    
 }
 
 body {
@@ -48,7 +46,7 @@ img {
 }
 
 a {
-    color: inherit; 
+    color: inherit;
     text-decoration: none;
 }
 
@@ -61,7 +59,7 @@ h2,
 h3,
 h4,
 h5,
-h6 {    
+h6 {
     margin: 0 0 0 0;
     margin-block: 0;
     line-height: 1.4em;
@@ -74,12 +72,12 @@ p {
 input {
     border: 0;
     outline: none;
-    
+
     /* font-size: 1.0em; */
     /* padding-inline: 20px; */
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
-

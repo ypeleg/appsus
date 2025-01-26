@@ -10,6 +10,7 @@
 
 /* Pages */
 @import './pages/home.css';
+@import './pages/About.css';
 
 @import './apps/note/pages/NoteIndex.css';
 @import './apps/mail/pages/MailIndex.css';
